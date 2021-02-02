@@ -301,31 +301,32 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	for (i = 0; i < loadedModelsCount; ++i)
 		sharedIndexStorage += a3indexFormatGetStorageSpaceRequired(sceneCommonIndexFormat, loadedModelsData[i].numIndices);
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment buffer creation
-/*	// create shared buffer
+	// create shared buffer
 	vbo_ibo = demoState->vbo_staticSceneObjectDrawBuffer;
 	a3bufferCreateSplit(vbo_ibo, "vbo/ibo:scene", a3buffer_vertex, sharedVertexStorage, sharedIndexStorage, 0, 0);
-	sharedVertexStorage = 0;*/
+	sharedVertexStorage = 0;
+	//imports a model basically
 
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment vertex array and drawable initialization for position/color format descriptor
-/*	// create vertex formats and drawables
+	// create vertex formats and drawables
 	// axes: position and color
 	vao = demoState->vao_position_color;
 	a3geometryGenerateVertexArray(vao, "vao:pos+col", displayShapesData + 0, vbo_ibo, sharedVertexStorage);
 	currentDrawable = demoState->draw_axes;
-	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, displayShapesData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);*/
+	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, displayShapesData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment vertex array and drawable initialization for position-only format descriptor
-/*	// grid: position attribute only
+	// grid: position attribute only
 	// overlay objects are also just position
 	vao = demoState->vao_position;
 	a3geometryGenerateVertexArray(vao, "vao:pos", displayShapesData + 1, vbo_ibo, sharedVertexStorage);
 	currentDrawable = demoState->draw_grid;
-	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, displayShapesData + 1, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);*/
+	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, displayShapesData + 1, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 
 	// ****TO-DO: 
 	//	-> uncomment vertex array initialization for position/normal/texcoord format descriptor 
@@ -333,20 +334,30 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	//	-> time to take the wheel: implement the rest of the procedural shape drawables
 	//		-> use the above examples and setup process to help you know which shape date goes 
 	//			with which drawable
-/*	// models
+	// models
 	vao = demoState->vao_position_normal_texcoord;
 	a3geometryGenerateVertexArray(vao, "vao:pos+nrm+tc", proceduralShapesData + 0, vbo_ibo, sharedVertexStorage);
 	currentDrawable = demoState->draw_unit_plane_z;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 	currentDrawable = demoState->draw_unit_box;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 1, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
-	//...*/
+	currentDrawable = demoState->draw_unit_sphere;
+	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 2, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+	currentDrawable = demoState->draw_unit_cylinder;
+	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 3, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+
+
+	//...
 
 	// ****TO-DO: 
 	//	-> implement the remaining vertex array format from scratch
 	//		-> the teapot is the only drawable that uses it; use the above examples to guide you
-/*	vao = demoState->vao_tangentbasis_texcoord;
-	//...*/
+	vao = demoState->vao_tangentbasis_texcoord;
+	a3geometryGenerateVertexArray(vao, "vao:pos+nrm+tc", loadedModelsData + 0, vbo_ibo, sharedVertexStorage);
+	currentDrawable = demoState->draw_teapot;
+	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, loadedModelsData + 0, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
+
+	//...
 
 
 	// release data when done
@@ -439,6 +450,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 			// vs
 			// base
+			// e/ = encoded, already done. You have do make your own code that works without e/
 			{ { { 0 },	"shdr-vs:passthru-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"passthru_transform_vs4x.glsl" } } },// ****DECODE
 			{ { { 0 },	"shdr-vs:pass-col-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"e/passColor_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:passthru-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"e/passthru_transform_instanced_vs4x.glsl" } } },
