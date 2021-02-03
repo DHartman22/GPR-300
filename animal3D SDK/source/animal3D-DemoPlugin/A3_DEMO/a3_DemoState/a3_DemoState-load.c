@@ -103,14 +103,14 @@ a3real4x4r a3demo_setAtlasTransform_internal(a3real4x4p m_out,
 // initialize dummy drawable
 inline void a3demo_initDummyDrawable_internal(a3_DemoState *demoState)
 {
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment
-/*	// dummy drawable for point drawing: copy any of the existing ones, 
+	// dummy drawable for point drawing: copy any of the existing ones, 
 	//	set vertex count to 1 and primitive to points (0x0000)
 	// DO NOT RELEASE THIS DRAWABLE; it is a managed stand-in!!!
 	*demoState->dummyDrawable = *demoState->draw_grid;
 	demoState->dummyDrawable->primitive = 0;
-	demoState->dummyDrawable->count = 1;*/
+	demoState->dummyDrawable->count = 1;
 }
 
 
@@ -328,7 +328,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	currentDrawable = demoState->draw_grid;
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, displayShapesData + 1, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment vertex array initialization for position/normal/texcoord format descriptor 
 	//		and first couple drawables using that format
 	//	-> time to take the wheel: implement the rest of the procedural shape drawables
@@ -349,7 +349,7 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 
 	//...
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> implement the remaining vertex array format from scratch
 	//		-> the teapot is the only drawable that uses it; use the above examples to guide you
 	vao = demoState->vao_tangentbasis_texcoord;
@@ -504,9 +504,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	//	- create program object
 	//	- attach shader objects
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment base program setup
-/*	// base programs: 
+	// base programs: 
 	// transform-only program
 	currentDemoProg = demoState->prog_transform;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:transform");
@@ -546,24 +546,54 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tb-inst");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_instanced_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTangentBasis_gs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);*/
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 
-	// ****TO-DO: 
+	// ****Done?: 
 	//	-> set up missing shader programs, using hints above: 
 	//		-> texturing, Lambert and Phong
-/*	// 00-common programs: 
+	// 00-common programs: 
 	// texturing
+
+	//UNSURE IF ANY OF THESE ARE CORRECT
 	currentDemoProg = demoState->prog_drawTexture;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
+
+
+	currentDemoProg = demoState->prog_drawTexture_instanced;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex-inst");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_instanced_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_instanced_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 	//...
 	// Lambert
+	currentDemoProg = demoState->prog_drawLambert;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
+
+	currentDemoProg = demoState->prog_drawLambert_instanced;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+
 	//...
 	// Phong
-	//...*/
+
+	currentDemoProg = demoState->prog_drawPhong;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+
+	currentDemoProg = demoState->prog_drawPhong_instanced;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong-inst");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+
+	//...
 
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment program linking and validation
-/*	// activate a primitive for validation
+	// activate a primitive for validation
 	// makes sure the specified geometry can draw using programs
 	// good idea to activate the drawable with the most attributes
 	a3vertexDrawableActivate(demoState->draw_axes);
@@ -579,7 +609,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		flag = a3shaderProgramValidate(currentDemoProg->program);
 		if (flag == 0)
 			printf("\n ^^^^ PROGRAM %u '%s' FAILED TO VALIDATE \n\n", i, currentDemoProg->program->handle->name);
-	}*/
+	}
 
 	// if linking fails, contingency plan goes here
 	// otherwise, release shaders
@@ -667,9 +697,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 // utility to load textures
 void a3demo_loadTextures(a3_DemoState* demoState)
 {	
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment texture loading
-/*	// indexing
+	// indexing
 	a3_Texture* tex;
 	a3ui32 i;
 
@@ -710,11 +740,11 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 		a3textureCreateFromFile(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
 		a3textureActivate(texturePtr->texture, a3tex_unit00);
 		a3textureDefaultSettings();
-	}*/
+	}
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment texture configuration
-/*	// change settings on a per-texture or per-type basis
+	// change settings on a per-texture or per-type basis
 	tex = demoState->texture;
 	// skyboxes
 	for (i = 0; i < 2; ++i, ++tex)
@@ -727,7 +757,7 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 	{
 		a3textureActivate(tex, a3tex_unit00);
 		a3textureChangeRepeatMode(a3tex_repeatClamp, a3tex_repeatClamp);	// clamp both axes
-	}*/
+	}
 
 
 	// done
@@ -762,7 +792,7 @@ void a3demo_loadValidate(a3_DemoState* demoState)
 {
 	// ****TO-DO: 
 	//	-> uncomment
-/*	a3_BufferObject* currentBuff = demoState->drawDataBuffer,
+	a3_BufferObject* currentBuff = demoState->drawDataBuffer,
 		* const endBuff = currentBuff + demoStateMaxCount_drawDataBuffer;
 	a3_VertexArrayDescriptor* currentVAO = demoState->vertexArray,
 		* const endVAO = currentVAO + demoStateMaxCount_vertexArray;
@@ -804,7 +834,7 @@ void a3demo_loadValidate(a3_DemoState* demoState)
 
 	currentVAO = demoState->vao_tangentbasis_texcoord;
 	currentVAO->vertexBuffer = currentBuff;
-	a3_refreshDrawable_internal(demoState->draw_teapot, currentVAO, currentBuff);*/
+	a3_refreshDrawable_internal(demoState->draw_teapot, currentVAO, currentBuff);
 
 	a3demo_initDummyDrawable_internal(demoState);
 }
