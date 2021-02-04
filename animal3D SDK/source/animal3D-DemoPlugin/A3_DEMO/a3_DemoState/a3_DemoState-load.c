@@ -557,24 +557,26 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	//UNSURE IF ANY OF THESE ARE CORRECT
 	currentDemoProg = demoState->prog_drawTexture;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_vs->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 
 
 	currentDemoProg = demoState->prog_drawTexture_instanced;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex-inst");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_instanced_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_transform_instanced_vs->shader);
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_instanced_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 	//...
 	// Lambert
 	//currentDemoProg = demoState->prog_drawLambert;
 	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_vs);
 	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
 
 	//currentDemoProg = demoState->prog_drawLambert_instanced;
 	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_instanced_vs);
 	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
 
 	////...
