@@ -33,10 +33,18 @@
 layout (location = 0) out vec4 rtFragColor;
 
 //common file extends this
-
+in vec4 vPosition;
+in vec4 vNormal;
+uniform vec4 uLightPosition;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE GREEN
 	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+
+	vec4 N = normalize(vNormal);
+	vec4 L = normalize(uLightPosition - vPosition);
+	float kd = dot(N, L);
+
+	rtFragColor = vec4(kd, kd, kd, 1.0);
 }
