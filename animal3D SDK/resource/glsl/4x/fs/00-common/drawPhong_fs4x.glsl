@@ -32,6 +32,9 @@
 
 layout (location = 0) out vec4 rtFragColor;
 
+//common file extends this
+
+
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE GREEN

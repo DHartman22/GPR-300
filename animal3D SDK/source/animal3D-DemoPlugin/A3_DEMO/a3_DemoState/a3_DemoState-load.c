@@ -569,24 +569,24 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 	//...
 	// Lambert
-	currentDemoProg = demoState->prog_drawLambert;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
+	//currentDemoProg = demoState->prog_drawLambert;
+	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
 
-	currentDemoProg = demoState->prog_drawLambert_instanced;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+	//currentDemoProg = demoState->prog_drawLambert_instanced;
+	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
 
-	//...
-	// Phong
+	////...
+	//// Phong
 
-	currentDemoProg = demoState->prog_drawPhong;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+	//currentDemoProg = demoState->prog_drawPhong;
+	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
 
-	currentDemoProg = demoState->prog_drawPhong_instanced;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong-inst");
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+	//currentDemoProg = demoState->prog_drawPhong_instanced;
+	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong-inst");
+	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
 
 	//...
 
@@ -678,7 +678,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 
 		// ****TO-DO: 
 		//	-> set lighting uniform and block handles and defaults
-
+		// USE DEMOSCENEOBJECT.h a3_pointlightdata struct?
 	}*/
 
 
