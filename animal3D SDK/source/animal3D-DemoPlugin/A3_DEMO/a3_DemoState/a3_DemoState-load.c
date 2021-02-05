@@ -569,26 +569,26 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawTexture_fs->shader);
 	//...
 	// Lambert
-	//currentDemoProg = demoState->prog_drawLambert;
-	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
+	currentDemoProg = demoState->prog_drawLambert;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert");
 	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_vs);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs->shader);
 
-	//currentDemoProg = demoState->prog_drawLambert_instanced;
-	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
+	currentDemoProg = demoState->prog_drawLambert_instanced;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-lambert-instanced");
 	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_transform_instanced_vs);
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawLambert_fs->shader);
 
 	////...
 	//// Phong
 
-	//currentDemoProg = demoState->prog_drawPhong;
-	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong");
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+	currentDemoProg = demoState->prog_drawPhong;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs->shader);
 
-	//currentDemoProg = demoState->prog_drawPhong_instanced;
-	//a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong-inst");
-	//a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs);
+	currentDemoProg = demoState->prog_drawPhong_instanced;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-phong-inst");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawPhong_fs->shader);
 
 	//...
 
