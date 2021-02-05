@@ -40,6 +40,7 @@
 #include <GL/GL.h>
 #else	// !_WIN32
 #include <OpenGL/gl3.h>
+#include <math.h>
 #endif	// _WIN32
 
 
@@ -197,6 +198,13 @@ void a3demo_renderTest(a3_DemoState const* demoState, a3f64 const dt)
 
 	// set viewport
 	glViewport(-demoState->frameBorder, -demoState->frameBorder, demoState->frameWidth, demoState->frameHeight);
+
+	
+	
+	const GLfloat color[] = { a3sindTaylor((a3real)demoState->n_timer) * 0.5f + 0.5f, a3cosdTaylor((a3real)demoState->n_timer) * 0.5f + 0.5f, 0.0f, 1.0f };
+	//const GLfloat red[] = { 0.5f, 0.5f, 0.0f, 1.0f };
+
+	glClearBufferfv(GL_COLOR, 0, color);
 
 	// ****TO-DO: render scene here
 	//	-> implement "render" from tutorial
