@@ -93,7 +93,6 @@ void a3intro_update_scene(a3_DemoState* demoState, a3_DemoMode0_Intro* demoMode,
 
 	a3demo_updateSceneObject(demoMode->obj_torus, 0);
 	a3demo_updateSceneObjectStack(demoMode->obj_torus, projector);
-	
 
 }
 

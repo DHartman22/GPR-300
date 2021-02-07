@@ -193,7 +193,7 @@ struct a3_DemoState
 	};
 
 
-	 //****TO-DO:
+	 //****DONE:
 		//-> uncomment buffers union
 	// draw data buffers
 	union {
@@ -204,7 +204,7 @@ struct a3_DemoState
 		};
 	};
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment vertex arrays union
 	// vertex array objects
 	union {
@@ -219,7 +219,7 @@ struct a3_DemoState
 		};
 	};
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment drawables union
 	// drawables
 	union {
@@ -242,7 +242,7 @@ struct a3_DemoState
 	};
 
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment shader programs union
 	// shader programs and uniforms
 	union {
@@ -270,7 +270,7 @@ struct a3_DemoState
 	};
 
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment textures union
 	// textures
 	union {
