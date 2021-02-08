@@ -264,23 +264,23 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			//	-> send "normal matrix": the inverse-transpose of the model-view matrix
 			//		(hint: the correct uniform location is in the shader header)
 			 //currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose
-			 //a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV_nrm, 1, currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose.mm);
+			 a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV_nrm, 1, currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose.mm);
 
 		case intro_renderModeTexture:
 			// activate diffuse map, fall through to solid color
 			// ****TO-DO: 
 			//	-> activate diffuse texture on texture unit 0
-			//a3textureActivate(texture_dm[j], a3tex_unit00);
+			a3textureActivate(texture_dm[j], a3tex_unit00);
 
 		case intro_renderModeSolid:
 			// send general matrix and color, end
 			// ****TO-DO: 
-			//a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, currentSceneObject->modelMatrixStackPtr->modelViewMat.mm);
 			
 			 //a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr->euler);
-			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr->euler.rgb.v);
+			//a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr);
 			
-			 //a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
+			 a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
+			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, currentSceneObject->modelMatrixStackPtr->modelViewProjectionMat.mm);
 
 			//	-> send model-view-projection matrix
 			//	-> send solid color (not a matrix)

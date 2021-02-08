@@ -33,7 +33,10 @@
 
 in vec2 vTexcoord;
 
+uniform uSampler;
+
 layout (location = 0) out vec4 rtFragColor;
+
 
 void main()
 {
