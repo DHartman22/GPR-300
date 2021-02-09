@@ -42,7 +42,6 @@ in vec4 vNormal;
 uniform vec4 uLightPosition;
 
 
-
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE LIME

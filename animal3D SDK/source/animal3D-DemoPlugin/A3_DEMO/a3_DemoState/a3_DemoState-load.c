@@ -482,9 +482,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 00-common
 			{ { { 0 },	"shdr-fs:draw-tex",					a3shader_fragment,	1,{ A3_DEMO_FS"00-common/drawTexture_fs4x.glsl" } } },// ****DECODE
 			{ { { 0 },	"shdr-fs:draw-Lambert",				a3shader_fragment,	2,{ A3_DEMO_FS"00-common/e/drawLambert_fs4x.glsl",// ****DECODE
-																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },// ****DECODE
+																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } },// ****DECODE
 			{ { { 0 },	"shdr-fs:draw-Phong",				a3shader_fragment,	2,{ A3_DEMO_FS"00-common/e/drawPhong_fs4x.glsl",// ****DECODE
-																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },// ****DECODE
+																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } },// ****DECODE
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;

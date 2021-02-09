@@ -48,6 +48,9 @@ uniform mat4 uMV, uP, uMV_nrm;
 out vec4 vNormal;
 out vec4 vPosition;
 
+out vec4 vLighting;
+out vec4 vShading;
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position

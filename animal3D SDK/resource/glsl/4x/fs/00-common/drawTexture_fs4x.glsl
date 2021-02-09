@@ -42,4 +42,7 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW
 	//rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
+
+	uniform vec3 uColor = uSampler * vTexcoord;
+	rtFragColor = (uColor, 1.0);
 }
