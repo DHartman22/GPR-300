@@ -95,7 +95,12 @@ extern "C"
 
 		// ****TO-DO: 
 		//	-> add lighting uniform and block handles
-
+		struct {
+			a3i32
+				uLightPos,       //Gets the position of lights in view space
+				uLightColor,     //Gets the color of the lights
+				uLightRadii;     //Gets the radii of the lights
+		};
 	};
 
 
