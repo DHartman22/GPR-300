@@ -101,6 +101,11 @@ extern "C"
 				uLightColor,     //Gets the color of the lights
 				uLightRadii;     //Gets the radii of the lights
 		};
+
+		struct {
+			a3i32
+				ubLightInfo; //Stores all light info uniforms above
+		};
 	};
 
 

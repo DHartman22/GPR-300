@@ -45,21 +45,36 @@ flat out int vInstanceID;
 
 uniform mat4 uMV, uP, uMV_nrm;
 
+out mat3 vTBN;
+
 out vec4 vNormal;
 out vec4 vPosition;
 
-out vec4 vLighting;
-out vec4 vShading;
+out vec4 vLightPos;
+out vec4 vLightColor;
+
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	//gl_Position = aPosition;
 
-	vPosition = uMV * aPosition; //camera space
-	vNormal = uMV_nrm * vec4(aNormal, 0.0); //object space
+	//TEXCOORD IS UV!
+	//P = vPosition
+	//U = TEXCOORD.X
+	//V = TEXCOORD.Y
+	//uMV_nrm = changep1?
+	//vec4(aNormal, 0.0) = changep2?
 
-	gl_Position = uP * vPosition;
+	vPosition = uMV * uMV_nrm * aPosition; //camera space
+	vNormal = uMV_nrm * vec4(aNormal, 0.0); //object space
+	
+
+	//https://champlain.instructure.com/courses/1623294/files/175356519?module_item_id=76564417
+
+
+	gl_Position = vPosition;
+
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

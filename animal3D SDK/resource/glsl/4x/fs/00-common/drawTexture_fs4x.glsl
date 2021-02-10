@@ -33,16 +33,21 @@
 
 in vec2 vTexcoord;
 
-uniform uSampler;
+uniform sampler2D uSampler;
 
 layout (location = 0) out vec4 rtFragColor;
-
+	
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW
-	//rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
+	rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
 
-	uniform vec3 uColor = uSampler * vTexcoord;
-	rtFragColor = (uColor, 1.0);
+
+	//used blue book pg 195 to find texelFetch and ivec2
+	//texelFetch
+	//vec4 color = texelFetch(uSampler, fvec2(vTexcoord.xy), 0);
+	//vec4 color = uSampler * vTexcoord;
+	
+	//rtFragColor = (color, 1.0);
 }

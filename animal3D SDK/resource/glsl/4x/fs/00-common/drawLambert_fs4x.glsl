@@ -39,7 +39,7 @@ layout (location = 0) out vec4 rtFragColor;
 
 in vec4 vPosition;
 in vec4 vNormal;
-uniform vec4 uLightPosition;
+uniform vec4 uLightPos;
 
 
 void main()
@@ -48,7 +48,7 @@ void main()
 	//rtFragColor = vec4(0.5, 1.0, 0.0, 1.0);
 
 	vec4 N = normalize(vNormal);
-	vec4 L = normalize(uLightPosition - vPosition);
+	vec4 L = normalize(uLightPos - vPosition);
 	float kd = dot(N, L);
 
 	//Debug
