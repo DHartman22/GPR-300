@@ -32,8 +32,10 @@
 //	-> assign color to output
 
 in vec2 vTexcoord;
+in vec4 vTexcoord_atlas;
 
 uniform sampler2D uSampler;
+uniform vec4 uColor;
 
 layout (location = 0) out vec4 rtFragColor;
 	
@@ -41,13 +43,9 @@ layout (location = 0) out vec4 rtFragColor;
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW
-	rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
+	//rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
 
-
-	//used blue book pg 195 to find texelFetch and ivec2
-	//texelFetch
-	//vec4 color = texelFetch(uSampler, ivec2(vTexcoord.xy), 0);
-	//vec4 color = uSampler * vTexcoord;
-	
-	//rtFragColor = (color);
+	//idea for texture2D came from here: https://thebookofshaders.com/glossary/?search=texture2D
+	vec4 color = texture2D(uSampler, vTexcoord) * uColor;
+	rtFragColor = color;
 }
