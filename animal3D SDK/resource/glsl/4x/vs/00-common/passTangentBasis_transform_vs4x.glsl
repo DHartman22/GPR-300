@@ -46,7 +46,7 @@ layout (location = 8) in vec2 aTexcoord;
 flat out int vVertexID;
 flat out int vInstanceID;
 
-uniform mat4 uMV, uP, uMV_nrm;
+uniform mat4 uMV, uP, uMV_nrm, uMVP;
 
 out mat3 vTBN;
 
@@ -96,7 +96,7 @@ void main()
 	//https://champlain.instructure.com/courses/1623294/files/175356519?module_item_id=76564417
 
 
-	gl_Position = vPosition;
+	gl_Position = uMVP * aPosition;
 
 
 	vVertexID = gl_VertexID;
