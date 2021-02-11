@@ -36,9 +36,12 @@
 //	-> calculate final normal and assign to varying
 //	-> assign texture coordinate to varying
 
+// Edited by Daniel Hartman
+
 layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec3 aNormal;
 layout (location = 8) in vec2 aTexcoord;
+
 
 flat out int vVertexID;
 flat out int vInstanceID;
@@ -47,12 +50,20 @@ uniform mat4 uMV, uP, uMV_nrm;
 
 out mat3 vTBN;
 
+out vec3 vTangent;
+out vec3 vBitangent;
+
 out vec4 vNormal;
 out vec4 vPosition;
 
 out vec4 vLightPos;
 out vec4 vLightColor;
 
+out vbVertexData {
+	vec3 normal;
+	vec3 tangent;
+	vec3 bitangent;
+} vb_vertex_data;
 
 void main()
 {
@@ -68,7 +79,19 @@ void main()
 
 	vPosition = uMV * uMV_nrm * aPosition; //camera space
 	vNormal = uMV_nrm * vec4(aNormal, 0.0); //object space
+
+	vPosition = aPosition;
+	vNormal = vec4(aNormal, 0.0);
 	
+	vTangent = vec3(aTexcoord.xy, 0.0); //use texcoord as tangent
+
+	//adapted from the blue book pg 631
+	vTangent = normalize(mat3(uMV) * vTangent); 
+	vBitangent = cross(vec3(vNormal), vTangent);
+
+
+	vBitangent = vec3(0.0, aTexcoord.y, 0.0);
+
 
 	//https://champlain.instructure.com/courses/1623294/files/175356519?module_item_id=76564417
 

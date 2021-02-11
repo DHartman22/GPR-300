@@ -265,6 +265,12 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			//		(hint: the correct uniform location is in the shader header)
 			 //currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose
 			 a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV_nrm, 1, currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose.mm);
+			 
+			 a3vec3 lightPositions[] = {a3vec3_one, a3vec3_zero};
+			 a3vec4 lightColors[] = { a3vec4_one, a3vec4_one };
+			 //lightPosition = a3vec3_one;
+			 a3shaderUniformSendFloat(a3unif_vec3, 0, currentDemoProgram->uLightPos, 2, lightPositions);
+				 
 
 		case intro_renderModeTexture:
 			// activate diffuse map, fall through to solid color
@@ -279,7 +285,7 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			 //a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr->euler);
 			//a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr);
 			
-			 a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
+			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, currentSceneObject->modelMatrixStackPtr->modelViewProjectionMat.mm);
 
 			//	-> send model-view-projection matrix
