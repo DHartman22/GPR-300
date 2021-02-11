@@ -56,9 +56,11 @@ void main()
 	vec4 L = normalize(uLightPos - vPosition);
 	float kd = dot(N, L);
 
+	
+
 	vec3 final = vec3(uLightColor) * kd;
 
-	final = kd * 5.0 * uLightColor * 
+	final = kd * 5.0 * vec3(uLightColor) * vec3(uColor); 
 	//Debug
 	rtFragColor = vec4(final, 0.0);
 }

@@ -49,5 +49,5 @@ void main()
 	//vec4 color = texelFetch(uSampler, fvec2(vTexcoord.xy), 0);
 	//vec4 color = uSampler * vTexcoord;
 	
-	//rtFragColor = (color, 1.0);
+	//rtFragColor = (color);
 }

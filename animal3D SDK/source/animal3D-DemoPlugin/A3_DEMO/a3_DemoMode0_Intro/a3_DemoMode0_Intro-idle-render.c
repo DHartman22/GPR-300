@@ -268,8 +268,8 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			 
 			 a3vec3 lightPositions[] = {a3vec3_one, a3vec3_zero};
 			 a3vec4 lightColors[] = { a3vec4_one, a3vec4_one };
-			 //lightPosition = a3vec3_one;
-			 a3shaderUniformSendFloat(a3unif_vec3, 0, currentDemoProgram->uLightPos, 2, lightPositions);
+			 a3vec3 lightPosition = a3vec3_one;
+			 a3shaderUniformSendFloat(a3unif_vec3, 0, currentDemoProgram->uLightPos, 1, lightPosition);
 				 
 
 		case intro_renderModeTexture:
@@ -282,7 +282,7 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			// send general matrix and color, end
 			// ****TO-DO: 
 			
-			 //a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr->euler);
+			//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, );
 			//a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr);
 			
 			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
