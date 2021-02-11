@@ -24,7 +24,7 @@
 
 #version 450
 
-// ****TO-DO: 
+// ****DONE: 
 //	-> start with same items as "../passthru_transform_vs4x"
 //	-> declare texture coordinate attribute
 //		(hint: location is 8, use most appropriate type)
@@ -35,13 +35,11 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec2 aTexcoord;
 
 uniform mat4 uMVP; // model view projection matrix
-uniform mat4 uAtlas;
 
 flat out int vVertexID;
 flat out int vInstanceID;
 
 out vec2 vTexcoord;
-out vec4 vTexcoord_atlas;
 
 void main()
 {
@@ -49,8 +47,6 @@ void main()
 	gl_Position = uMVP * aPosition;
 
 	vTexcoord = aTexcoord;
-	
-	vTexcoord_atlas = uAtlas * vTexcoord;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

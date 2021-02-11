@@ -46,7 +46,7 @@ void main()
 
 	//used blue book pg 195 to find texelFetch and ivec2
 	//texelFetch
-	//vec4 color = texelFetch(uSampler, fvec2(vTexcoord.xy), 0);
+	//vec4 color = texelFetch(uSampler, ivec2(vTexcoord.xy), 0);
 	//vec4 color = uSampler * vTexcoord;
 	
 	//rtFragColor = (color);

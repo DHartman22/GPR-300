@@ -48,13 +48,19 @@ uniform vec4 uColor;
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE LIME
-	//rtFragColor = vec4(0.5, 1.0, 0.0, 1.0);
+	rtFragColor = vec4(0.5, 1.0, 0.0, 1.0);
 
+<<<<<<< HEAD
 	//vec4 pos = vec4(0.0, 0.0, 0.0, 0.0);
 	
 	vec4 N = normalize(vNormal);
 	vec4 L = normalize(uLightPos - vPosition);
 	float kd = dot(N, L);
+=======
+	//vec4 N = normalize(vNormal);
+	//vec4 L = normalize(uLightPos - vPosition);
+	//float kd = dot(N, L);
+>>>>>>> b8ec99ae703b03389e3d386ca5a675ffb28f1a4f
 
 	
 
@@ -62,5 +68,9 @@ void main()
 
 	final = kd * 5.0 * vec3(uLightColor) * vec3(uColor); 
 	//Debug
+<<<<<<< HEAD
 	rtFragColor = vec4(final, 0.0);
+=======
+	//rtFragColor = vec4(kd, kd, kd, 1.0);
+>>>>>>> b8ec99ae703b03389e3d386ca5a675ffb28f1a4f
 }
