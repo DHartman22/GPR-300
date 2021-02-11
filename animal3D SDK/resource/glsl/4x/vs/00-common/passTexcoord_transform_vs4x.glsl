@@ -35,11 +35,13 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec2 aTexcoord;
 
 uniform mat4 uMVP; // model view projection matrix
+uniform mat4 uAtlas; 
 
 flat out int vVertexID;
 flat out int vInstanceID;
 
 out vec2 vTexcoord;
+
 
 void main()
 {

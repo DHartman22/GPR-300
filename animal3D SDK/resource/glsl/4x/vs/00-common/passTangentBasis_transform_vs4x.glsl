@@ -80,8 +80,8 @@ void main()
 	vPosition = uMV * uMV_nrm * aPosition; //camera space
 	vNormal = uMV_nrm * vec4(aNormal, 0.0); //object space
 
-	vPosition = aPosition;
-	vNormal = vec4(aNormal, 0.0);
+	//vPosition = aPosition;
+	//vNormal = vec4(aNormal, 0.0);
 	
 	vTangent = vec3(aTexcoord.xy, 0.0); //use texcoord as tangent
 

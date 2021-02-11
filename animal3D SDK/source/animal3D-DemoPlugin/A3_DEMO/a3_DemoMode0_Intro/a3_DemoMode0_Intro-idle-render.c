@@ -269,7 +269,11 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			 a3vec3 lightPositions[] = {a3vec3_one, a3vec3_zero};
 			 a3vec4 lightColors[] = { a3vec4_one, a3vec4_one };
 			 a3vec3 lightPosition = a3vec3_one;
-			 a3shaderUniformSendFloat(a3unif_vec3, 0, currentDemoProgram->uLightPos, 1, lightPosition);
+			 a3f32 lightRadius = 2.5f;
+			 a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uLightPos, 1, lightPosition.v);
+			 a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uLightColor, 1, lightColors[0].v);
+			 a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uLightRadii, 1, &lightRadius);
+
 				 
 
 		case intro_renderModeTexture:
@@ -277,6 +281,8 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			// ****TO-DO: 
 			//	-> activate diffuse texture on texture unit 0
 			a3textureActivate(texture_dm[j], a3tex_unit00);
+			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uAtlas, 1, currentSceneObject->modelMatrixStackPtr->atlasMat.mm);
+
 
 		case intro_renderModeSolid:
 			// send general matrix and color, end
