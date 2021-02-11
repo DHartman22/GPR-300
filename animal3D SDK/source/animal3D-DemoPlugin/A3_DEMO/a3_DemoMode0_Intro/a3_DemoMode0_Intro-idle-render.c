@@ -28,6 +28,8 @@
 
 //-----------------------------------------------------------------------------
 
+//Edited by Daniel Hartman and Nick Preis
+
 #include "../a3_DemoMode0_Intro.h"
 
 //typedef struct a3_DemoState a3_DemoState;

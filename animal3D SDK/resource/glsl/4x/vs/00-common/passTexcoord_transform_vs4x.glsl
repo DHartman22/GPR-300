@@ -22,7 +22,7 @@
 	Calculate final position and pass atlas texture coordinate.
 */
 
-//Edited by Daniel Hartman
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
@@ -37,22 +37,18 @@ layout (location = 0) in vec4 aPosition;
 layout (location = 8) in vec2 aTexcoord;
 
 uniform mat4 uMVP; // model view projection matrix
-uniform mat4 uAtlas; 
 
 flat out int vVertexID;
 flat out int vInstanceID;
 
 out vec2 vTexcoord;
 
-
 void main()
 {
-	
-	gl_Position = uMVP * aPosition;
-
-	//pretty much just for 
+	//assign texcoord to varying
 	vTexcoord = aTexcoord;
 
+	gl_Position = uMVP * aPosition;
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 }

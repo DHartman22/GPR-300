@@ -24,6 +24,8 @@
 
 #version 450
 
+//Edited by Daniel Hartman and Nick Preis
+
 // ****DONE: 
 //	-> declare texture coordinate varying
 //	-> declare sampler uniform

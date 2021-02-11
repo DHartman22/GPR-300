@@ -36,7 +36,7 @@
 //	-> calculate final normal and assign to varying
 //	-> assign texture coordinate to varying
 
-// Edited by Daniel Hartman
+//Edited by Daniel Hartman and Nick Preis
 
 layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec3 aNormal;

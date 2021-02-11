@@ -28,6 +28,8 @@
 	****************************************************
 */
 
+//Edited by Daniel Hartman and Nick Preis
+
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
 
 

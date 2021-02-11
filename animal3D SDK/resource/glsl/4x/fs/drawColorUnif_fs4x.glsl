@@ -14,6 +14,8 @@
 	limitations under the License.
 */
 
+//Edited by Daniel Hartman and Nick Preis
+
 /*
 	animal3D SDK: Minimal 3D Animation Framework
 	By Daniel S. Buckstein
@@ -23,6 +25,8 @@
 */
 
 #version 450
+
+//Edited by Daniel Hartman and Nick Preis
 
 // ****DONE: 
 //	-> declare color uniform
@@ -37,7 +41,5 @@ layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE RED
-	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 	rtFragColor = uColor;
 }

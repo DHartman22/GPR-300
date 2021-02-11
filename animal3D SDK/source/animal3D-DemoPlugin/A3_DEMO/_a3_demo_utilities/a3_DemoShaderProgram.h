@@ -25,6 +25,7 @@
 #ifndef __ANIMAL3D_DEMOSHADERPROGRAM_H
 #define __ANIMAL3D_DEMOSHADERPROGRAM_H
 
+//Edited by Daniel Hartman and Nick Preis
 
 //-----------------------------------------------------------------------------
 // animal3D framework includes
@@ -93,7 +94,7 @@ extern "C"
 				ubTransformMVP;		// model-view-projection matrix block
 		};
 
-		// ****TO-DO: 
+		// ****DONE: 
 		//	-> add lighting uniform and block handles
 		struct {
 			a3i32

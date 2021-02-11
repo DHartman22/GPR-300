@@ -39,6 +39,8 @@
 //-----------------------------------------------------------------------------
 // UPDATE
 
+//Edited by Daniel Hartman and Nick Preis
+
 void a3intro_update_graphics(a3_DemoState* demoState, a3_DemoMode0_Intro* demoMode)
 {
 	// ****LATER: 
@@ -74,7 +76,6 @@ void a3intro_update_scene(a3_DemoState* demoState, a3_DemoMode0_Intro* demoMode,
 	a3demo_updateSceneObjectStack(demoMode->obj_sphere, projector);
 
 	// ****DONE:
-	//Should work just fine
 	//	-> update the remaining scene objects and their matrix stacks
 	a3demo_updateSceneObject(demoMode->obj_capsule, 0);
 	a3demo_updateSceneObjectStack(demoMode->obj_capsule, projector);

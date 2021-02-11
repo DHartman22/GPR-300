@@ -28,6 +28,8 @@
 	****************************************************
 */
 
+//Edited by Daniel Hartman and Nick Preis
+
 //-----------------------------------------------------------------------------
 
 #include "../a3_DemoState.h"
@@ -43,7 +45,7 @@
 // utility to unload geometry
 void a3demo_unloadGeometry(a3_DemoState* demoState)
 {
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment model unloading algorithm
 	a3_BufferObject* currentBuff = demoState->drawDataBuffer,
 		* const endBuff = currentBuff + demoStateMaxCount_drawDataBuffer;
