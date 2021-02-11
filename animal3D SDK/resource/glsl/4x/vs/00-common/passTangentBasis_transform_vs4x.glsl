@@ -50,7 +50,7 @@ out mat3 vTBN;
 out vec4 vNormal;
 out vec4 vPosition;
 
-out vec4 vLightPos;
+out vec3 vLightPos;
 out vec4 vLightColor;
 
 
