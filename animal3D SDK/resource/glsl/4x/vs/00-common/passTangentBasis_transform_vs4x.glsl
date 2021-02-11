@@ -46,56 +46,24 @@ layout (location = 8) in vec2 aTexcoord;
 flat out int vVertexID;
 flat out int vInstanceID;
 
-uniform mat4 uMV, uP, uMV_nrm, uMVP;
-
-out mat3 vTBN;
-
-out vec3 vTangent;
-out vec3 vBitangent;
+uniform mat4 uMV, uMV_nrm, uMVP;
 
 out vec4 vNormal;
 out vec4 vPosition;
-
-out vec3 vLightPos;
-out vec4 vLightColor;
-
-out vbVertexData {
-	vec3 normal;
-	vec3 tangent;
-	vec3 bitangent;
-} vb_vertex_data;
+out vec2 vTexcoord;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	//gl_Position = aPosition;
 
-	//TEXCOORD IS UV!
-	//P = vPosition
-	//U = TEXCOORD.X
-	//V = TEXCOORD.Y
-	//uMV_nrm = changep1?
-	//vec4(aNormal, 0.0) = changep2?
-
+	//done in class	
 	vPosition = uMV * uMV_nrm * aPosition; //camera space
 	vNormal = uMV_nrm * vec4(aNormal, 0.0); //object space
-
-	//vPosition = aPosition;
-	//vNormal = vec4(aNormal, 0.0);
 	
-	vTangent = vec3(aTexcoord.xy, 0.0); //use texcoord as tangent
-
-	//adapted from the blue book pg 631
-	vTangent = normalize(mat3(uMV) * vTangent); 
-	vBitangent = cross(vec3(vNormal), vTangent);
-
-
-	vBitangent = vec3(0.0, aTexcoord.y, 0.0);
-
-
-	//https://champlain.instructure.com/courses/1623294/files/175356519?module_item_id=76564417
-
-
+	//passing texcoord so drawLambert/drawPhong can use textures
+	vTexcoord = aTexcoord;
+	
+	
 	gl_Position = uMVP * aPosition;
 
 

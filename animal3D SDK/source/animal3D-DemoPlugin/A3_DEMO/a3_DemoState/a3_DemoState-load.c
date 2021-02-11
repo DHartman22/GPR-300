@@ -563,7 +563,6 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	// 00-common programs: 
 	// texturing
 
-	//UNSURE IF ANY OF THESE ARE CORRECT
 	currentDemoProg = demoState->prog_drawTexture;
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-tex");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_transform_vs->shader);
@@ -631,7 +630,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	}
 
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment uniform setup and default value assignment
 	// prepare uniforms algorithmically instead of manually for all programs
 	// get uniform and uniform block locations and set default values for all 
@@ -687,15 +686,16 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		a3demo_setUniformDefaultBlock(currentDemoProg, ubTransformMVP, 0);
 		a3demo_setUniformDefaultBlock(currentDemoProg, ubTransformMVPB, 1);
 
-		// ****TO-DO: 
+		// ****DONE: 
 		//	-> set lighting uniform and block handles and defaults
 
+		//all three of these are used in drawLambert
 		a3demo_setUniformDefaultVec4(currentDemoProg, uLightPos, a3vec4_one.v);
 		a3demo_setUniformDefaultVec4(currentDemoProg, uLightColor, a3vec4_one.v);
 		a3demo_setUniformDefaultFloat(currentDemoProg, uLightRadii, 0);
 		
 
-		a3demo_setUniformDefaultBlock(currentDemoProg, ubLightInfo, 0);
+		a3demo_setUniformDefaultBlock(currentDemoProg, ubLightInfo, 0); //this goes unused due to time constraints
 		// USE DEMOSCENEOBJECT.h a3_pointlightdata struct?
 	}
 
@@ -808,7 +808,7 @@ inline void a3_refreshDrawable_internal(a3_VertexDrawable *drawable, a3_VertexAr
 //	...or just set new function pointers!
 void a3demo_loadValidate(a3_DemoState* demoState)
 {
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment
 	a3_BufferObject* currentBuff = demoState->drawDataBuffer,
 		* const endBuff = currentBuff + demoStateMaxCount_drawDataBuffer;

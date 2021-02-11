@@ -24,7 +24,7 @@
 
 #version 450
 
-// ****TO-DO: 
+// ****DONE: 
 //	-> declare texture coordinate varying
 //	-> declare sampler uniform
 //		(hint: correct name is used in codebase)
@@ -42,10 +42,7 @@ layout (location = 0) out vec4 rtFragColor;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE YELLOW
-	//rtFragColor = vec4(1.0, 1.0, 0.0, 1.0);
-
-	//idea for texture2D came from here: https://thebookofshaders.com/glossary/?search=texture2D
+	//referenced frame buffer presentation pdf for texture2d function
 	vec4 color = texture2D(uSampler, vTexcoord) * uColor;
 	rtFragColor = color;
 }

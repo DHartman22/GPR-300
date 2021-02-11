@@ -22,7 +22,11 @@
 	Output Phong shading.
 */
 
+
 #version 450
+//Edited by Daniel Hartman and Nick Preis
+
+//Note: this is just copy pasted lambert, didn't have the time to finish this
 
 // ****TO-DO: 
 //	-> start with list from "drawLambert_fs4x"
@@ -32,19 +36,26 @@
 
 layout (location = 0) out vec4 rtFragColor;
 
-//common file extends this
 in vec4 vPosition;
 in vec4 vNormal;
+in vec2 vTexcoord;
 uniform vec4 uLightPos;
+uniform vec4 uLightColor;
+uniform float uLightRadii;
+uniform vec4 uColor;
+uniform sampler2D uSampler;
+
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE GREEN
-	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
 
-	//vec4 N = normalize(vNormal);
-	//vec4 L = normalize(uLightPos - vPosition);
-	//float kd = dot(N, L);
+	
+	//mostly done in class
+	vec4 N = normalize(vNormal);
+	vec4 L = normalize(uLightPos - vPosition);
+	float kd = dot(N, L);
+	//kd = max(kd, 0.0);
 
-	//rtFragColor = vec4(kd, kd, kd, 1.0);
+	rtFragColor = kd * uLightRadii * uLightColor * texture2D(uSampler, vTexcoord) * uColor;
+
 }

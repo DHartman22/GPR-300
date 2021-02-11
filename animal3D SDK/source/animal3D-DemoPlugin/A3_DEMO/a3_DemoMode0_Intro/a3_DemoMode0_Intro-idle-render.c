@@ -250,7 +250,7 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 		{
 		case intro_renderModePhong:
 			// activate specular map, fall through to Lambert
-			// ****TO-DO: 
+			// ****DONE: 
 			//	-> uncomment texture activation
 			a3textureActivate(texture_dm[j], a3tex_unit01);
 			// ****PRO-TIP: 
@@ -260,16 +260,17 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 			// send lights and matrices, fall through to texturing
 			modelViewMat = currentSceneObject->modelMatrixStackPtr->modelViewMat;
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, modelViewMat.mm);
-			// ****TO-DO: 
+			// ****DONE: 
 			//	-> send "normal matrix": the inverse-transpose of the model-view matrix
 			//		(hint: the correct uniform location is in the shader header)
 			 //currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose
 			 a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV_nrm, 1, currentSceneObject->modelMatrixStackPtr->modelViewMatInverseTranspose.mm);
 			 
+			 //Plans to implement multiple lights, didn't get around to finishing them
 			 a3vec3 lightPositions[] = {a3vec3_one, a3vec3_zero};
 			 a3vec4 lightColors[] = { a3vec4_one, a3vec4_one };
 			 a3vec3 lightPosition = a3vec3_one;
-			 a3f32 lightRadius = 0.5f;
+			 a3f32 lightRadius = 1.0f;
 			 a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uLightPos, 1, lightPosition.v);
 			 a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uLightColor, 1, lightColors[0].v);
 			 a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uLightRadii, 1, &lightRadius);
@@ -278,28 +279,25 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 
 		case intro_renderModeTexture:
 			// activate diffuse map, fall through to solid color
-			// ****TO-DO: 
+			// ****DONE: 
 			//	-> activate diffuse texture on texture unit 0
 			a3textureActivate(texture_dm[j], a3tex_unit00);
-			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uAtlas, 1, currentSceneObject->modelMatrixStackPtr->atlasMat.mm);
 
 
 		case intro_renderModeSolid:
 			// send general matrix and color, end
-			// ****TO-DO: 
+			// ****DONE: 
+			//	-> send model-view-projection matrix
+			//	-> send solid color (not a matrix)
 			
-			//a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, );
-			//a3shaderUniformSendFloat(a3unif_vec3, currentDemoProgram->uColor, 1, currentSceneObject->dataPtr);
-			
+			//Never figured out where or how to get the actual colors for objects 
+			//so to distinguish them I used the vector from this file and the sceneHierarchyIndex
 			a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, rgba4[currentSceneObject->sceneHierarchyIndex].v);
 			a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, currentSceneObject->modelMatrixStackPtr->modelViewProjectionMat.mm);
 
-			//	-> send model-view-projection matrix
-			//	-> send solid color (not a matrix)
-
 			break;
 		}
-		// ****TO-DO: 
+		// ****DONE: 
 		//	-> uncomment render call
 		a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uIndex, 1, &j);
 		a3vertexDrawableActivateAndRender(drawable[j]);
@@ -318,7 +316,7 @@ void a3intro_render(a3_DemoState const* demoState, a3_DemoMode0_Intro const* dem
 	// enable alpha
 	a3demo_enableCompositeBlending();
 
-	// ****TO-DO: 
+	// ****DONE: 
 	//	-> uncomment overlay rendering
 	// scene overlays
 	if (demoState->displayGrid || demoState->displayTangentBases || demoState->displayWireframe)

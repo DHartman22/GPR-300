@@ -39,28 +39,24 @@ layout (location = 0) out vec4 rtFragColor;
 
 in vec4 vPosition;
 in vec4 vNormal;
-in vec3 vTangent;
+in vec2 vTexcoord;
 uniform vec4 uLightPos;
 uniform vec4 uLightColor;
 uniform float uLightRadii;
 uniform vec4 uColor;
+uniform sampler2D uSampler;
 
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE LIME
-	//rtFragColor = vec4(0.5, 1.0, 0.0, 1.0);
 
-	//vec4 pos = vec4(0.0, 0.0, 0.0, 0.0);
 	
+	//mostly done in class
 	vec4 N = normalize(vNormal);
 	vec4 L = normalize(uLightPos - vPosition);
 	float kd = dot(N, L);
-	kd = max(kd, 0.0);
+	//kd = max(kd, 0.0);
 
-	vec3 final = vec3(uLightColor) * kd;
-
-	final = kd * uLightRadii * vec3(uLightColor) * vec3(uColor); 
-	rtFragColor = vec4(final, 0.0);
+	rtFragColor = kd * uLightRadii * uLightColor * texture2D(uSampler, vTexcoord) * uColor;
 
 }

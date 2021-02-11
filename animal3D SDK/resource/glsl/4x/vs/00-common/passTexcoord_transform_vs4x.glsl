@@ -22,6 +22,8 @@
 	Calculate final position and pass atlas texture coordinate.
 */
 
+//Edited by Daniel Hartman
+
 #version 450
 
 // ****DONE: 
@@ -45,9 +47,10 @@ out vec2 vTexcoord;
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
+	
 	gl_Position = uMVP * aPosition;
 
+	//pretty much just for 
 	vTexcoord = aTexcoord;
 
 	vVertexID = gl_VertexID;
