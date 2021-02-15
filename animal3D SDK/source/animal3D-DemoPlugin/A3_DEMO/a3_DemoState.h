@@ -311,7 +311,7 @@ struct a3_DemoState
 	};
 
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment framebuffers
 	// framebuffers
 	union {
