@@ -235,7 +235,6 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	//	-> add pointer to target FBO for each pass
 	//		(hint: choose the most relevant one for each; all are unique)
 	// framebuffer target for each pass
-<<<<<<< HEAD
 	const a3_Framebuffer* writeFBO[postproc_renderPass_max] = { //unsure if this is right, feels odd to not use c32f or c16x4
 		demoState->fbo_d32,
 		demoState->fbo_c16x4_d24s8,
@@ -249,12 +248,6 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 		demoState->fbo_c16_szEighth,
 		demoState->fbo_c16_szEighth,
 		demoState->fbo_c16x4_d24s8
-
-=======
-	const a3_Framebuffer* writeFBO[postproc_renderPass_max] = {
-		demoState->fbo_d32,
-		demoState->fbo_c16x4_d24s8,
->>>>>>> e5b037c23e0439513da2a848d170b97cfbec5d61
 		//...
 	};
 
@@ -293,11 +286,7 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	//	-> uncomment shadow pass FBO binding
 	// bind scene FBO
 	currentWriteFBO = writeFBO[postproc_renderPassShadow]; //demoState->fbo_d32
-<<<<<<< HEAD
 	a3framebufferActivate(currentWriteFBO); //activate depth only target
-=======
-	a3framebufferActivate(currentWriteFBO);
->>>>>>> e5b037c23e0439513da2a848d170b97cfbec5d61
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	currentDemoProgram = demoState->prog_transform;
@@ -394,11 +383,6 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 		// activate texture maps
 		a3textureActivate(texture_dm[j], a3tex_unit00);
 		a3textureActivate(texture_sm[j], a3tex_unit01);
-<<<<<<< HEAD
-		
-=======
-	
->>>>>>> e5b037c23e0439513da2a848d170b97cfbec5d61
 
 		// send other data
 		a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uIndex, 1, &j);
@@ -444,6 +428,64 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	a3shaderProgramActivate(currentDemoProgram->program);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBright2];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurH2];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurV2];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+
+	currentDemoProgram = demoState->prog_postBright;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBright4];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurH4];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurV4];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+
+	currentDemoProgram = demoState->prog_postBright;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBright8];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurH8];
+	a3framebufferActivate(currentWriteFBO);
+	a3vertexDrawableRenderActive();
+
+	currentDemoProgram = demoState->prog_postBlur;
+	a3shaderProgramActivate(currentDemoProgram->program);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	currentWriteFBO = writeFBO[postproc_renderPassBlurV8];
 	a3framebufferActivate(currentWriteFBO);
 	a3vertexDrawableRenderActive();
 	//...
