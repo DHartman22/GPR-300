@@ -103,7 +103,6 @@ struct sPointLightData
 
 uniform ubTransformStack
 {
-	//sProjectorMatrixStack uProjectorMatrixStack[2];
 	sProjectorMatrixStack uCameraMatrixStack, uLightMatrixStack;
 	sModelMatrixStack uModelMatrixStack[16];
 };
