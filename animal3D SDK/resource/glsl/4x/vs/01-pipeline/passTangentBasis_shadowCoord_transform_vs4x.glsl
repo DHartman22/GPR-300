@@ -50,11 +50,17 @@ flat out int vVertexID;
 flat out int vInstanceID;
 
 uniform int uIndex;
+uniform int uCount;
 
+out vec4 vView;
 out vec4 vNormal;
 out vec4 vPosition;
 out vec2 vTexcoord;
 out vec4 vShadowCoord;
+
+out vec4 vLightPos;
+out vec4 vLightColor;
+out float vLightRadii;
 
 //ubo transform:
 //	Projector stack for camera
@@ -83,11 +89,28 @@ struct sModelMatrixStack
 	mat4 atlasMat;						// atlas matrix (texture -> cell)
 };
 
+
+struct sPointLightData
+{
+	vec4 position;					// position in rendering target space
+	vec4 worldPos;					// original position in world space
+	vec4 color;						// RGB color with padding
+	float radius;						// radius (distance of effect from center)
+	float radiusSq;					// radius squared (if needed)
+	float radiusInv;					// radius inverse (attenuation factor)
+	float radiusInvSq;					// radius inverse squared (attenuation factor)
+};
+
 uniform ubTransformStack
 {
 	//sProjectorMatrixStack uProjectorMatrixStack[2];
 	sProjectorMatrixStack uCameraMatrixStack, uLightMatrixStack;
 	sModelMatrixStack uModelMatrixStack[16];
+};
+
+uniform ubLight
+{
+	sPointLightData uPointLightData[4];
 };
 
 void main()
@@ -99,7 +122,9 @@ void main()
 		uModelMatrixStack[uIndex].modelViewMat *
 		aPosition;
 
-	vPosition = uModelMatrixStack[uIndex].modelViewMat * uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; //camera space
+	//vPosition = uModelMatrixStack[uIndex].modelViewMat * uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; //camera space
+	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; //camera space
+	
 	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); //object space
 	
 	//passing texcoord so drawLambert/drawPhong can use textures
@@ -109,8 +134,17 @@ void main()
 	
 	vShadowCoord = shadowMat * aPosition;
 	
-
-
+	vView = (uModelMatrixStack[uIndex].modelViewMat * aPosition);
+	vLightPos = vec4(1, 1, 1, 1);
+	vLightColor = vec4(1, 1, 1, 1);
+	vLightRadii = 1f;
+	for(int i = 0; i < uCount; i++)
+	{
+		vLightPos *= uPointLightData[uCount].worldPos;
+		vLightColor *= uPointLightData[uCount].color;
+		vLightRadii *= uPointLightData[uCount].radius;
+	}
+	
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 

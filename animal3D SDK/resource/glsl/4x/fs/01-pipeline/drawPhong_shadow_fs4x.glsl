@@ -37,8 +37,41 @@ layout (location = 0) out vec4 rtFragColor;
 
 uniform int uCount;
 
+in vec4 vPosition;
+in vec4 vNormal;
+in vec2 vTexcoord;
+in vec4 vView;
+
+in vec4 vLightPos;
+in vec4 vLightColor;
+in float vLightRadii;
+
+uniform vec4 uLightPos;
+uniform vec4 uLightColor;
+uniform float uLightRadii;
+uniform vec4 uColor;
+uniform sampler2D uSampler;
+
+
+
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
-	rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
+	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
+
+		//mostly done in class
+	vec4 N = normalize(vNormal);
+	vec4 L = normalize(vLightPos - vPosition);
+	vec4 V = normalize(vView);
+
+	vec4 R = reflect(-L, N);
+
+
+	float kd = max(dot(N, L), 0.0);
+	vec3 diffuse = kd * vec3(texture2D(uSampler, vTexcoord));
+	vec3 specular = pow(max(dot(R, V), 0.0), 2048.0) * vec3(vLightColor);
+
+	//kd = max(kd, 0.0);
+	rtFragColor = vec4(diffuse + specular, 1.0);
+	//rtFragColor = kd * uLightRadii * uLightColor * texture2D(uSampler, vTexcoord) * uColor;
 }
