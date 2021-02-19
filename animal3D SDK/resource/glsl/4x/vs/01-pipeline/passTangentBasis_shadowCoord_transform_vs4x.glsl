@@ -43,11 +43,18 @@
 //	-> declare and write varying for shadow coordinate
 
 layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec3 aNormal;
+layout (location = 8) in vec2 aTexcoord;
 
 flat out int vVertexID;
 flat out int vInstanceID;
 
 uniform int uIndex;
+
+out vec4 vNormal;
+out vec4 vPosition;
+out vec2 vTexcoord;
+out vec4 vShadowCoord;
 
 //ubo transform:
 //	Projector stack for camera
@@ -85,11 +92,27 @@ uniform ubTransformStack
 
 void main()
 {
+	
 	// DUMMY OUTPUT: directly assign input position to output position
 	//gl_Position = aPosition;
 	gl_Position = uCameraMatrixStack.projectionMat * 
-	uModelMatrixStack[uIndex].modelViewMat * 
-	aPosition;
+		uModelMatrixStack[uIndex].modelViewMat *
+		aPosition;
+
+	vPosition = uModelMatrixStack[uIndex].modelViewMat * uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; //camera space
+	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); //object space
+	
+	//passing texcoord so drawLambert/drawPhong can use textures
+	vTexcoord = aTexcoord;
+
+	mat4 shadowMat = uLightMatrixStack.viewProjectionBiasMat * uModelMatrixStack[uIndex].modelMat;
+	
+	vShadowCoord = shadowMat * aPosition;
+	
+
+
+	vVertexID = gl_VertexID;
+	vInstanceID = gl_InstanceID;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
