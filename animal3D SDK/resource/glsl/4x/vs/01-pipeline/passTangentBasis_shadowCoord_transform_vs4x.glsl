@@ -136,7 +136,7 @@ void main()
 	vView = (uModelMatrixStack[uIndex].modelViewMat * aPosition);
 	vLightPos = vec4(1, 1, 1, 1);
 	vLightColor = vec4(1, 1, 1, 1);
-	vLightRadii = 1f;
+	vLightRadii = 1.0;
 	for(int i = 0; i < uCount; i++)
 	{
 		vLightPos *= uPointLightData[uCount].worldPos;
