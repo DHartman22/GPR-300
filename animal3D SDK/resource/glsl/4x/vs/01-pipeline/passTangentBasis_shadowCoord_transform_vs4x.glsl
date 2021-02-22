@@ -135,7 +135,6 @@ void main()
 	
 	vShadowCoord = shadowMat * aPosition;
 	
-
 	for(int i = 0; i < uCount; i++)
 	{
 		vLightPos = uPointLightData[uCount-1].position;
