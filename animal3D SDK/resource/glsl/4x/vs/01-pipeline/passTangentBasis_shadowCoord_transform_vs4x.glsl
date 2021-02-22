@@ -124,29 +124,25 @@ void main()
 	//vPosition = uModelMatrixStack[uIndex].modelViewMat * uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; //camera space
 	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; //camera space
 	
-	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); //object space
+	//vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); //object space
+	vNormal = uModelMatrixStack[uIndex].modelViewMat * vec4(aNormal, 0.0); //object space
 	
-	//passing texcoord so drawLambert/drawPhong can use textures
+	vView = (uModelMatrixStack[uIndex].modelViewMat * aPosition);
+	//passing texcoord so drawPhong can use textures
 	vTexcoord = aTexcoord;
 
 	mat4 shadowMat = uLightMatrixStack.viewProjectionBiasMat * uModelMatrixStack[uIndex].modelMat;
 	
 	vShadowCoord = shadowMat * aPosition;
 	
-	vView = (uModelMatrixStack[uIndex].modelViewMat * aPosition);
-	vLightPos = vec4(1, 1, 1, 1);
-	vLightColor = vec4(1, 1, 1, 1);
-	vLightRadii = 1f;
+
 	for(int i = 0; i < uCount; i++)
 	{
-		vLightPos *= uPointLightData[uCount].worldPos;
-		vLightColor *= uPointLightData[uCount].color;
-		vLightRadii *= uPointLightData[uCount].radius;
+		vLightPos = uPointLightData[uCount-1].position;
+		vLightColor = uPointLightData[uCount-1].color;
+		vLightRadii = uPointLightData[uCount-1].radiusSq;
 	}
 	
-	vVertexID = gl_VertexID;
-	vInstanceID = gl_InstanceID;
-
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 }

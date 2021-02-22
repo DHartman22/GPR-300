@@ -24,7 +24,7 @@
 
 #version 450
 
-// ****TO-DO:
+// ****DONE I think:
 // 1) Phong shading
 //	-> identical to outcome of last project
 // 2) shadow mapping
@@ -34,44 +34,66 @@
 //	-> perform "shadow test" (explained in class)
 
 layout (location = 0) out vec4 rtFragColor;
+layout (binding = 6) uniform sampler2D uTex_shadow; //taken directly from blue book pg 653
 
 uniform int uCount;
 
-in vec4 vPosition;
-in vec4 vNormal;
-in vec2 vTexcoord;
 in vec4 vView;
+in vec4 vNormal;
+in vec4 vPosition;
+in vec2 vTexcoord;
+in vec4 vShadowCoord;
 
 in vec4 vLightPos;
 in vec4 vLightColor;
 in float vLightRadii;
 
-uniform vec4 uLightPos;
-uniform vec4 uLightColor;
-uniform float uLightRadii;
 uniform vec4 uColor;
 uniform sampler2D uSampler;
 
+struct sPointLightData
+{
+	vec4 position;					// position in rendering target space
+	vec4 worldPos;					// original position in world space
+	vec4 color;						// RGB color with padding
+	float radius;						// radius (distance of effect from center)
+	float radiusSq;					// radius squared (if needed)
+	float radiusInv;					// radius inverse (attenuation factor)
+	float radiusInvSq;					// radius inverse squared (attenuation factor)
+};
+
+uniform ubLight
+{
+	sPointLightData uPointLightData[4];
+};
 
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
-	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
-
-		//mostly done in class
+	//normal and view vectors are not light specific
 	vec4 N = normalize(vNormal);
-	vec4 L = normalize(vLightPos - vPosition);
-	vec4 V = normalize(vView);
+	vec4 V = normalize(vView * -1);
 
-	vec4 R = reflect(-L, N);
+	vec4 finalOutput = vec4(0.0); //used to add up results of the loop below and pass to rtFragColor
 
+	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
+	{
+		vec4 lightDirectionFull = uPointLightData[i].position - vPosition; //used later to calculate distance from light
+		vec4 L = normalize(lightDirectionFull);
+		vec4 R = reflect(-L, N);
 
-	float kd = max(dot(N, L), 0.0);
-	vec3 diffuse = kd * vec3(texture2D(uSampler, vTexcoord));
-	vec3 specular = pow(max(dot(R, V), 0.0), 2048.0) * vec3(vLightColor);
+		float lightDistance = length(lightDirectionFull); 
 
-	//kd = max(kd, 0.0);
-	rtFragColor = vec4(diffuse + specular, 1.0);
-	//rtFragColor = kd * uLightRadii * uLightColor * texture2D(uSampler, vTexcoord) * uColor;
+		float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 1.0);
+
+		float kd = max(dot(N, L), 0.0);
+
+		vec4 diffuse = kd * texture2D(uSampler, vTexcoord) * uPointLightData[i].color; //applies texture and light color
+		vec4 specular = pow(max(dot(V, R), 0.0), 128.0) * uPointLightData[i].color;
+
+		finalOutput += attenuation * vec4(diffuse + specular);
+	}
+
+	//textureProj performs the perspective divide
+	rtFragColor = textureProj(uTex_shadow, vShadowCoord) * finalOutput;
 }

@@ -882,10 +882,10 @@ void a3demo_loadFramebuffers(a3_DemoState* demoState)
 	a3framebufferCreate(fbo, "fbo:c32f",
 		1, a3fbo_colorRGBA32F, a3fbo_depthDisable,
 		frameWidth1, frameHeight1);
-	fbo = demoState->fbo_d32;
-	a3framebufferCreate(fbo, "fbo:d32",
-		0, a3fbo_colorDisable, a3fbo_depth32,
-		shadowMapSize, shadowMapSize);
+	//fbo = demoState->fbo_d32;
+	//a3framebufferCreate(fbo, "fbo:d32",
+	//	0, a3fbo_colorDisable, a3fbo_depth32,
+	//	shadowMapSize, shadowMapSize);
 	fbo = demoState->fbo_c16x4;
 	a3framebufferCreate(fbo, "fbo:c16x4",
 		4, a3fbo_colorRGBA16, a3fbo_depthDisable,
