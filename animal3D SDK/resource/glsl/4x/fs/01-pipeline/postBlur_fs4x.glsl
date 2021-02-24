@@ -31,12 +31,27 @@
 //		(hint: the efficiency of this is described in class)
 
 layout (location = 0) out vec4 rtFragColor;
+layout (binding = 0) uniform sampler2D uTex_dm;
 
 in vec2 vTexcoord;
-uniform sampler2D uTex_dm;
+//uniform sampler2D uTex_dm;
+uniform vec2 uAxis;
 
 void main()
 {
+
+	//vec2 offsetTexcoord = vTexcoord * uAxis;
+	//rtFragColor = texture(uTex_dm, vTexcoord);
+	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+
+
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
-	rtFragColor = texture(uTex_dm, vTexcoord);
+	// temp vec2 current coord, 
+	//  -> offset coord???
+	//		vec2 for offset: ???
+	//			e.g. horizontal: vec2(1 / img width, 0)
+	//			e.g. vertical: vec2(0, 1/ img height)
+
+	// color accumulates
+
 }

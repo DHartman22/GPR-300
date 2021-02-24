@@ -236,18 +236,18 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	//		(hint: choose the most relevant one for each; all are unique)
 	// framebuffer target for each pass
 	const a3_Framebuffer* writeFBO[postproc_renderPass_max] = { //unsure if this is right, feels odd to not use c32f or c16x4
-		demoState->fbo_d32,
-		demoState->fbo_c16x4_d24s8,
-		demoState->fbo_c16_szHalf + 0,
-		demoState->fbo_c16_szHalf + 1,
-		demoState->fbo_c16_szHalf + 2,
-		demoState->fbo_c16_szQuarter + 0,
+		demoState->fbo_d32, //shadow
+		demoState->fbo_c16x4_d24s8, //scene
+		demoState->fbo_c16_szHalf + 0, //bright half
+		demoState->fbo_c16_szHalf + 1, //blur h half
+		demoState->fbo_c16_szHalf + 2, //blur v half
+		demoState->fbo_c16_szQuarter + 0, //
 		demoState->fbo_c16_szQuarter + 1,
 		demoState->fbo_c16_szQuarter + 2,
 		demoState->fbo_c16_szEighth + 0,
 		demoState->fbo_c16_szEighth + 1,
 		demoState->fbo_c16_szEighth + 2,
-		demoState->fbo_c16x4
+		demoState->fbo_c16x4 //composition
 		//...
 	};
 
@@ -436,7 +436,7 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	pixelSize.x = 1.0f / currentWriteFBO->frameWidth;
 	pixelSize.y = 0.0f;
 	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
-	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
+	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 1);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurH2];
 	a3framebufferActivate(currentWriteFBO);
 	a3vertexDrawableRenderActive();
@@ -444,7 +444,8 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	currentDemoProgram = demoState->prog_postBlur;
 	a3shaderProgramActivate(currentDemoProgram->program);
 	pixelSize.x = 0.0f;
-	pixelSize.y = 1.0f / currentWriteFBO->frameHeight;
+	pixelSize.y = 1.0f / (currentWriteFBO->frameHeight);
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurV2];
 	a3framebufferActivate(currentWriteFBO);
@@ -460,6 +461,9 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 
 	currentDemoProgram = demoState->prog_postBlur;
 	a3shaderProgramActivate(currentDemoProgram->program);
+	pixelSize.x = 1.0f / currentWriteFBO->frameWidth;
+	pixelSize.y = 0.0f;
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurH4];
 	a3framebufferActivate(currentWriteFBO);
@@ -467,6 +471,9 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 
 	currentDemoProgram = demoState->prog_postBlur;
 	a3shaderProgramActivate(currentDemoProgram->program);
+	pixelSize.x = 0.0f;
+	pixelSize.y = 1.0f / currentWriteFBO->frameHeight;
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurV4];
 	a3framebufferActivate(currentWriteFBO);
@@ -482,6 +489,9 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 
 	currentDemoProgram = demoState->prog_postBlur;
 	a3shaderProgramActivate(currentDemoProgram->program);
+	pixelSize.x = 1.0f / currentWriteFBO->frameWidth;
+	pixelSize.y = 0.0f;
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurH8];
 	a3framebufferActivate(currentWriteFBO);
@@ -489,6 +499,9 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 
 	currentDemoProgram = demoState->prog_postBlur;
 	a3shaderProgramActivate(currentDemoProgram->program);
+	pixelSize.x = 0.0f;
+	pixelSize.y = 1.0f / currentWriteFBO->frameHeight;
+	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassBlurV8];
 	a3framebufferActivate(currentWriteFBO);
@@ -502,6 +515,7 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 	a3vertexDrawableRenderActive();
 	//...
 
+	//final pass: activate color from scene and the 3 blur results (vertical)
 
 	//-------------------------------------------------------------------------
 	// DISPLAY: final pass, perform and present final composite
