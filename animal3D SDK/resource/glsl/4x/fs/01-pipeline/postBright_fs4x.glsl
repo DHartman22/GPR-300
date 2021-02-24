@@ -44,7 +44,7 @@ void main()
 	
 	
 
-	//Luminance function goes here
+	//Greyscale and luminance function from blue book, page 486
 	vec3 greyScale = vec3(0.299, 0.587, 0.0722);
 
 	float L = dot(color, greyScale);
