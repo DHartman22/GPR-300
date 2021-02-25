@@ -34,13 +34,15 @@ layout (location = 0) out vec4 rtFragColor;
 in vec2 vTexcoord;
 
 uniform sampler2D uSampler;
+uniform sampler2D uSampler2;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE PURPLE
 	//rtFragColor = vec4(0.5, 0.0, 1.0, 1.0);
 
-	//Process found on this website: https://learnopengl.com/Advanced-OpenGL/Blending
+	//Process found on this website: https://distrustsimplicity.net/articles/texture-blending-in-glsl/
 	vec4 textureColor = texture(uSampler, vTexcoord);
+	textureColor += texture(uSampler2, vTexcoord);
 	rtFragColor = textureColor;
 }
