@@ -76,6 +76,8 @@ void main()
 
 	vec4 finalOutput = vec4(0.0); //used to add up results of the loop below and pass to rtFragColor
 
+
+	//blue book helped a lot with this
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
 	{
 		vec4 lightDirectionFull = uPointLightData[i].position - vPosition; //used later to calculate distance from light
@@ -89,7 +91,7 @@ void main()
 		float kd = max(dot(N, L), 0.0);
 
 		vec4 diffuse = kd * texture2D(uSampler, vTexcoord) * uPointLightData[i].color; //applies texture and light color
-		vec4 specular = pow(max(dot(V, R), 0.0), 128.0) * uPointLightData[i].color;
+		vec4 specular = pow(max(dot(V, R), 0.0), 128.0) * uPointLightData[i].color; //specular color is the same as the light color
 
 		finalOutput += attenuation * vec4(diffuse + specular);
 	}

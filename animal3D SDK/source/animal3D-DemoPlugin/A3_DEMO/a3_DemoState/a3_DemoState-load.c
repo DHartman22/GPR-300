@@ -901,7 +901,7 @@ void a3demo_loadFramebuffers(a3_DemoState* demoState)
 	fbo = demoState->fbo_c16_szEighth;
 	a3framebufferCreate(fbo, "fbo:c16_szEighth",
 		1, a3fbo_colorRGBA16, a3fbo_depthDisable,
-		frameWidth1, frameHeight1);
+		frameWidth8, frameHeight8);
 	//...
 
 	// ****DONE:

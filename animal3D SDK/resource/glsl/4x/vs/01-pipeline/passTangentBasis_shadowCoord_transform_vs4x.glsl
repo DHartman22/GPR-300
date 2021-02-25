@@ -131,9 +131,9 @@ void main()
 	//passing texcoord so drawPhong can use textures
 	vTexcoord = aTexcoord;
 
-	mat4 shadowMat = uLightMatrixStack.viewProjectionBiasMat * uModelMatrixStack[uIndex].modelMat;
+	mat4 shadow = uLightMatrixStack.viewProjectionBiasMat * uModelMatrixStack[uIndex].modelMat;
 	
-	vShadowCoord = shadowMat * aPosition;
+	vShadowCoord = shadow * aPosition;
 	
 	for(int i = 0; i < uCount; i++)
 	{

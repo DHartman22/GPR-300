@@ -509,9 +509,6 @@ void a3postproc_render(a3_DemoState const* demoState, a3_DemoMode1_PostProc cons
 
 	currentDemoProgram = demoState->prog_postBlend;
 	a3shaderProgramActivate(currentDemoProgram->program);
-	pixelSize.x = 0.0f;
-	pixelSize.y = (1.0f / currentWriteFBO->frameHeight);
-	a3shaderUniformSendFloat(a3unif_vec2, currentDemoProgram->uAxis, 1, pixelSize.v);
 	a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 	currentWriteFBO = writeFBO[postproc_renderPassDisplay]; 
 	a3framebufferActivate(currentWriteFBO);

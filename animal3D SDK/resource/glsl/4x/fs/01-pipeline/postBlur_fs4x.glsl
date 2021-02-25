@@ -93,6 +93,6 @@ void main()
 
 	// color accumulates
 	rtFragColor = color;
-	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }
