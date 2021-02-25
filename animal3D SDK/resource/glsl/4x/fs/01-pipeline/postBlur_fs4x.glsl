@@ -37,6 +37,7 @@ in vec2 vTexcoord;
 //uniform sampler2D uTex_dm;
 uniform vec2 uAxis;
 
+//Blur formula found in the blue book, pages 487 and 488
 const float weights[] = float[](0.0024499299678342,
 0.0043538453346397,
 0.0073599963704157,
@@ -72,10 +73,10 @@ void main()
 
 	int i = 0;
 
-	vec2 test = 1/uAxis;
-	test /= 8;
+	//vec2 test = 1/uAxis;
+	//test /= 8;
 
-	ivec2 P = ivec2(gl_FragCoord.xy) - ivec2(0, weights.length()-1);
+	ivec2 P = ivec2(gl_FragCoord.yx) - ivec2(0, weights.length()-1);
 
 	for(i = 0; i < weights.length(); i++)
 	{
@@ -93,6 +94,6 @@ void main()
 
 	// color accumulates
 	rtFragColor = color;
-	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }
