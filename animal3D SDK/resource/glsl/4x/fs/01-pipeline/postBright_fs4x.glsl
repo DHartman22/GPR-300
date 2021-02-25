@@ -49,9 +49,14 @@ void main()
 	vec4 testVec4 = texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0);
 
 
+<<<<<<< HEAD
 	//Luminance function goes here
 	//vec3 greyScale = vec3(0.299, 0.587, 0.0722);
 	vec3 luminance = vec3(0.2126, 0.7152, 0.0722);
+=======
+	//Greyscale and luminance function from blue book, page 486
+	vec3 greyScale = vec3(0.299, 0.587, 0.0722);
+>>>>>>> 4fa261414f8946acf2ca00d4450be61d6156cfb1
 
 	float L = dot(test, luminance);
 	
