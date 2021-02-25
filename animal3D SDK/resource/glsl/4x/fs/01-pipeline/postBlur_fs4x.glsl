@@ -73,9 +73,6 @@ void main()
 
 	int i = 0;
 
-	//vec2 test = 1/uAxis;
-	//test /= 8;
-
 	ivec2 P = ivec2(gl_FragCoord.yx) - ivec2(0, weights.length()-1);
 
 	for(i = 0; i < weights.length(); i++)
@@ -83,8 +80,6 @@ void main()
 		color += texelFetch(uTex_dm, P + ivec2(0, i), 0) * weights[i]; 
 	}
 	
-	
-
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	// temp vec2 current coord, 
 	//  -> offset coord???
@@ -94,6 +89,5 @@ void main()
 
 	// color accumulates
 	rtFragColor = color;
-	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }

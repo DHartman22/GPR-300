@@ -34,43 +34,18 @@ layout (location = 0) out vec4 rtFragColor;
 layout (binding = 0) uniform sampler2D uTex_dm;
 
 in vec2 vTexcoord;
-//uniform sampler2D uSampler;
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE ORANGE
 	//rtFragColor = vec4(1.0, 0.5, 0.0, 1.0);
-	//vec3 color = vec3(1.0, 0.5, 0.0);
 	
 	vec3 textureColor = vec3(texture(uTex_dm, vTexcoord));
 
-	//vec3 color = vec3(texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0));
-
-	vec4 testVec4 = texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0);
-
-
-	//Luminance function goes here
-	//vec3 greyScale = vec3(0.299, 0.587, 0.0722);
-	vec3 luminance = vec3(0.2126, 0.7152, 0.0722);
 	//Greyscale and luminance function from blue book, page 486
-	vec3 greyScale = vec3(0.299, 0.587, 0.0722);
-
+	vec3 luminance = vec3(0.2126, 0.7152, 0.0722);
 	float Y = dot(textureColor, luminance);
-	
 	textureColor = textureColor * 4.0 * smoothstep(0.4, 1.0, Y);
 
 	rtFragColor = vec4(textureColor, 1.0);
-
-
-	//taken from somewhere
-
-	//vec4 newColor = texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0);
-
-	//newColor.rgb = vec3(1.0) - exp(-newColor.rgb * L);
-
-	//newColor = vec4(L, L, L, 1.0);
-	
-	//rtFragColor = vec4(L, L, L, 1.0);
-	//rtFragColor = texture2D(uTex_dm, vTexcoord);
-	//rtFragColor = testVec4;
 }
