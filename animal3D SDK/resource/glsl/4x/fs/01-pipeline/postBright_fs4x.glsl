@@ -42,18 +42,31 @@ void main()
 	//rtFragColor = vec4(1.0, 0.5, 0.0, 1.0);
 	vec3 color = vec3(1.0, 0.5, 0.0);
 	
-	
+	vec3 textureColor = vec3(texture(uTex_dm, vTexcoord));
+
+	vec3 test = vec3(texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0));
+
+	vec4 testVec4 = texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0);
+
 
 	//Luminance function goes here
-	vec3 greyScale = vec3(0.299, 0.587, 0.0722);
+	//vec3 greyScale = vec3(0.299, 0.587, 0.0722);
+	vec3 luminance = vec3(0.2126, 0.7152, 0.0722);
 
-	float L = dot(color, greyScale);
+	float L = dot(test, luminance);
+	
+	
 
-	vec4 newColor = texelFetch(uTex_dm, ivec2(gl_FragCoord.xy), 0);
+	//taken from somewhere
+
+	vec4 newColor = texelFetch(uTex_dm, ivec2(vTexcoord.xy), 0);
 
 	newColor.rgb = vec3(1.0) - exp(-newColor.rgb * L);
+
+	//newColor = vec4(L, L, L, 1.0);
 	
-	rtFragColor = newColor;
+	//rtFragColor = newColor;
 	//rtFragColor = vec4(L, L, L, 1.0);
-	//rtFragColor = texture2D(uTex_dm, vTexcoord);
+	rtFragColor = texture2D(uTex_dm, vTexcoord);
+	//rtFragColor = testVec4;
 }

@@ -37,13 +37,52 @@ in vec2 vTexcoord;
 //uniform sampler2D uTex_dm;
 uniform vec2 uAxis;
 
+const float weights[] = float[](0.0024499299678342,
+0.0043538453346397,
+0.0073599963704157,
+0.0118349786570722,
+0.0181026699707781,
+0.0263392293891488,
+0.0364543006660986,
+0.0479932050577658,
+0.0601029809166942,
+0.0715974486241365,
+0.0811305381519717,
+0.0874493212267511,
+0.0896631113333857,
+0.0874493212267511,
+0.0811305381519717,
+0.0715974486241365,
+0.0601029809166942,
+0.0479932050577658,
+0.0364543006660986,
+0.0263392293891488,
+0.0181026699707781,
+0.0118349786570722,
+0.0073599963704157,
+0.0043538453346397,
+0.0024499299678342);
+
 void main()
 {
 
 	//vec2 offsetTexcoord = vTexcoord * uAxis;
 	//rtFragColor = texture(uTex_dm, vTexcoord);
-	rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	vec4 color = vec4(0.0);
 
+	int i = 0;
+
+	vec2 test = 1/uAxis;
+	test /= 8;
+
+	ivec2 P = ivec2(gl_FragCoord.xy) - ivec2(0, weights.length()-1);
+
+	for(i = 0; i < weights.length(); i++)
+	{
+		color += texelFetch(uTex_dm, P + ivec2(0, i), 0) * weights[i]; 
+	}
+	
+	
 
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	// temp vec2 current coord, 
@@ -53,5 +92,7 @@ void main()
 	//			e.g. vertical: vec2(0, 1/ img height)
 
 	// color accumulates
+	rtFragColor = color;
+	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }
