@@ -25,6 +25,7 @@
 	*** THIS IS YOUR DEMO'S MAIN HEADER FILE ***
 	********************************************
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #ifndef __ANIMAL3D_DEMOSTATE_H
 #define __ANIMAL3D_DEMOSTATE_H

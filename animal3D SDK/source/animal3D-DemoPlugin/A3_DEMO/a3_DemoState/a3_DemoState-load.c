@@ -27,6 +27,7 @@
 	***     LOADING in this file.                    ***
 	****************************************************
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
 
@@ -855,7 +856,7 @@ void a3demo_loadFramebuffers(a3_DemoState* demoState)
 	const a3ui32 targets_composite = 1;
 
 
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment framebuffer initialization
 	//	-> initialize all framebuffers
 	//		(hint: their names describe their features)
@@ -866,7 +867,6 @@ void a3demo_loadFramebuffers(a3_DemoState* demoState)
 	//		-> set of half/quarter/eighth-size color only
 	// initialize framebuffers: MRT, color and depth formats, size
 
-	//UNTESTED
 
 	fbo = demoState->fbo_c16x4_d24s8;
 	a3framebufferCreate(fbo, "fbo:c16x4;d24s8",
@@ -877,7 +877,7 @@ void a3demo_loadFramebuffers(a3_DemoState* demoState)
 	a3framebufferCreate(fbo, "fbo:d32",
 		0, a3fbo_colorDisable, a3fbo_depth32,
 		shadowMapSize, shadowMapSize);
-	//...
+
 	fbo = demoState->fbo_c32f;
 	a3framebufferCreate(fbo, "fbo:c32f",
 		1, a3fbo_colorRGBA32F, a3fbo_depthDisable,

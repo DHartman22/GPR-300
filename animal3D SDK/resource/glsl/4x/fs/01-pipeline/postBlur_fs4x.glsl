@@ -22,9 +22,10 @@
 	Gaussian blur.
 */
 
+//Edited by Daniel Hartman and Nick Preis
 #version 450
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare texture coordinate varying and input texture
 //	-> declare sampling axis uniform (see render code for clue)
 //	-> declare Gaussian blur function that samples along one axis
@@ -67,8 +68,7 @@ const float weights[] = float[](0.0024499299678342,
 void main() //this is mostly ported code from the blue book
 {
 
-	//vec2 offsetTexcoord = vTexcoord * uAxis;
-	//rtFragColor = texture(uTex_dm, vTexcoord);
+
 	vec4 color = vec4(0.0);
 
 	int i = 0;
@@ -82,6 +82,7 @@ void main() //this is mostly ported code from the blue book
 		isHorizontal = true;
 	}
 
+	//current pixel
 	ivec2 pixel = ivec2(gl_FragCoord);
 
 	
@@ -113,7 +114,7 @@ void main() //this is mostly ported code from the blue book
 	//			e.g. horizontal: vec2(1 / img width, 0)
 	//			e.g. vertical: vec2(0, 1/ img height)
 
-	//for some reason, the output is drawing in a weird way, but the blur itself is working.
+	//For some reason, the output is drawing in a weird way, but the blur itself is working.
 	//Additionally, the image seems to shift itself with every blur pass, and I think it has something to do with
 	//the ivec2 pixel variable, but I couldn't figure out what to make it
 	rtFragColor = color;

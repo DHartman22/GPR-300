@@ -21,6 +21,7 @@
 	drawPhong_shadow_fs4x.glsl
 	Output Phong shading with shadow mapping.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 

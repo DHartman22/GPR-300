@@ -21,10 +21,11 @@
 	postBright_fs4x.glsl
 	Bright pass filter.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare texture coordinate varying and input texture
 //	-> implement relative luminance function
 //	-> implement simple "tone mapping" such that the brightest areas of the 
