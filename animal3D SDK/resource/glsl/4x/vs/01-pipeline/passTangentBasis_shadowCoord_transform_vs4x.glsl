@@ -121,18 +121,15 @@ void main()
 		uModelMatrixStack[uIndex].modelViewMat *
 		aPosition;
 
-	//vPosition = uModelMatrixStack[uIndex].modelViewMat * uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; //camera space
+	
 	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; //camera space
-	
-	//vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); //object space
 	vNormal = uModelMatrixStack[uIndex].modelViewMat * vec4(aNormal, 0.0); //object space
-	
 	vView = (uModelMatrixStack[uIndex].modelViewMat * aPosition);
+
 	//passing texcoord so drawPhong can use textures
 	vTexcoord = aTexcoord;
 
 	mat4 shadow = uLightMatrixStack.viewProjectionBiasMat * uModelMatrixStack[uIndex].modelMat;
-	
 	vShadowCoord = shadow * aPosition;
 	
 	for(int i = 0; i < uCount; i++)

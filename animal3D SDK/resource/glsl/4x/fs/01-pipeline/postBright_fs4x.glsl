@@ -37,15 +37,12 @@ in vec2 vTexcoord;
 
 void main()
 {
-
-	
 	vec3 textureColor = vec3(texture(uTex_dm, vTexcoord)); //gets color at texcoord
 
 	vec3 luminance = vec3(0.299, 0.587, 0.144);
 	//Luminance function from blue book, page 486
 
 	float Y = dot(textureColor, luminance);
-	
 	textureColor = textureColor * 4.0 * smoothstep(0.4, 1.0, Y);
 
 	rtFragColor = vec4(textureColor, 1.0);

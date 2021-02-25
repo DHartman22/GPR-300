@@ -107,8 +107,6 @@ void main() //this is mostly ported code from the blue book
 	}
 
 	
-	
-
 	// temp vec2 current coord, 
 	//  -> offset coord???
 	//		vec2 for offset: ???
@@ -119,6 +117,5 @@ void main() //this is mostly ported code from the blue book
 	//Additionally, the image seems to shift itself with every blur pass, and I think it has something to do with
 	//the ivec2 pixel variable, but I couldn't figure out what to make it
 	rtFragColor = color;
-	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
 }
