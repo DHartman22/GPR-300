@@ -24,7 +24,7 @@
 
 #version 450
 
-// ****DONE I think:
+// ****DONE:
 // 1) Phong shading
 //	-> identical to outcome of last project
 // 2) shadow mapping
@@ -88,9 +88,7 @@ void main()
 
 		float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 1.0);
 
-		float kd = max(dot(N, L), 0.0);
-
-		vec4 diffuse = kd * texture2D(uSampler, vTexcoord) * uPointLightData[i].color; //applies texture and light color
+		vec4 diffuse = max(dot(N, L), 0.0) * texture2D(uSampler, vTexcoord) * uPointLightData[i].color; //applies texture and light color
 		vec4 specular = pow(max(dot(V, R), 0.0), 128.0) * uPointLightData[i].color; //specular color is the same as the light color
 
 		finalOutput += attenuation * vec4(diffuse + specular);

@@ -34,10 +34,10 @@ layout (location = 0) out vec4 rtFragColor;
 layout (binding = 0) uniform sampler2D uTex_dm;
 
 in vec2 vTexcoord;
-//uniform sampler2D uTex_dm;
 uniform vec2 uAxis;
 
 //Blur formula found in the blue book, pages 487 and 488
+//Weights directly taken from blue book
 const float weights[] = float[](0.0024499299678342,
 0.0043538453346397,
 0.0073599963704157,
@@ -64,7 +64,7 @@ const float weights[] = float[](0.0024499299678342,
 0.0043538453346397,
 0.0024499299678342);
 
-void main()
+void main() //this is mostly ported code from the blue book
 {
 
 	//vec2 offsetTexcoord = vTexcoord * uAxis;
@@ -73,26 +73,51 @@ void main()
 
 	int i = 0;
 
-	//vec2 test = 1/uAxis;
-	//test /= 8;
+	bool isHorizontal = false;
 
-	ivec2 P = ivec2(gl_FragCoord.yx) - ivec2(0, weights.length()-1);
-
-	for(i = 0; i < weights.length(); i++)
+	ivec2 iterator;
+	vec2 fullAxis = 1/uAxis;
+	if(uAxis.x > 0)
 	{
-		color += texelFetch(uTex_dm, P + ivec2(0, i), 0) * weights[i]; 
+		isHorizontal = true;
 	}
+
+	ivec2 pixel = ivec2(gl_FragCoord);
+
+	
+	if(isHorizontal)
+	{
+		for(i = 0; i < weights.length(); i++)
+		{
+	// color accumulates
+	// current coord + offset coord
+	// samples 25 times
+			color += texelFetch(uTex_dm, pixel + ivec2(i, 0), 0) * weights[i]; 
+		}
+	}
+	else
+	{
+		for(i = 0; i < weights.length(); i++)
+		{
+	// color accumulates
+	// current coord + offset coord
+	// samples 25 times
+			color += texelFetch(uTex_dm, pixel + ivec2(0, i), 0) * weights[i]; 
+		}
+	}
+
 	
 	
 
-	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	// temp vec2 current coord, 
 	//  -> offset coord???
 	//		vec2 for offset: ???
 	//			e.g. horizontal: vec2(1 / img width, 0)
 	//			e.g. vertical: vec2(0, 1/ img height)
 
-	// color accumulates
+	//for some reason, the output is drawing in a weird way, but the blur itself is working.
+	//Additionally, the image seems to shift itself with every blur pass, and I think it has something to do with
+	//the ivec2 pixel variable, but I couldn't figure out what to make it
 	rtFragColor = color;
 	//rtFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 
