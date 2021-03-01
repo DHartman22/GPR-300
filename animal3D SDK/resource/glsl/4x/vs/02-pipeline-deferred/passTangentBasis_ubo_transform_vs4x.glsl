@@ -36,6 +36,12 @@
 //		(hint: texcoord transformed to atlas coordinates in a similar fashion)
 
 layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec3 aNormal;
+layout (location = 8) in vec4 aTexcoord; //why is this vec4?
+layout (location = 10) in vec4 aTangent;
+layout (location = 11) in vec4 aBitangent;
+
+
 
 struct sModelMatrixStack
 {
@@ -57,10 +63,25 @@ uniform int uIndex;
 flat out int vVertexID;
 flat out int vInstanceID;
 
+// view-space varyings
+out vec4 vPosition;
+out vec4 vNormal;
+out vec4 vTexcoord;
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	gl_Position = uModelMatrixStack[uIndex].modelViewProjectionMat * aPosition;
+
+	//all needs to be on the same space for the math to work
+	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
+
+	//MV inverse transpose fixes the scale of the normal, ensures the normal is perpendicular
+	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
+
+	//atlas converts tex range of 0-1 to cell space, similar to a sprite sheet
+	vTexcoord = uModelMatrixStack[uIndex].atlasMat * aTexcoord; 
+
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
