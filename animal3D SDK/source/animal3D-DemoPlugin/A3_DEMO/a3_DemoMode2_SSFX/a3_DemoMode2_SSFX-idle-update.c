@@ -120,6 +120,7 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 		i < ssfxMaxCount_pointLight;
 		++i, ++pointLightData, ++pointLightMVP)
 	{
+		//This calculates light in view-space position
 		a3real4Real4x4Product(pointLightData->position.v,
 			projector->sceneObjectPtr->modelMatrixStackPtr->modelMatInverse.m,
 			pointLightData->worldPos.v);
@@ -129,8 +130,10 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 		//		(hint: in the previous line, we calculate the view-space position)
 		//		(hint: determine the scale part, append position and multiply by 
 		//			projection matrix to arrive at a proper MVP for each light)
-	/*	// update and transform light matrix
-		//...*/
+		// update and transform light matrix
+		//...
+
+
 	}
 }
 
