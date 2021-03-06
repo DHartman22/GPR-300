@@ -41,8 +41,6 @@ layout (location = 8) in vec4 aTexcoord; //why is this vec4?
 layout (location = 10) in vec4 aTangent;
 layout (location = 11) in vec4 aBitangent;
 
-
-
 struct sModelMatrixStack
 {
 	mat4 modelMat;						// model matrix (object -> world)
@@ -54,11 +52,29 @@ struct sModelMatrixStack
 	mat4 modelViewProjectionMat;		// model-view-projection matrix (object -> clip)
 	mat4 atlasMat;						// atlas matrix (texture -> cell)
 };
+
+//struct sProjectorMatrixStack
+//{
+//	mat4 projectionMat;					// projection matrix (viewer -> clip)
+//	mat4 projectionMatInverse;			// projection inverse matrix (clip -> viewer)
+//	mat4 projectionBiasMat;				// projection-bias matrix (viewer -> biased clip)
+//	mat4 projectionBiasMatInverse;		// projection-bias inverse matrix (biased clip -> viewer)
+//	mat4 viewProjectionMat;				// view-projection matrix (world -> clip)
+//	mat4 viewProjectionMatInverse;		// view-projection inverse matrix (clip -> world)
+//	mat4 viewProjectionBiasMat;			// view projection-bias matrix (world -> biased clip)
+//	mat4 viewProjectionBiasMatInverse;	// view-projection-bias inverse matrix (biased clip -> world)
+//};
+
 uniform ubTransformStack
 {
 	sModelMatrixStack uModelMatrixStack[MAX_OBJECTS];
+	//sProjectorMatrixStack uCameraMatrixStack;
 };
+
+
 uniform int uIndex;
+uniform mat4 uMVP;
+uniform mat4 uP;
 
 flat out int vVertexID;
 flat out int vInstanceID;
@@ -67,22 +83,45 @@ flat out int vInstanceID;
 out vec4 vPosition;
 out vec4 vNormal;
 out vec4 vTexcoord;
+out vec4 vTangent;
+out vec4 vBitangent;
+out vec4 vView;
+out mat3 TBN;
 
 void main()
 {
-	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = uModelMatrixStack[uIndex].modelViewProjectionMat * aPosition;
+
 
 	//all needs to be on the same space for the math to work
 	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
+	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
 
+	vView = -vPosition;
+//
+//	vPosition = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
+//	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
+//
 	//MV inverse transpose fixes the scale of the normal, ensures the normal is perpendicular
-	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
+	//vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0);
+	//Normal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
+
+
+	//vNormal = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
 
 	//atlas converts tex range of 0-1 to cell space, similar to a sprite sheet
 	vTexcoord = uModelMatrixStack[uIndex].atlasMat * aTexcoord; 
 
+	//https://learnopengl.com/Advanced-Lighting/Normal-Mapping
+
+	vec3 T = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aTangent));
+	vec3 B = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aBitangent));
+	vec3 N = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0)));
+	mat3 TBN = mat3(T, B, N);
+
+	//TBN = transpose(TBN);
+	//vView = vec4(normalize(vec3(dot(vView.xyz, T), dot(vView.xyz, B), dot(vView.xyz, N))), 1.0);
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
+	gl_Position = uModelMatrixStack[uIndex].modelViewProjectionMat * aPosition;
 }
