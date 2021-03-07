@@ -53,22 +53,9 @@ struct sModelMatrixStack
 	mat4 atlasMat;						// atlas matrix (texture -> cell)
 };
 
-//struct sProjectorMatrixStack
-//{
-//	mat4 projectionMat;					// projection matrix (viewer -> clip)
-//	mat4 projectionMatInverse;			// projection inverse matrix (clip -> viewer)
-//	mat4 projectionBiasMat;				// projection-bias matrix (viewer -> biased clip)
-//	mat4 projectionBiasMatInverse;		// projection-bias inverse matrix (biased clip -> viewer)
-//	mat4 viewProjectionMat;				// view-projection matrix (world -> clip)
-//	mat4 viewProjectionMatInverse;		// view-projection inverse matrix (clip -> world)
-//	mat4 viewProjectionBiasMat;			// view projection-bias matrix (world -> biased clip)
-//	mat4 viewProjectionBiasMatInverse;	// view-projection-bias inverse matrix (biased clip -> world)
-//};
-
 uniform ubTransformStack
 {
 	sModelMatrixStack uModelMatrixStack[MAX_OBJECTS];
-	//sProjectorMatrixStack uCameraMatrixStack;
 };
 
 

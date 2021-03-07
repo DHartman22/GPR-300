@@ -39,6 +39,23 @@
 //		back to view-space, perspective divide)
 //	-> calculate and accumulate final diffuse and specular shading
 
+struct sPointLightData
+{
+	vec4 position;					// position in rendering target space
+	vec4 worldPos;					// original position in world space
+	vec4 color;						// RGB color with padding
+	float radius;						// radius (distance of effect from center)
+	float radiusSq;					// radius squared (if needed)
+	float radiusInv;					// radius inverse (attenuation factor)
+	float radiusInvSq;					// radius inverse squared (attenuation factor)
+};
+
+uniform ubLight
+{
+	sPointLightData uPointLightData[MAX_LIGHTS];
+};
+
+
 in vec4 vTexcoord_atlas;
 
 uniform int uCount;
@@ -81,7 +98,12 @@ void main()
 	//	Sample atlas using scene texcoord
 	vec4 sceneTexcoord = texture(uImage04, vTexcoord_atlas.xy);
 	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
-	rtFragColor = diffuseSample;
+	vec4 normal = texture(uImage05, sceneTexcoord.xy);
+	float specularPower = 32.0f;
+
+
+
+	 rtFragColor = diffuseSample;
 	//Debug
-	rtFragColor = texture(uImage06, vTexcoord_atlas.xy);
+	//rtFragColor = texture(uImage05, vTexcoord_atlas.xy);
 }

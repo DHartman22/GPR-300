@@ -128,21 +128,23 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 			projector->sceneObjectPtr->modelMatrixStackPtr->modelMatInverse.m,
 			pointLightData->worldPos.v);
 
+		//radius is the scale
+		//extract position from pointLightData
+		//a3real4x4Product to assign final light MVP to pointLightMVP
+		//UNTESTED
 
+		//The MV mat4 here should be correct
+		a3mat4 mv = { pointLightData->radius, 0, 0, pointLightData->position.x,
+						0, pointLightData->radius, 0, pointLightData->position.y,
+						0, 0, pointLightData->radius, pointLightData->position.z,
+						0, 0, 0, 1};
 
-		// ****TO-DO:
-		//	-> calculate light transformation
-		//		(hint: in the previous line, we calculate the view-space position)
-		//		(hint: determine the scale part, append position and multiply by 
-		//			projection matrix to arrive at a proper MVP for each light)
-		// update and transform light matrix
-
-		//pointLightMVP
-
-		//...
-		//...
-
-
+		//This doesn't compile, look into using other functions
+		//a3real4x4Product(pointLightMVP, projector->projectorMatrixStackPtr->projectionMat.mm, mv.mm);
+		
+		a3real4Real4x4Product(pointLightData->position.v,
+			projector->sceneObjectPtr->modelMatrixStackPtr->modelMatInverse.m,
+			pointLightData->worldPos.v);
 	}
 }
 
