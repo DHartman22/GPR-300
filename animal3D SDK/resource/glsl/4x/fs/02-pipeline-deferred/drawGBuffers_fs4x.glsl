@@ -36,8 +36,19 @@ in vec4 vPosition;
 in vec4 vNormal;
 in vec4 vTexcoord;
 
+uniform sampler2D uImage00; //diffuse
+uniform sampler2D uImage01; //specular
+
+uniform sampler2D uImage04; //scene texcoord
+uniform sampler2D uImage05; //scene normals
+uniform sampler2D uImage06; //scene "positions"
+uniform sampler2D uImage07; //scene depth
+
+uniform mat4 uPB_inv;
+
 layout (location = 0) out vec4 rtTexcoord;
 layout (location = 1) out vec4 rtNormal;
+layout (location = 2) out vec4 rtDiffuse;
 layout (location = 3) out vec4 rtPosition;
 
 
@@ -49,5 +60,8 @@ void main()
 
 	//ensures that vNormal fits in the color range
 	rtNormal = vec4(normalize(vNormal.xyz) * 0.5 + 0.5, 1.0);
-	rtPosition = vPosition;
+	rtDiffuse = texture(uImage00, vTexcoord.xy);
+	rtDiffuse.a = texture(uImage01, vTexcoord.xy).r;
+	rtPosition = texture(uImage05, vTexcoord.xy) * vPosition;
+	//rtPosition = vPosition;
 }

@@ -55,6 +55,8 @@ uniform ubLight
 	sPointLightData uPointLightData[MAX_LIGHTS];
 };
 
+float attenuation(in float dist, in float distSq, in float lightRadiusInv, in float lightRadiusInvSq);
+
 
 in vec4 vTexcoord_atlas;
 
@@ -98,12 +100,38 @@ void main()
 	//	Sample atlas using scene texcoord
 	vec4 sceneTexcoord = texture(uImage04, vTexcoord_atlas.xy);
 	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
+	vec4 specularSample = texture(uImage01, sceneTexcoord.xy);
+
+	vec4 diffuseSpec = diffuseSample * specularSample;
+
 	vec4 normal = texture(uImage05, sceneTexcoord.xy);
+	vec4 position = texture(uImage04, sceneTexcoord.xy);
 	float specularPower = 32.0f;
 
 
 
-	 rtFragColor = diffuseSample;
+	vec4 N = normalize(normal);
+	vec4 final = vec4(0.0);
+	
+	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
+	{
+		vec4 lightDirectionFull = uPointLightData[i].position - position; //used later to calculate distance from light
+		vec4 L = normalize(lightDirectionFull);
+		vec4 R = reflect(-L, N);
+
+		float lightDistance = length(lightDirectionFull); 
+
+		//float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 0.2);
+		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
+
+		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[i].color; //applies texture and light color
+		//vec4 specular = pow(max(dot(V, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
+		
+
+		final += attenuation * vec4(diffuse);
+	}
+
+	 rtFragColor = vec4(final);
 	//Debug
 	//rtFragColor = texture(uImage05, vTexcoord_atlas.xy);
 }

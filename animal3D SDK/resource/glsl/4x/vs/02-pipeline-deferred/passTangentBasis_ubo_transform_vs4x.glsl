@@ -97,6 +97,7 @@ void main()
 
 	//atlas converts tex range of 0-1 to cell space, similar to a sprite sheet
 	vTexcoord = uModelMatrixStack[uIndex].atlasMat * aTexcoord; 
+	//vTexcoord = aTexcoord; 
 
 	//https://learnopengl.com/Advanced-Lighting/Normal-Mapping
 
