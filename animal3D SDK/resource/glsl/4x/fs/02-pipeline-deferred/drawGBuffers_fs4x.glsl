@@ -51,6 +51,7 @@ layout (location = 1) out vec4 rtNormal;
 layout (location = 2) out vec4 rtDiffuse;
 layout (location = 3) out vec4 rtPosition;
 
+vec4 vPosition_screen;
 
 void main()
 {
@@ -60,8 +61,10 @@ void main()
 
 	//ensures that vNormal fits in the color range
 	rtNormal = vec4(normalize(vNormal.xyz) * 0.5 + 0.5, 1.0);
-	rtDiffuse = texture(uImage00, vTexcoord.xy);
-	rtDiffuse.a = texture(uImage01, vTexcoord.xy).r;
-	rtPosition = texture(uImage05, vTexcoord.xy) * vPosition;
+	//rtDiffuse = texture(uImage00, vTexcoord.xy);
+	//rtDiffuse.a = texture(uImage01, vTexcoord.xy).r;
+	//rtPosition = texture(uImage05, vTexcoord.xy) * vPosition;
+
+	rtPosition = vPosition_screen / vPosition_screen.w;
 	//rtPosition = vPosition;
 }

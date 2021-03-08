@@ -75,6 +75,15 @@ out vec4 vBitangent;
 out vec4 vView;
 out mat3 TBN;
 
+out vec4 vPosition_screen;
+
+const mat4 bias = mat4(
+	0.5, 0.0, 0.0, 0.0,
+	0.0, 0.5, 0.0, 0.0,
+	0.0, 0.0, 0.5, 0.0,
+	0.5, 0.5, 0.5, 1.0
+);
+
 void main()
 {
 
@@ -112,4 +121,5 @@ void main()
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 	gl_Position = uModelMatrixStack[uIndex].modelViewProjectionMat * aPosition;
+	vPosition_screen = bias * gl_Position;
 }
