@@ -119,7 +119,7 @@ void main()
 	vec4 normal_view = texture(uImage05, vTexcoord_atlas.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
 
-	vec4 N = normalize(normal);
+	vec4 N = normalize(normal_view);
 	vec4 final = vec4(0.0);
 	
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
