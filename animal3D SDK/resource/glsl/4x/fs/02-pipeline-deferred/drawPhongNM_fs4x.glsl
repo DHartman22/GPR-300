@@ -113,13 +113,13 @@ void main()
 	vec3 nMap = texture(uTex_nm, vTexcoord.xy).rgb;
 	nMap = nMap * 2.0 - 1.0;
 	nMap = normalize(nMap);
-	vec3 viewDir = TBN * vec3(normalize(vView - vPosition));
-	V = vec4(viewDir, 1.0);
+
 	V = normalize(vView);
 	vec3 N = nMap;
 	//vec3 N = normalize(vNormal.xyz);
 
-	
+	//using own phong implementation because the other one wasn't working for whatever reason
+
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
 	{
 		vec3 lightDirectionFull = uPointLightData[i].position.xyz - vPosition.xyz; //used later to calculate distance from light
@@ -128,7 +128,7 @@ void main()
 
 		float lightDistance = length(lightDirectionFull); 
 
-		//float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 0.2);
+		//using provided attenuation for better result
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
 		vec3 diffuse = max(dot(N, L), 0.0) * texture2D(uTex_dm, vTexcoord.xy).rgb * uPointLightData[i].color.rgb; //applies texture and light color
@@ -137,19 +137,5 @@ void main()
 		final += attenuation * vec4(diffuse + specular, 1.0);
 	}
 
-//	for(int i = 0; i < uCount; i++)
-//	{
-//		calcPhongPoint(diffuse, specular, vPosition, vTexcoord, N, texture(uTex_dm, vTexcoord.xy), uPointLightData[i].position, 
-//		vec4(uPointLightData[i].radius, uPointLightData[i].radiusSq, uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq),
-//		uPointLightData[i].color);
-//		final += (diffuse + specular);
-//	}
-
 	rtFragColor = vec4(final.xyz, 1.0);
-	//rtFragColor = N;
-
-	//DEBUG
-
-
-
 }

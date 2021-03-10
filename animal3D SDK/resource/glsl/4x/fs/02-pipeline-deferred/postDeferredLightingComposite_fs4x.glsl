@@ -34,15 +34,28 @@ in vec4 vTexcoord_atlas;
 
 layout (location = 0) out vec4 rtFragColor;
 
+layout (binding = 8) uniform sampler2D rtDiffuseResult;
+layout (binding = 9) uniform sampler2D rtSpecularResult;
+
+
 uniform sampler2D uImage00; //diffuse texture
 uniform sampler2D uImage01; //specular texture
 uniform sampler2D uImage02; //normal texture
 uniform sampler2D uImage03; //height texture
+uniform sampler2D uImage04; //scene texcoord
+uniform sampler2D uImage08; //diffuseResult
+uniform sampler2D uImage09; //specularResult
+
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	//rtFragColor = vec4(0.0, 1.0, 0.5, 1.0);
+	vec4 sceneTexcoord = texture(uImage04, vTexcoord_atlas.xy);
 
-	//rtFragColor = texture(uImage00, vTexcoord_atlas.xy);
+	
+
+	rtFragColor = texture(rtDiffuseResult, sceneTexcoord.xy);
+
+
 }

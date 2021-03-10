@@ -97,25 +97,32 @@ void main()
 	normal_view = (normal_view - 0.5) * 2.0;
 
 	vec4 N = normalize(normal_view);
-	vec4 final = vec4(0.0);
+
+	vec4 finalDiffuse;
+	vec4 finalSpecular;
 	
 
-		vec4 lightDirectionFull = uPointLightData[vInstanceID].position - position_view; //used later to calculate distance from light
-		vec4 L = normalize(lightDirectionFull);
-		vec4 R = reflect(-L, N);
+	vec4 lightDirectionFull = uPointLightData[vInstanceID].position - position_view; //used later to calculate distance from light
+	vec4 L = normalize(lightDirectionFull);
+	vec4 R = reflect(-L, N);
+	float lightDistance = length(lightDirectionFull); 
 
-		float lightDistance = length(lightDirectionFull); 
+	float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[vInstanceID].radiusInv, uPointLightData[vInstanceID].radiusInvSq);
 
-		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[vInstanceID].radiusInv, uPointLightData[vInstanceID].radiusInvSq);
-
-		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[vInstanceID].color; //applies texture and light color
-		vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; //specular color is the same as the light color
+	vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[vInstanceID].color; //applies texture and light color
+	vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; //specular color is the same as the light color
 		
 
-		final += attenuation * vec4(diffuse);
+	finalDiffuse = attenuation * diffuse;
+	finalSpecular = attenuation * specular;
+	
 	
 
-	rtDiffuseLight = vec4(final);
+	rtDiffuseLight = vec4(finalDiffuse.rgb, 1.0);
+	rtSpecularLight = finalSpecular;
+
+	//rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
+	//rtSpecularLight = vec4(1.0);
 
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 

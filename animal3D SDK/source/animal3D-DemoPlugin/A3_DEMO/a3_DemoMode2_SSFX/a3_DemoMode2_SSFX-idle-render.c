@@ -354,6 +354,7 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		//...
 		
 		a3vertexDrawableActivateAndRenderInstanced(demoState->draw_unit_sphere, ssfxMaxCount_pointLight);
+
 		//...
 	}
 
@@ -407,7 +408,7 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		a3textureActivate(demoState->tex_atlas_dm, a3tex_unit00); // diffuse texture atlas
 
 		a3textureActivate(demoState->tex_atlas_sm, a3tex_unit01); // specular texture atlas
-		//a3textureActivate(demoState->tex_atlas_nm, a3tex_unit02); // normal texture atlas
+		a3textureActivate(demoState->tex_atlas_nm, a3tex_unit02); // normal texture atlas
 		//a3textureActivate(demoState->tex_atlas_hm, a3tex_unit03); // height tex atlas
 
 		a3framebufferBindColorTexture(demoState->fbo_c16x4_d24s8, a3tex_unit04, 0);	// texcoords
@@ -445,6 +446,12 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		//a3framebufferBindColorTexture(demoState->fbo_c16x4_d24s8, a3tex_unit06, 3);	// "position"
 		a3framebufferBindDepthTexture(demoState->fbo_c16x4_d24s8, a3tex_unit07);	// depth
 		//...
+		currentWriteFBO = writeFBO[ssfx_renderModePhongDL];
+
+		a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit08, 0); //diffuse result
+		a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit09, 1); //specular result
+		a3framebufferActivate(currentWriteFBO);
+
 
 		a3shaderUniformBufferActivate(demoState->ubo_light, demoProg_blockLight);
 		a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uCount, 1, renderModeLightCount + renderMode);
