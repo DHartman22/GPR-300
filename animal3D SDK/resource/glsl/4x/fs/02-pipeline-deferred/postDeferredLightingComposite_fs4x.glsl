@@ -52,10 +52,13 @@ void main()
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	//rtFragColor = vec4(0.0, 1.0, 0.5, 1.0);
 	vec4 sceneTexcoord = texture(uImage04, vTexcoord_atlas.xy);
+	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
+	vec4 specularSample = texture(uImage01, sceneTexcoord.xy);
 
+	vec4 diffuseSpec = diffuseSample * specularSample;
 	
 
-	rtFragColor = texture(rtDiffuseResult, sceneTexcoord.xy);
-
+	rtFragColor = diffuseSpec;
+	rtFragColor.a = diffuseSample.a;
 
 }
