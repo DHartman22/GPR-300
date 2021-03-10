@@ -60,6 +60,7 @@ void main()
 	// DUMMY OUTPUT: directly assign input position to output position
 
 	gl_Position = sLightMVP[vInstanceID] * aPosition;
+	//gl_Position = aPosition * sLightMVP[vInstanceID];
 
 	vPosition_biased_clip = bias * sLightMVP[vInstanceID] * aPosition;
 

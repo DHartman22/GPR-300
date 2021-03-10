@@ -96,7 +96,7 @@ void main()
 	vec4 normal_view = texture(uImage05, screenSpace.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
 
-	vec4 N = normalize(normal_view);
+	vec4 N = normalize(normal);
 
 	vec4 finalDiffuse;
 	vec4 finalSpecular;
@@ -118,10 +118,10 @@ void main()
 	
 	
 
-	rtDiffuseLight = vec4(finalDiffuse.rgb, 1.0);
+	rtDiffuseLight = finalDiffuse;
 	rtSpecularLight = finalSpecular;
 
-	//rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
+	rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
 	//rtSpecularLight = vec4(1.0);
 
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading

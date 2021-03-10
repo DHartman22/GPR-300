@@ -41,7 +41,7 @@ layout (binding = 9) uniform sampler2D rtSpecularResult;
 uniform sampler2D uImage00; //diffuse texture
 uniform sampler2D uImage01; //specular texture
 uniform sampler2D uImage02; //normal texture
-uniform sampler2D uImage03; //height texture
+uniform sampler2D uImage03; //height texture ??? diffuse?
 uniform sampler2D uImage04; //scene texcoord
 uniform sampler2D uImage08; //diffuseResult
 uniform sampler2D uImage09; //specularResult
@@ -56,9 +56,11 @@ void main()
 	vec4 specularSample = texture(uImage01, sceneTexcoord.xy);
 
 	vec4 diffuseSpec = diffuseSample * specularSample;
-	
 
-	rtFragColor = diffuseSpec;
+	vec4 diffuseResult = texture(rtDiffuseResult, sceneTexcoord.xy);
+	vec4 specularResult = texture(rtSpecularResult, sceneTexcoord.xy);
+
+	rtFragColor = texture(rtDiffuseResult, sceneTexcoord.xy);
 	rtFragColor.a = diffuseSample.a;
 
 }

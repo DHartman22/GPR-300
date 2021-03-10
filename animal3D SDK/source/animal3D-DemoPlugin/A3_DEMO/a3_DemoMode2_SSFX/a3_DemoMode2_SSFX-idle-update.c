@@ -142,10 +142,15 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 		//...*/
 
 		//The MV mat4 here should be correct
-		a3mat4 mv = { pointLightData[i].radius, 0, 0, pointLightData[i].position.x,
-						0, pointLightData[i].radius, 0, pointLightData[i].position.y,
-						0, 0, pointLightData[i].radius, pointLightData[i].position.z,
-						0, 0, 0, 1};
+		//a3mat4 mv = { pointLightData[i].radius, 0, 0, pointLightData[i].position.x,
+		//				0, pointLightData[i].radius, 0, pointLightData[i].position.y,
+		//				0, 0, pointLightData[i].radius, pointLightData[i].position.z,
+		//				0, 0, 0, 1};
+
+		a3mat4 mv = { pointLightData->radius*2, 0, 0, pointLightData->position.x,
+				0, pointLightData->radius, 0, pointLightData->position.y,
+				0, 0, pointLightData->radius, pointLightData->position.z,
+				0, 0, 0, 1 };
 
 		//pointLightData[i].radius;
 
@@ -153,8 +158,18 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 		
 		//pointLightMVP[i] = projector->projectorMatrixStackPtr->projectionMat.m * mv.m;
 
-		a3real4x4Product(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
-		
+		//a3real4x4Product(pointLightMVP->m, mv.m, projector->projectorMatrixStackPtr->projectionMat.m);
+		//pointLightMVP[i].m;
+		//a3real4x4Product(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
+		//a3real4x4Concat(projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
+
+		// A3: Calculate matrix product as 4x3 (faster than full 4x4).
+//	param m_out: output matrix, product
+//	param mL: input left matrix
+//	param mR: input right matrix
+//	return m_out
+		//A3_INLINE a3real4x4r a3real4x4ProductTransform(a3real4x4p m_out, const a3real4x4p mL, const a3real4x4p mR);
+		a3real4x4ProductTransform(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
 	}
 }
 

@@ -64,6 +64,7 @@ uniform int uCount;
 
 uniform sampler2D uImage00; //diffuse
 uniform sampler2D uImage01; //specular
+uniform sampler2D uImage02; //normals
 
 uniform sampler2D uImage04; //scene texcoord
 uniform sampler2D uImage05; //scene normals
@@ -116,7 +117,7 @@ void main()
 	vec4 position_view = uPB_inv * position_screen;
 	position_view /= position_view.w;
 
-	vec4 normal_view = texture(uImage05, vTexcoord_atlas.xy);
+	vec4 normal_view = texture(uImage02, sceneTexcoord.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
 
 	vec4 N = normalize(normal_view);
@@ -133,7 +134,7 @@ void main()
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
 		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[i].color; //applies texture and light color
-		vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
+		//vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
 		
 
 		final += attenuation * vec4(diffuse);
