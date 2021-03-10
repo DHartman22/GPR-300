@@ -115,25 +115,26 @@ void main()
 	nMap = normalize(nMap);
 	vec3 viewDir = TBN * vec3(normalize(vView - vPosition));
 	V = vec4(viewDir, 1.0);
-	vec4 N = vec4(nMap, 0.5);
-	//vec4 N = normalize(vNormal);
+	V = normalize(vView);
+	vec3 N = nMap;
+	//vec3 N = normalize(vNormal.xyz);
 
 	
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
 	{
-		vec4 lightDirectionFull = uPointLightData[i].position - vPosition; //used later to calculate distance from light
-		vec4 L = normalize(lightDirectionFull);
-		vec4 R = reflect(-L, N);
+		vec3 lightDirectionFull = uPointLightData[i].position.xyz - vPosition.xyz; //used later to calculate distance from light
+		vec3 L = normalize(lightDirectionFull);
+		vec3 R = reflect(-L, N);
 
 		float lightDistance = length(lightDirectionFull); 
 
 		//float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 0.2);
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
-		vec4 diffuse = max(dot(N, L), 0.0) * texture2D(uTex_dm, vTexcoord.xy) * uPointLightData[i].color; //applies texture and light color
-		vec4 specular = pow(max(dot(V, R), 0.0), 32.0) * uPointLightData[i].color; //specular color is the same as the light color
+		vec3 diffuse = max(dot(N, L), 0.0) * texture2D(uTex_dm, vTexcoord.xy).rgb * uPointLightData[i].color.rgb; //applies texture and light color
+		vec3 specular = pow(max(dot(V.xyz, R), 0.0), 32.0) * uPointLightData[i].color.rgb; //specular color is the same as the light color
 
-		final += attenuation * vec4(diffuse + specular);
+		final += attenuation * vec4(diffuse + specular, 1.0);
 	}
 
 //	for(int i = 0; i < uCount; i++)
@@ -145,6 +146,7 @@ void main()
 //	}
 
 	rtFragColor = vec4(final.xyz, 1.0);
+	//rtFragColor = N;
 
 	//DEBUG
 

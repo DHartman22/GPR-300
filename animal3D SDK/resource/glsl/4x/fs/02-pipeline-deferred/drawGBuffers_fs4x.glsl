@@ -49,7 +49,7 @@ uniform mat4 uPB_inv;
 layout (location = 0) out vec4 rtTexcoord;
 layout (location = 1) out vec4 rtNormal;
 layout (location = 2) out vec4 rtDiffuse;
-layout (location = 3) out vec4 rtPosition;
+layout (location = 3) out vec4 rtSpecular;
 
 vec4 vPosition_screen;
 
@@ -59,12 +59,19 @@ void main()
 	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
 	rtTexcoord = vTexcoord;
 
+	vec3 nMap = texture(uImage05, vPosition_screen.xy).rgb;
+	nMap = nMap * 2.0 - 1.0;
+	nMap = normalize(nMap);
+	//vec3 viewDir = TBN * vec3(normalize(vView - vPosition));
+	//V = vec4(viewDir, 1.0);
+	vec4 N = vec4(nMap, 0.5);
+
 	//ensures that vNormal fits in the color range
 	rtNormal = vec4(normalize(vNormal.xyz) * 0.5 + 0.5, 1.0);
-	//rtDiffuse = texture(uImage00, vTexcoord.xy);
+	rtDiffuse = texture(uImage00, vTexcoord.xy);
 	//rtDiffuse.a = texture(uImage01, vTexcoord.xy).r;
-	//rtPosition = texture(uImage05, vTexcoord.xy) * vPosition;
 
-	rtPosition = vPosition_screen / vPosition_screen.w;
-	//rtPosition = vPosition;
+	//rtPosition = vPosition_screen / vPosition_screen.w;
+	//rtPosition = N;
+	rtSpecular = texture(uImage01, vTexcoord.xy);
 }

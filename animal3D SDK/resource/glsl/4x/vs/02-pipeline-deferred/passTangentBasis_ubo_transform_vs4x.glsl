@@ -90,13 +90,12 @@ void main()
 
 	//all needs to be on the same space for the math to work
 	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
-	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
+	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 1.0); 
 
 	vView = -vPosition;
-//
-//	vPosition = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
-//	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
-//
+
+	//	vPosition = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
+	//	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
 	//MV inverse transpose fixes the scale of the normal, ensures the normal is perpendicular
 	//vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0);
 	//Normal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
@@ -110,13 +109,13 @@ void main()
 
 	//https://learnopengl.com/Advanced-Lighting/Normal-Mapping
 
-	vec3 T = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aTangent));
-	vec3 B = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aBitangent));
-	vec3 N = normalize(vec3(uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0)));
+	vec3 T = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * aTangent));
+	vec3 B = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * aBitangent));
+	vec3 N = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * vec4(aNormal, 0.0)));
 	mat3 TBN = mat3(T, B, N);
 
-	//TBN = transpose(TBN);
-	//vView = vec4(normalize(vec3(dot(vView.xyz, T), dot(vView.xyz, B), dot(vView.xyz, N))), 1.0);
+	TBN = transpose(TBN);
+	vView = vec4(normalize(vec3(dot(vView.xyz, T), dot(vView.xyz, B), dot(vView.xyz, N))), vView.a);
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

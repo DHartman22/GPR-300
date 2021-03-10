@@ -119,31 +119,30 @@ void main()
 	vec4 normal_view = texture(uImage05, vTexcoord_atlas.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
 
-	vec4 N = normalize(normal);
+	vec4 N = normalize(normal_view);
 	vec4 final = vec4(0.0);
 	
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
 	{
-		vec4 lightDirectionFull = uPointLightData[i].position - position; //used later to calculate distance from light
+		vec4 lightDirectionFull = uPointLightData[i].position - position_view; //used later to calculate distance from light
 		vec4 L = normalize(lightDirectionFull);
 		vec4 R = reflect(-L, N);
 
 		float lightDistance = length(lightDirectionFull); 
 
-		//float attenuation = clamp(uPointLightData[i].radiusSq / lightDistance, 0.0, 0.2);
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
 		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[i].color; //applies texture and light color
-		//vec4 specular = pow(max(dot(V, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
+		vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
 		
 
 		final += attenuation * vec4(diffuse);
 	}
 
-	 rtFragColor = vec4(final);
-	//Debug
-	//rtFragColor = texture(uImage05, vTexcoord_atlas.xy);
-	rtFragColor = normal_view;
+	rtFragColor = vec4(final);
+	//rtFragColor = specularSample;
+
+	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 
 	rtFragColor.a = diffuseSample.a;
 }

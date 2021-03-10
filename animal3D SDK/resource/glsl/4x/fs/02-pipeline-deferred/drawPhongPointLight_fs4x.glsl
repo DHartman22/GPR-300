@@ -37,13 +37,87 @@
 //		(hint: same as deferred shading)
 //	-> calculate final diffuse and specular shading for current light only
 
+struct sPointLightData
+{
+	vec4 position;					// position in rendering target space
+	vec4 worldPos;					// original position in world space
+	vec4 color;						// RGB color with padding
+	float radius;						// radius (distance of effect from center)
+	float radiusSq;					// radius squared (if needed)
+	float radiusInv;					// radius inverse (attenuation factor)
+	float radiusInvSq;					// radius inverse squared (attenuation factor)
+};
+
+uniform ubLight
+{
+	sPointLightData uPointLightData[MAX_LIGHTS];
+};
+
+float attenuation(in float dist, in float distSq, in float lightRadiusInv, in float lightRadiusInvSq);
+
 flat in int vInstanceID;
 
 layout (location = 0) out vec4 rtDiffuseLight;
 layout (location = 1) out vec4 rtSpecularLight;
 
+in vec4 vPosition_biased_clip;
+
+uniform sampler2D uImage00; //diffuse
+uniform sampler2D uImage01; //specular
+
+uniform sampler2D uImage04; //scene texcoord
+uniform sampler2D uImage05; //scene normals
+//uniform sampler2D uImage06; //scene "positions"
+uniform sampler2D uImage07; //scene depth
+
+uniform mat4 uPB_inv;  //Inverse bias projection
+
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
 	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
+	vec4 screenSpace = vPosition_biased_clip / vPosition_biased_clip.w;
+	vec4 sceneTexcoord = texture(uImage04, screenSpace.xy);
+	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
+	vec4 specularSample = texture(uImage01, sceneTexcoord.xy);
+
+	vec4 diffuseSpec = diffuseSample * specularSample;
+
+	vec4 normal = texture(uImage05, sceneTexcoord.xy);
+	vec4 position = texture(uImage04, sceneTexcoord.xy);
+	float specularPower = 32.0f;
+
+	vec4 position_screen = screenSpace;
+	position_screen.z = texture(uImage07, screenSpace.xy).r;
+
+	vec4 position_view = uPB_inv * position_screen;
+	position_view /= position_view.w;
+
+	vec4 normal_view = texture(uImage05, screenSpace.xy);
+	normal_view = (normal_view - 0.5) * 2.0;
+
+	vec4 N = normalize(normal_view);
+	vec4 final = vec4(0.0);
+	
+
+		vec4 lightDirectionFull = uPointLightData[vInstanceID].position - position_view; //used later to calculate distance from light
+		vec4 L = normalize(lightDirectionFull);
+		vec4 R = reflect(-L, N);
+
+		float lightDistance = length(lightDirectionFull); 
+
+		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[vInstanceID].radiusInv, uPointLightData[vInstanceID].radiusInvSq);
+
+		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[vInstanceID].color; //applies texture and light color
+		vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; //specular color is the same as the light color
+		
+
+		final += attenuation * vec4(diffuse);
+	
+
+	rtDiffuseLight = vec4(final);
+
+	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
+
+	//rtFragColor.a = diffuseSample.a;
 }

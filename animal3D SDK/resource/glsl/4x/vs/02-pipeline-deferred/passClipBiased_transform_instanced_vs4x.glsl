@@ -36,7 +36,7 @@
 layout (location = 0) in vec4 aPosition;
 
 flat out int vVertexID;
-flat out int vInstanceID;
+flat out int vInstanceID; //light index
 
 // bias matrix
 const mat4 bias = mat4(
@@ -46,10 +46,22 @@ const mat4 bias = mat4(
 	0.5, 0.5, 0.5, 1.0
 );
 
+
+
+uniform ubMVP
+{
+	mat4 sLightMVP[MAX_INSTANCES];
+};
+
+out vec4 vPosition_biased_clip;
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+
+	gl_Position = sLightMVP[vInstanceID] * aPosition;
+
+	vPosition_biased_clip = bias * sLightMVP[vInstanceID] * aPosition;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
