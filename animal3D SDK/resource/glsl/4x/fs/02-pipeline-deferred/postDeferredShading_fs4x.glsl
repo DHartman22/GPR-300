@@ -120,7 +120,6 @@ void main()
 
 	vec4 normal_view = texture(uImage05, vTexcoord_atlas.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
-	//normal_view * 2.0 - 1.0;
 
 	vec4 N = normalize(normal_view);
 	vec4 final = vec4(0.0);
@@ -143,10 +142,9 @@ void main()
 	}
 
 	rtFragColor = final;
-	rtFragColor.a = diffuseSample.a;
-	//rtFragColor = specularSample;
+	rtFragColor.a = diffuseSample.a; //ensures skybox is visible
 
-	//learnopengl helped a lot with general concepts
+	//learnopengl helped a lot with general concepts and some code
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 
 }

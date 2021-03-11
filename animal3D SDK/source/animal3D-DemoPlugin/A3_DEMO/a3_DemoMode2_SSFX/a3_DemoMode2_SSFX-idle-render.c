@@ -333,15 +333,12 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		a3textureActivate(demoState->tex_atlas_dm, a3tex_unit00);
 		a3textureActivate(demoState->tex_atlas_sm, a3tex_unit01);
 		a3textureActivate(demoState->tex_atlas_nm, a3tex_unit02);
-		//a3textureActivate(demoState->tex_atlas_hm, a3tex_unit03);
 		
 
 		a3shaderUniformBufferActivate(demoState->ubo_light, demoProg_blockLight);
 		a3shaderUniformBufferActivate(demoState->ubo_mvp, demoProg_blockTransformStack);
-
-		//a3shaderUniformBufferActivate(demoState->ubo_transform, demoProg)
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uPB_inv, 1, projectionBiasMatInv.mm);
-		
+
 		//...
 
 		//bind results 

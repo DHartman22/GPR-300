@@ -56,7 +56,7 @@ uniform ubLight
 
 float attenuation(in float dist, in float distSq, in float lightRadiusInv, in float lightRadiusInvSq);
 
-flat in int vInstanceID;
+flat in int vInstanceID; //light index
 
 layout (location = 0) out vec4 rtDiffuseLight;
 layout (location = 1) out vec4 rtSpecularLight;
@@ -68,7 +68,6 @@ uniform sampler2D uImage01; //specular
 
 uniform sampler2D uImage04; //scene texcoord
 uniform sampler2D uImage05; //scene normals
-//uniform sampler2D uImage06; //scene "positions"
 uniform sampler2D uImage07; //scene depth
 
 uniform mat4 uPB_inv;  //Inverse bias projection
@@ -79,6 +78,7 @@ void main()
 	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
 
 	//mostly same as deferred
+	//We were never able to properly test this due to the light mvp problem
 
 	vec4 screenSpace = vPosition_biased_clip / vPosition_biased_clip.w;
 	vec4 sceneTexcoord = texture(uImage04, screenSpace.xy);
@@ -91,6 +91,7 @@ void main()
 	vec4 position = texture(uImage04, sceneTexcoord.xy);
 	float specularPower = 32.0f;
 
+	//use depth sampler to recreate Z value of position
 	vec4 position_screen = screenSpace;
 	position_screen.z = texture(uImage07, screenSpace.xy).r;
 
@@ -105,7 +106,7 @@ void main()
 	vec4 finalDiffuse;
 	vec4 finalSpecular;
 	
-
+	//standard phong but only for the light we're on
 	vec4 lightDirectionFull = uPointLightData[vInstanceID].position - position_view; //used later to calculate distance from light
 	vec4 L = normalize(lightDirectionFull);
 	vec4 R = reflect(-L, N);
@@ -113,9 +114,8 @@ void main()
 
 	float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[vInstanceID].radiusInv, uPointLightData[vInstanceID].radiusInvSq);
 
-	vec4 diffuse = max(dot(N, L), 0.0) * uPointLightData[vInstanceID].color; //applies texture and light color
-	vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; //specular color is the same as the light color
-		
+	vec4 diffuse = max(dot(N, L), 0.0) * uPointLightData[vInstanceID].color;
+	vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; 
 
 	finalDiffuse = attenuation * diffuse;
 	finalSpecular = attenuation * specular;

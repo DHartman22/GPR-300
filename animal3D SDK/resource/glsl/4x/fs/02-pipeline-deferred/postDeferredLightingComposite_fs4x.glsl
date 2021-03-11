@@ -21,6 +21,7 @@
 	postDeferredLightingComposite_fs4x.glsl
 	Composite results of light pre-pass in deferred pipeline.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
@@ -29,7 +30,6 @@
 //	-> declare samplers for texcoords, diffuse and specular maps
 //	-> implement Phong sum with samples from the above
 //		(hint: this entire shader is about sampling textures)
-//Edited by Daniel Hartman and Nick Preis
 
 in vec4 vTexcoord_atlas;
 
