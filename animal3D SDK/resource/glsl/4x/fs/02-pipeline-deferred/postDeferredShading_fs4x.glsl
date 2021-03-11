@@ -22,11 +22,13 @@
 	Calculate full-screen deferred Phong shading.
 */
 
+//Edited by Daniel Hartman and Nick Preis
+
 #version 450
 
 #define MAX_LIGHTS 1024
 
-// ****TO-DO:
+// ****DONE:
 //	-> this one is pretty similar to the forward shading algorithm (Phong NM) 
 //		except it happens on a plane, given images of the scene's geometric 
 //		data (the "g-buffers"); all of the information about the scene comes 
@@ -68,14 +70,10 @@ uniform sampler2D uImage02; //normals
 
 uniform sampler2D uImage04; //scene texcoord
 uniform sampler2D uImage05; //scene normals
-//uniform sampler2D uImage06; //scene "positions"
+//uniform sampler2D uImage06; //scene "positions" unnecessary due to depth
 uniform sampler2D uImage07; //scene depth
 
 uniform mat4 uPB_inv;  //Inverse bias projection
-
-
-//testing
-//uniform sampler2D uImage02, uImage03;
 
 layout (location = 0) out vec4 rtFragColor;
 
@@ -108,17 +106,21 @@ void main()
 	vec4 diffuseSpec = diffuseSample * specularSample;
 
 	vec4 normal = texture(uImage05, sceneTexcoord.xy);
+
+
 	vec4 position = texture(uImage04, sceneTexcoord.xy);
 	float specularPower = 32.0f;
 
+	//use depth sampler to recreate Z value of position
 	vec4 position_screen = vTexcoord_atlas;
 	position_screen.z = texture(uImage07, vTexcoord_atlas.xy).r;
 
 	vec4 position_view = uPB_inv * position_screen;
 	position_view /= position_view.w;
 
-	vec4 normal_view = texture(uImage02, sceneTexcoord.xy);
+	vec4 normal_view = texture(uImage05, vTexcoord_atlas.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
+	//normal_view * 2.0 - 1.0;
 
 	vec4 N = normalize(normal_view);
 	vec4 final = vec4(0.0);
@@ -129,21 +131,22 @@ void main()
 		vec4 L = normalize(lightDirectionFull);
 		vec4 R = reflect(-L, N);
 
-		float lightDistance = length(lightDirectionFull); 
+		float lightDistance = length(lightDirectionFull) * -2; 
 
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
-		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[i].color; //applies texture and light color
-		//vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[i].color; //specular color is the same as the light color
+		vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[i].color;
+		vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[i].color; 
 		
 
-		final += attenuation * vec4(diffuse);
+		final += attenuation * vec4(diffuse.rgb, specular.a);
 	}
 
-	rtFragColor = vec4(final);
+	rtFragColor = final;
+	rtFragColor.a = diffuseSample.a;
 	//rtFragColor = specularSample;
 
+	//learnopengl helped a lot with general concepts
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 
-	rtFragColor.a = diffuseSample.a;
 }

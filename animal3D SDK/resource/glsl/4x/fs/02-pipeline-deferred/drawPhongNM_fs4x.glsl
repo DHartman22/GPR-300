@@ -22,11 +22,14 @@
 	Output Phong shading with normal mapping.
 */
 
+//Edited by Daniel Hartman and Nick Preis
+
+
 #version 450
 
 #define MAX_LIGHTS 1024
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare view-space varyings from vertex shader
 //	-> declare point light data structure and uniform block
 //	-> declare uniform samplers (diffuse, specular & normal maps)
@@ -90,7 +93,7 @@ in vec4 vTangent;
 in vec4 vBitangent;
 in vec4 vView;
 in mat3 TBN;
-
+in vec3 N;
 //uniform sampler2D 
 uniform sampler2D uTex_dm;
 uniform sampler2D uTex_sm;
@@ -105,30 +108,28 @@ void main()
 	//vec4 theColor = );
 
 	vec4 final = vec4(0.0);
-
-	vec4 diffuse, specular = vec4(0);
-
-	vec4 V = normalize(vView);
-	//V = normalize(vView);
+	
 	vec3 nMap = texture(uTex_nm, vTexcoord.xy).rgb;
 	nMap = nMap * 2.0 - 1.0;
 	nMap = normalize(nMap);
 
-	V = normalize(vView);
+	vec4 V = vView;
+
+	//normal map makes a difference but causes light to move depending on camera viewing angle for some reason.
+	//no shiny spots on the ground either. Viewing the scene from a higher angle makes the normal mapping more obvious, although
+	//it'd be ideally not affected at all by the camera position
 	vec3 N = nMap;
-	//vec3 N = normalize(vNormal.xyz);
 
-	//using own phong implementation because the other one wasn't working for whatever reason
-
+	//standard phong
 	for(int i = 0; i < uCount; i++) //uCount = number of lights active in the scene
 	{
 		vec3 lightDirectionFull = uPointLightData[i].position.xyz - vPosition.xyz; //used later to calculate distance from light
 		vec3 L = normalize(lightDirectionFull);
 		vec3 R = reflect(-L, N);
 
-		float lightDistance = length(lightDirectionFull); 
+		float lightDistance = length(lightDirectionFull) * -2; //Added the -2 so the normal mapping is more obvious, taking it away makes the afformentioned bug more obvious
 
-		//using provided attenuation for better result
+		//using provided attenuation for better result, for whatever reason the provided phong function was giving me issues but not my own
 		float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[i].radiusInv, uPointLightData[i].radiusInvSq);
 
 		vec3 diffuse = max(dot(N, L), 0.0) * texture2D(uTex_dm, vTexcoord.xy).rgb * uPointLightData[i].color.rgb; //applies texture and light color

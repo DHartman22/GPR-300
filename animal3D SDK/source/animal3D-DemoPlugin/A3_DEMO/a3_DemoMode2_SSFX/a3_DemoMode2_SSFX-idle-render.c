@@ -25,6 +25,7 @@
 	*** RENDERING FOR ANIMATION SCENE MODE   ***
 	********************************************
 */
+//Edited by Daniel Hartman and Nick Preis
 
 //-----------------------------------------------------------------------------
 
@@ -319,7 +320,7 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 
 	if (renderMode == ssfx_renderModePhongDL)
 	{
-		// ****TO-DO:
+		// ****DONE:
 		//	-> uncomment deferred shading program and diffuse texture activations
 		//	-> activate pertinent textures for deferred lighting composition
 		//		(hint: all outputs from previous passes)
@@ -343,13 +344,14 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		
 		//...
 
+		//bind results 
 		currentWriteFBO = writeFBO[ssfx_renderPassLights];
 		a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit08, 0); //diffuse result
 		a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit09, 1); //specular result
 		a3framebufferActivate(currentWriteFBO);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// ****TO-DO:
+		// ****DONE:
 		//	-> draw many inverted instances of the unit sphere model (because 
 		//		point lights are spheres), and using additive blending
 		//currentDemoProgram = demoState->prog_drawPhongPointLight_instanced;
@@ -397,7 +399,7 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, a3vec4_one.v);
 		break;
 	case ssfx_renderModePhongDS:
-		// ****TO-DO:
+		// ****DONE:
 		//	-> uncomment deferred shading program and diffuse texture activations
 		//	-> activate pertinent textures for deferred lighting composition
 		//		(hint: all outputs from previous passes)
@@ -431,7 +433,7 @@ void a3ssfx_render(a3_DemoState const* demoState, a3_DemoMode2_SSFX const* demoM
 		//...
 		break;
 	case ssfx_renderModePhongDL:
-		// ****TO-DO:
+		// ****DONE:
 		//	-> uncomment deferred lighting composite program and diffuse texture activations
 		//	-> activate pertinent textures for deferred lighting composition
 		//		(hint: all outputs from previous passes)

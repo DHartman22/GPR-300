@@ -24,11 +24,12 @@
 
 #version 450
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare samplers containing results of light pre-pass
 //	-> declare samplers for texcoords, diffuse and specular maps
 //	-> implement Phong sum with samples from the above
 //		(hint: this entire shader is about sampling textures)
+//Edited by Daniel Hartman and Nick Preis
 
 in vec4 vTexcoord_atlas;
 
@@ -37,30 +38,27 @@ layout (location = 0) out vec4 rtFragColor;
 layout (binding = 8) uniform sampler2D rtDiffuseResult;
 layout (binding = 9) uniform sampler2D rtSpecularResult;
 
-
 uniform sampler2D uImage00; //diffuse texture
 uniform sampler2D uImage01; //specular texture
-uniform sampler2D uImage02; //normal texture
-uniform sampler2D uImage03; //height texture ??? diffuse?
 uniform sampler2D uImage04; //scene texcoord
-uniform sampler2D uImage08; //diffuseResult
-uniform sampler2D uImage09; //specularResult
-
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE AQUA
 	//rtFragColor = vec4(0.0, 1.0, 0.5, 1.0);
+	//get samples of the relevant g-buffers
 	vec4 sceneTexcoord = texture(uImage04, vTexcoord_atlas.xy);
 	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
 	vec4 specularSample = texture(uImage01, sceneTexcoord.xy);
 
-	vec4 diffuseSpec = diffuseSample * specularSample;
-
+	//take the diffuse and specular results 
 	vec4 diffuseResult = texture(rtDiffuseResult, sceneTexcoord.xy);
 	vec4 specularResult = texture(rtSpecularResult, sceneTexcoord.xy);
 
-	rtFragColor = texture(rtDiffuseResult, sceneTexcoord.xy);
+	//should work in theory? but comes out wrong due to lightMVP being wrong...
+	rtFragColor = (diffuseSample * diffuseResult) + (specularResult * specularSample);
+
+	//ensures the skybox is visible fully
 	rtFragColor.a = diffuseSample.a;
 
 }

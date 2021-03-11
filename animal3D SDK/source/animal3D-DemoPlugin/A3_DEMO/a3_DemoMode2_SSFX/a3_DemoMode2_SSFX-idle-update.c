@@ -25,6 +25,7 @@
 	*** UPDATE FOR ANIMATION SCENE MODE      ***
 	********************************************
 */
+//Edited by Daniel Hartman and Nick Preis
 
 //-----------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@
 
 void a3ssfx_update_graphics(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode)
 {
-	// ****TO-DO:
+	// ****DONE:
 	//	-> uncomment transformation and light data uploads
 	//	-> add line to upload light transformations
 	//		(hint: just individual matrices, see scene update)
@@ -49,7 +50,7 @@ void a3ssfx_update_graphics(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode
 	/*a3bufferRefillOffset(demoState->ubo_transform, 0, 0, sizeof(demoMode->projectorMatrixStack), demoMode->projectorMatrixStack);
 	a3bufferRefillOffset(demoState->ubo_transform, 0, sizeof(demoMode->projectorMatrixStack), sizeof(demoMode->modelMatrixStack), demoMode->modelMatrixStack);*/
 	a3bufferRefillOffset(demoState->ubo_transform, 0, 0, sizeof(demoMode->modelMatrixStack), demoMode->modelMatrixStack);
-	a3bufferRefillOffset(demoState->ubo_transform, 0, sizeof(demoMode->modelMatrixStack), sizeof(demoMode->projectorMatrixStack), demoMode->projectorMatrixStack);
+	//a3bufferRefillOffset(demoState->ubo_transform, 0, sizeof(demoMode->modelMatrixStack), sizeof(demoMode->projectorMatrixStack), demoMode->projectorMatrixStack);
 	a3bufferRefillOffset(demoState->ubo_light, 0, 0, sizeof(demoMode->pointLightData), demoMode->pointLightData);
 	a3bufferRefillOffset(demoState->ubo_mvp, 0, 0, sizeof(demoMode->pointLightMVP), demoMode->pointLightMVP);
 	//...
@@ -128,12 +129,7 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 			projector->sceneObjectPtr->modelMatrixStackPtr->modelMatInverse.m,
 			pointLightData->worldPos.v);
 
-		//radius is the scale
-		//extract position from pointLightData
-		//a3real4x4Product to assign final light MVP to pointLightMVP
-		//UNTESTED
-
-		// ****TO-DO:
+		// ****DONE:
 		//	-> calculate light transformation
 		//		(hint: in the previous line, we calculate the view-space position)
 		//		(hint: determine the scale part, append position and multiply by 
@@ -141,35 +137,19 @@ void a3ssfx_update_scene(a3_DemoState* demoState, a3_DemoMode2_SSFX* demoMode, a
 	/*	// update and transform light matrix
 		//...*/
 
-		//The MV mat4 here should be correct
-		//a3mat4 mv = { pointLightData[i].radius, 0, 0, pointLightData[i].position.x,
-		//				0, pointLightData[i].radius, 0, pointLightData[i].position.y,
-		//				0, 0, pointLightData[i].radius, pointLightData[i].position.z,
-		//				0, 0, 0, 1};
 
-		a3mat4 mv = { pointLightData->radius*2, 0, 0, pointLightData->position.x,
-				0, pointLightData->radius, 0, pointLightData->position.y,
-				0, 0, pointLightData->radius, pointLightData->position.z,
-				0, 0, 0, 1 };
+		//radius is the scale
+		//extract position from pointLightData
+		//a3real4x4Product to assign final light MVP to pointLightMVP
 
-		//pointLightData[i].radius;
+		a3mat4 mv = {	pointLightData->radius, 0,						0,						pointLightData->worldPos.x,
+						0,						pointLightData->radius, 0,						pointLightData->worldPos.y,
+						0,						0,						pointLightData->radius, pointLightData->worldPos.z,
+						0,						0,						0,						1 };
 
-		//This doesn't compile, look into using other functions
 		
-		//pointLightMVP[i] = projector->projectorMatrixStackPtr->projectionMat.m * mv.m;
+		a3real4x4Product(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
 
-		//a3real4x4Product(pointLightMVP->m, mv.m, projector->projectorMatrixStackPtr->projectionMat.m);
-		//pointLightMVP[i].m;
-		//a3real4x4Product(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
-		//a3real4x4Concat(projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
-
-		// A3: Calculate matrix product as 4x3 (faster than full 4x4).
-//	param m_out: output matrix, product
-//	param mL: input left matrix
-//	param mR: input right matrix
-//	return m_out
-		//A3_INLINE a3real4x4r a3real4x4ProductTransform(a3real4x4p m_out, const a3real4x4p mL, const a3real4x4p mR);
-		a3real4x4ProductTransform(pointLightMVP->m, projector->projectorMatrixStackPtr->projectionMat.m, mv.m);
 	}
 }
 

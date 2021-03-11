@@ -21,12 +21,13 @@
 	passTangentBasis_ubo_transform_vs4x.glsl
 	Calculate and pass tangent basis using uniform buffers.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
 #define MAX_OBJECTS 128
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare attributes related to lighting
 //		(hint: normal [2], texcoord [8], tangent [10], bitangent [11])
 //	-> declare view-space varyings related to lighting
@@ -74,6 +75,7 @@ out vec4 vTangent;
 out vec4 vBitangent;
 out vec4 vView;
 out mat3 TBN;
+out vec3 N;
 
 out vec4 vPosition_screen;
 
@@ -88,37 +90,30 @@ void main()
 {
 
 
-	//all needs to be on the same space for the math to work
 	vPosition = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
 	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 1.0); 
 
 	vView = -vPosition;
 
-	//	vPosition = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
-	//	vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0); 
-	//MV inverse transpose fixes the scale of the normal, ensures the normal is perpendicular
-	//vNormal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * vec4(aNormal, 0.0);
-	//Normal = uModelMatrixStack[uIndex].modelViewMatInverseTranspose * aPosition; 
-
-
-	//vNormal = uModelMatrixStack[uIndex].modelViewMat * aPosition; 
-
 	//atlas converts tex range of 0-1 to cell space, similar to a sprite sheet
 	vTexcoord = uModelMatrixStack[uIndex].atlasMat * aTexcoord; 
-	//vTexcoord = aTexcoord; 
 
 	//https://learnopengl.com/Advanced-Lighting/Normal-Mapping
+	//pg 631 of superbible helped as well with normal mapping
 
 	vec3 T = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * aTangent));
 	vec3 B = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * aBitangent));
-	vec3 N = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * vec4(aNormal, 0.0)));
+	vec3 N = normalize(vec3(uModelMatrixStack[uIndex].modelViewMat * vec4(aNormal, 1.0)));
 	mat3 TBN = mat3(T, B, N);
 
-	TBN = transpose(TBN);
-	vView = vec4(normalize(vec3(dot(vView.xyz, T), dot(vView.xyz, B), dot(vView.xyz, N))), vView.a);
+	//TBN = transpose(TBN);
+	//vView = vec4(normalize(vec3(dot(vView.xyz, T), dot(vView.xyz, B), dot(vView.xyz, N))), vView.a);
+	vView.xyz = normalize(vView.xyz * TBN);
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 	gl_Position = uModelMatrixStack[uIndex].modelViewProjectionMat * aPosition;
+
+	//used in g buffers
 	vPosition_screen = bias * gl_Position;
 }

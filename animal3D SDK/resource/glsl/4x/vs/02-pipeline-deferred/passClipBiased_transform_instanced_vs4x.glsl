@@ -21,12 +21,13 @@
 	passClipBiased_transform_instanced_vs4x.glsl
 	Calculate and biased clip coordinate with instancing.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
 #define MAX_INSTANCES 1024
 
-// ****TO-DO: 
+// ****DONE: 
 //	-> declare uniform block containing MVP for all lights
 //	-> calculate final clip-space position
 //	-> declare varying for biased clip-space position
@@ -50,19 +51,22 @@ const mat4 bias = mat4(
 
 uniform ubMVP
 {
-	mat4 sLightMVP[MAX_INSTANCES];
+	mat4 uLightMVP[MAX_INSTANCES];
 };
 
+uniform mat4 uMVP;
 out vec4 vPosition_biased_clip;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 
-	gl_Position = sLightMVP[vInstanceID] * aPosition;
-	//gl_Position = aPosition * sLightMVP[vInstanceID];
+	//Somehow, the way the lightMVP got constructed is causing issues here where flickering wavy lines of the output provided
+	//from phongPointLight is appearing on geometry, in addition to heavy flickering that depends on the camera angle/position
+	gl_Position = uLightMVP[vInstanceID] * aPosition;
 
-	vPosition_biased_clip = bias * sLightMVP[vInstanceID] * aPosition;
+	// position -> clip space -> biased clip space
+	vPosition_biased_clip = bias * uLightMVP[vInstanceID] * aPosition;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

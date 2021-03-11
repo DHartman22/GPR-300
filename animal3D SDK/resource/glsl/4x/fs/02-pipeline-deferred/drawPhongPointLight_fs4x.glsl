@@ -21,12 +21,13 @@
 	drawPhongPointLight_fs4x.glsl
 	Output Phong shading components while drawing point light volume.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
 #define MAX_LIGHTS 1024
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare biased clip coordinate varying from vertex shader
 //	-> declare point light data structure and uniform block
 //	-> declare pertinent samplers with geometry data ("g-buffers")
@@ -76,6 +77,9 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
 	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
+
+	//mostly same as deferred
+
 	vec4 screenSpace = vPosition_biased_clip / vPosition_biased_clip.w;
 	vec4 sceneTexcoord = texture(uImage04, screenSpace.xy);
 	vec4 diffuseSample = texture(uImage00, sceneTexcoord.xy);
@@ -96,7 +100,7 @@ void main()
 	vec4 normal_view = texture(uImage05, screenSpace.xy);
 	normal_view = (normal_view - 0.5) * 2.0;
 
-	vec4 N = normalize(normal);
+	vec4 N = normalize(normal_view);
 
 	vec4 finalDiffuse;
 	vec4 finalSpecular;
@@ -109,7 +113,7 @@ void main()
 
 	float attenuation = attenuation(lightDistance, dot(lightDistance, lightDistance), uPointLightData[vInstanceID].radiusInv, uPointLightData[vInstanceID].radiusInvSq);
 
-	vec4 diffuse = max(dot(N, L), 0.0) * diffuseSample * uPointLightData[vInstanceID].color; //applies texture and light color
+	vec4 diffuse = max(dot(N, L), 0.0) * uPointLightData[vInstanceID].color; //applies texture and light color
 	vec4 specular = pow(max(dot(position_view, R), 0.0), specularPower) * uPointLightData[vInstanceID].color; //specular color is the same as the light color
 		
 
@@ -121,8 +125,8 @@ void main()
 	rtDiffuseLight = finalDiffuse;
 	rtSpecularLight = finalSpecular;
 
-	rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
-	//rtSpecularLight = vec4(1.0);
+//	rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
+//	rtSpecularLight = vec4(1.0);
 
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 

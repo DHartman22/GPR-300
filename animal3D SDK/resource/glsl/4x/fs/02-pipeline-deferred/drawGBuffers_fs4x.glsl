@@ -21,10 +21,11 @@
 	drawGBuffers_fs4x.glsl
 	Output g-buffers for use in future passes.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 
-// ****TO-DO:
+// ****DONE:
 //	-> declare view-space varyings from vertex shader
 //	-> declare MRT for pertinent surface data (incoming attribute info)
 //		(hint: at least normal and texcoord are needed)
@@ -55,23 +56,13 @@ vec4 vPosition_screen;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
-	//rtFragColor = vec4(1.0, 0.0, 1.0, 1.0);
+
 	rtTexcoord = vTexcoord;
-
-	vec3 nMap = texture(uImage05, vPosition_screen.xy).rgb;
-	nMap = nMap * 2.0 - 1.0;
-	nMap = normalize(nMap);
-	//vec3 viewDir = TBN * vec3(normalize(vView - vPosition));
-	//V = vec4(viewDir, 1.0);
-	vec4 N = vec4(nMap, 0.5);
-
-	//ensures that vNormal fits in the color range
+	
+	//fixes the axis of normal
 	rtNormal = vec4(normalize(vNormal.xyz) * 0.5 + 0.5, 1.0);
-	rtDiffuse = texture(uImage00, vTexcoord.xy);
-	//rtDiffuse.a = texture(uImage01, vTexcoord.xy).r;
 
-	//rtPosition = vPosition_screen / vPosition_screen.w;
-	//rtPosition = N;
+	//sample diffuse and spec
+	rtDiffuse = texture(uImage00, vTexcoord.xy);
 	rtSpecular = texture(uImage01, vTexcoord.xy);
 }
