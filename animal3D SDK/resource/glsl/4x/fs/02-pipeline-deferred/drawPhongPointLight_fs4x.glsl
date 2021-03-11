@@ -125,10 +125,7 @@ void main()
 	rtDiffuseLight = finalDiffuse;
 	rtSpecularLight = finalSpecular;
 
-//	rtDiffuseLight = vec4(1.0, 0.0, 0.0, 1.0);
-//	rtSpecularLight = vec4(1.0);
-
+	//resources used:
 	//https://learnopengl.com/Advanced-Lighting/Deferred-Shading
 
-	//rtFragColor.a = diffuseSample.a;
 }
