@@ -33,5 +33,6 @@ uniform vec2 uLevelOuter;
 
 void main()
 {
-	
+	gl_TessLevelOuter[0] = uLevelOuter[0];
+	gl_TessLevelOuter[1] = uLevelOuter[1];
 }
