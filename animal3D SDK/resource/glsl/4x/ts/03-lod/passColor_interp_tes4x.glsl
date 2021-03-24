@@ -24,7 +24,7 @@
 
 #version 450
 
-// ****TO-DO: 
+// ****DONE (supposedly): 
 //	-> declare uniform block for spline waypoint and handle data
 //	-> implement spline interpolation algorithm based on scene object's path
 //	-> interpolate along curve using correct inputs and project result

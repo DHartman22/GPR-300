@@ -501,19 +501,19 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-tb-ubo-trans",		a3shader_vertex  ,	1,{ A3_DEMO_VS"02-pipeline-deferred/e/passTangentBasis_ubo_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-clipb-trans-inst",	a3shader_vertex  ,	1,{ A3_DEMO_VS"02-pipeline-deferred/e/passClipBiased_transform_instanced_vs4x.glsl" } } },
 			// 03-lod
-			{ { { 0 },	"shdr-vs:empty",					a3shader_vertex  ,	1,{ A3_DEMO_VS"03-lod/empty_vs4x.glsl" } } }, // ****DECODE
+			{ { { 0 },	"shdr-vs:empty",					a3shader_vertex  ,	1,{ A3_DEMO_VS"03-lod/empty_vs4x.glsl" } } }, // ****DECODE (DONE)
 
 			// ts
 			// 03-lod
-			{ { { 0 },	"shdr-tcs:tess-line-curve",			a3shader_tessellationControl,		1,{ A3_DEMO_TS"03-lod/tessIso_tcs4x.glsl" } } }, // ****DECODE
-			{ { { 0 },	"shdr-tcs:tess-tri-lod",			a3shader_tessellationControl,		1,{ A3_DEMO_TS"03-lod/tessTriTangentBasis_tcs4x.glsl" } } }, // ****DECODE
-			{ { { 0 },	"shdr-tes:passthru-interp",			a3shader_tessellationEvaluation,	1,{ A3_DEMO_TS"03-lod/passColor_interp_tes4x.glsl" } } }, // ****DECODE
-			{ { { 0 },	"shdr-tes:pass-tb-disp",			a3shader_tessellationEvaluation,	1,{ A3_DEMO_TS"03-lod/passTangentBasis_displace_tes4x.glsl" } } }, // ****DECODE
+			{ { { 0 },	"shdr-tcs:tess-line-curve",			a3shader_tessellationControl,		1,{ A3_DEMO_TS"03-lod/e/tessIso_tcs4x.glsl" } } }, // ****DECODE (DONE)
+			{ { { 0 },	"shdr-tcs:tess-tri-lod",			a3shader_tessellationControl,		1,{ A3_DEMO_TS"03-lod/e/tessTriTangentBasis_tcs4x.glsl" } } }, // ****DECODE
+			{ { { 0 },	"shdr-tes:passthru-interp",			a3shader_tessellationEvaluation,	1,{ A3_DEMO_TS"03-lod/e/passColor_interp_tes4x.glsl" } } }, // ****DECODE (DONE)
+			{ { { 0 },	"shdr-tes:pass-tb-disp",			a3shader_tessellationEvaluation,	1,{ A3_DEMO_TS"03-lod/e/passTangentBasis_displace_tes4x.glsl" } } }, // ****DECODE
 
 			// gs
 			// 00-common
-			{ { { 0 },	"shdr-gs:draw-tb",					a3shader_geometry,	2,{ A3_DEMO_GS"00-common/drawTangentBasis_gs4x.glsl", // ****DECODE
-																					A3_DEMO_GS"00-common/utilCommon_gs4x.glsl",} } }, // ****DECODE
+			{ { { 0 },	"shdr-gs:draw-tb",					a3shader_geometry,	2,{ A3_DEMO_GS"00-common/e/drawTangentBasis_gs4x.glsl", // ****DECODE
+																					A3_DEMO_GS"00-common/e/utilCommon_gs4x.glsl",} } }, // ****DECODE
 
 			// fs
 			// base
@@ -538,10 +538,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:draw-Phong-light",			a3shader_fragment,	2,{ A3_DEMO_FS"02-pipeline-deferred/e/drawPhongPointLight_fs4x.glsl",
 																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },
 			{ { { 0 },	"shdr-fs:draw-gbuffers",			a3shader_fragment,	1,{ A3_DEMO_FS"02-pipeline-deferred/e/drawGBuffers_fs4x.glsl" } } },
-			{ { { 0 },	"shdr-fs:draw-Phong-nm",			a3shader_fragment,	2,{ A3_DEMO_FS"02-pipeline-deferred/drawPhongNM_fs4x.glsl", // ****DECODE
-																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } }, // ****DECODE
-			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/drawPhongPOM_fs4x.glsl", // ****DECODE
-																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } }, // ****DECODE
+			{ { { 0 },	"shdr-fs:draw-Phong-nm",			a3shader_fragment,	2,{ A3_DEMO_FS"02-pipeline-deferred/e/drawPhongNM_fs4x.glsl", // ****DECODE
+																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } }, // ****DECODE
+			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/e/drawPhongPOM_fs4x.glsl", // ****DECODE
+																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } }, // ****DECODE
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;

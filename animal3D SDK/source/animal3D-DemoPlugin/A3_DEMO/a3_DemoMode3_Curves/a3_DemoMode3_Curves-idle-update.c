@@ -52,14 +52,57 @@ void a3curves_update_animation(a3_DemoState* demoState, a3_DemoMode3_Curves* dem
 	if (demoState->updateAnimation)
 	{
 		a3_SceneObjectData* sceneObjectData = demoMode->obj_teapot->dataPtr;
-
-		// ****TO-DO: 
+		
+		// ****TO-DO: (DONE technically, slows down at each waypoint but its more than functional)
 		//	-> interpolate teapot's position using algorithm that matches path drawn
 		//		(hint: use the one that looks the best)
 		//	-> update the animation timer
 		//		(hint: check if we've surpassed the segment's duration)
 		// teapot follows curved path
 
+		demoMode->curveSegmentTime += (a3f32)dt/demoMode->curveSegmentDuration; // ensures that each segment takes the desired amount of time
+
+
+		if (demoMode->curveSegmentTime < 1) // 1 = next segment position, 0 = current segment position
+		{
+			// without this check, when curveSegmentIndex = 3 the destination becomes the origin of the scene 
+			// since that space in the array hasn't been overwritten
+			if (demoMode->curveSegmentIndex + 1 != demoMode->curveWaypointCount) 
+			{
+				a3real4HermiteTangent(sceneObjectData->position.v,
+					demoMode->curveWaypoint[demoMode->curveSegmentIndex].v,
+					demoMode->curveWaypoint[demoMode->curveSegmentIndex + 1].v,
+					demoMode->curveTangent[demoMode->curveSegmentIndex].v,
+					demoMode->curveTangent[demoMode->curveSegmentIndex + 1].v,
+					demoMode->curveSegmentTime);
+			}
+			else
+			{
+				a3real4HermiteTangent(sceneObjectData->position.v,
+					demoMode->curveWaypoint[demoMode->curveSegmentIndex].v,
+					demoMode->curveWaypoint[0].v,
+					demoMode->curveTangent[demoMode->curveSegmentIndex].v,
+					demoMode->curveTangent[0].v,
+					demoMode->curveSegmentTime);
+			}
+
+		}
+		else
+		{
+			// see previous comment
+			if (demoMode->curveSegmentIndex + 1 != demoMode->curveWaypointCount)
+			{
+				demoMode->curveSegmentIndex++;
+			}
+			else
+			{
+				//teapot has reached segment 0, resets index back to 0
+				demoMode->curveSegmentIndex = 0; 
+			}
+			
+			//resets curveSegmentTime so that the teapot's position does not go off the curve
+			demoMode->curveSegmentTime = 0;
+		}
 	}
 }
 

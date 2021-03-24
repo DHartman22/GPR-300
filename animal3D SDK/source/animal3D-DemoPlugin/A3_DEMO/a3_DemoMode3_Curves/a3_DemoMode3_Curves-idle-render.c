@@ -134,6 +134,7 @@ a3ret a3vertexDrawableRenderIsoPatches(a3ui32 const count)
 a3ret a3vertexDrawableRenderTriPatches(a3_VertexDrawable const* drawable)
 {
 	// triangle: use first 3 outer levels and only first inner
+	// THIS NEEDS TO BE DONE FOR LOD TO WORK, BUT NOTHING ELSE REQUIRES IT
 	// https://www.khronos.org/opengl/wiki/Tessellation 
 	if (drawable)
 	{
@@ -142,6 +143,15 @@ a3ret a3vertexDrawableRenderTriPatches(a3_VertexDrawable const* drawable)
 		//	-> copy regular rendering algorithm
 		//	-> replace primitive type with "patches" keyword
 		// draw
+		float defaultTessLevelsOuter[4] = { 1.0f, 1.0f, 1.0f, 1.0f }, defaultTessLevelsInner[2] = { 1.0f, 1.0f };
+
+		glPatchParameteri(GL_PATCH_VERTICES, 3);
+		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, defaultTessLevelsOuter);
+		glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, defaultTessLevelsInner);
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glDrawArrays(GL_PATCHES, 0, drawable->count * 2);
 		
 		return 1;
 	}
