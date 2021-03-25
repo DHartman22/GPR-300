@@ -138,21 +138,21 @@ a3ret a3vertexDrawableRenderTriPatches(a3_VertexDrawable const* drawable)
 	// https://www.khronos.org/opengl/wiki/Tessellation 
 	if (drawable)
 	{
-		// ****TO-DO: 
+		// ****DONE: 
 		//	-> set patch vertices parameter for triangles
 		//	-> copy regular rendering algorithm
 		//	-> replace primitive type with "patches" keyword
 		// draw
-		float defaultTessLevelsOuter[4] = { 1.0f, 1.0f, 1.0f, 1.0f }, defaultTessLevelsInner[2] = { 1.0f, 1.0f };
-
-		glPatchParameteri(GL_PATCH_VERTICES, 3);
-		glPatchParameterfv(GL_PATCH_DEFAULT_OUTER_LEVEL, defaultTessLevelsOuter);
-		glPatchParameterfv(GL_PATCH_DEFAULT_INNER_LEVEL, defaultTessLevelsInner);
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glDrawArrays(GL_PATCHES, 0, drawable->count * 2);
 		
+		glPatchParameteri(GL_PATCH_VERTICES, 3);
+		glBindVertexArray(drawable->vertexArray->handle->handle);
+		if (drawable->indexType)
+		{
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable->indexBuffer->handle->handle);
+			glDrawElements(GL_PATCHES, drawable->count, drawable->indexType, drawable->indexing);
+		}
+		else
+			glDrawArrays(GL_PATCHES, drawable->first, drawable->count);
 		return 1;
 	}
 	return -1;
