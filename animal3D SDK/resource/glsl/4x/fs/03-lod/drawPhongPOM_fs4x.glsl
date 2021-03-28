@@ -51,6 +51,8 @@ uniform sampler2D uTex_dm, uTex_sm, uTex_nm, uTex_hm;
 
 const vec4 kEyePos = vec4(0.0, 0.0, 0.0, 1.0);
 
+const float depthScale = 0.1f;
+
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtFragNormal;
 
@@ -63,15 +65,35 @@ vec3 calcParallaxCoord(in vec3 coord, in vec3 viewVec, const int steps)
 	// ****TO-DO:
 	//	-> step along view vector until intersecting height map
 	//	-> determine precise intersection point, return resulting coordinate
-	
+
+	//using learnopengl as a reference https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
+
+	float stepLength = 1.0 / steps;
+	float currentStepValue = 0.0;
+	float depthValue = texture(uTex_dm, coord.xy).r;
+
+	vec3 texCoord = coord;
+	vec3 P = viewVec * depthScale;
+	vec3 deltaTexCoord = P / steps;
+	while (currentStepValue < depthValue)
+	{
+		texCoord += deltaTexCoord;
+		depthValue = texture(uTex_dm, texCoord.xy).r;
+
+		currentStepValue += stepLength;
+
+	}
+
+	vec2 prevCoords = texCoord.xy - deltaTexCoord.xy;
+
 	// done
-	return coord;
+	return texCoord;
 }
 
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE GREEN
-//	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
+	//	rtFragColor = vec4(0.0, 1.0, 0.0, 1.0);
 
 	vec4 diffuseColor = vec4(0.0), specularColor = diffuseColor, dd, ds;
 	
@@ -94,7 +116,12 @@ void main()
 		0.0,
 		0.0
 	);
-	
+
+	//mat3 tbn = {vTangentBasis_view[0].xyz, vTangentBasis_view[1].xyz, vTangentBasis_view[2].xyz};
+	mat3 tbn = {tan_view.xyz, bit_view.xyz, nrm_view.xyz};
+
+
+	viewVec_tan = inverse(tbn) * viewVec.xyz;
 	// parallax occlusion mapping
 	vec3 texcoord = vec3(vTexcoord_atlas.xy, uSize);
 	texcoord = calcParallaxCoord(texcoord, viewVec_tan, 256);

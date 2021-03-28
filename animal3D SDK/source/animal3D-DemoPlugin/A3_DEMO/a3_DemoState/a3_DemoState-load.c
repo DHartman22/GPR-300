@@ -498,7 +498,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-tb-sc-trans",			a3shader_vertex  ,	1,{ A3_DEMO_VS"01-pipeline/e/passTangentBasis_shadowCoord_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-tb-sc-trans-inst",	a3shader_vertex  ,	1,{ A3_DEMO_VS"01-pipeline/e/passTangentBasis_shadowCoord_transform_instanced_vs4x.glsl" } } },
 			// 02-pipeline-deferred
-			{ { { 0 },	"shdr-vs:pass-tb-ubo-trans",		a3shader_vertex  ,	1,{ A3_DEMO_VS"02-pipeline-deferred/e/passTangentBasis_ubo_transform_vs4x.glsl" } } },
+			{ { { 0 },	"shdr-vs:pass-tb-ubo-trans",		a3shader_vertex  ,	1,{ A3_DEMO_VS"02-pipeline-deferred/passTangentBasis_ubo_transform_vs4x.glsl" } } },
 			{ { { 0 },	"shdr-vs:pass-clipb-trans-inst",	a3shader_vertex  ,	1,{ A3_DEMO_VS"02-pipeline-deferred/e/passClipBiased_transform_instanced_vs4x.glsl" } } },
 			// 03-lod
 			{ { { 0 },	"shdr-vs:empty",					a3shader_vertex  ,	1,{ A3_DEMO_VS"03-lod/empty_vs4x.glsl" } } }, // ****DECODE (DONE)
@@ -540,8 +540,8 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:draw-gbuffers",			a3shader_fragment,	1,{ A3_DEMO_FS"02-pipeline-deferred/e/drawGBuffers_fs4x.glsl" } } },
 			{ { { 0 },	"shdr-fs:draw-Phong-nm",			a3shader_fragment,	2,{ A3_DEMO_FS"02-pipeline-deferred/e/drawPhongNM_fs4x.glsl", // ****DECODE
 																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } }, // ****DECODE
-			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/e/drawPhongPOM_fs4x.glsl", // ****DECODE
-																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } }, // ****DECODE
+			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/drawPhongPOM_fs4x.glsl", // ****DECODE
+																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } }, // ****DECODE
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
