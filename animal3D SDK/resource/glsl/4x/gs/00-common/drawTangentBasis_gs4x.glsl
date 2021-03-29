@@ -50,13 +50,82 @@ layout (line_strip, max_vertices = MAX_VERTICES) out;
 out vec4 vColor;
 flat out int vVertexData[];
 
+uniform mat4 uMVP;
+uniform vec2 vScale;
+out vec3 dist;
+
 void main()
 {
 	//gets the position of each corner of a triangle
-	vec4 position0 = gl_in[0].gl_Position;
-	vec4 position1 = gl_in[1].gl_Position;
-	vec4 position2 = gl_in[2].gl_Position;
+	vec4 pos0 = gl_in[0].gl_Position;
+	vec4 pos1 = gl_in[1].gl_Position;
+	vec4 pos2 = gl_in[2].gl_Position;
+
+	//Makes position relative to mvp
+	pos0 *= uMVP;
+	pos1 *= uMVP;
+	pos2 *= uMVP;
+
+	//Converts positions into 2D
+	vec2 pos0_2d = pos0.xy / pos0.w;
+	vec2 pos1_2d = pos1.xy / pos1.w;
+	vec2 pos2_2d = pos2.xy / pos2.w;
+
+	// This is where we start doing calculations of the vertices,
+	// and area of the triangles
+
+	// Calculations for position 0:
+	//	Vectors:
+	vec2 v1_0 = vScale * (pos1_2d - pos0_2d);
+	vec2 v2_0 = vScale * (pos2_2d - pos0_2d);
+
+	// Area:
+	float a0 = abs((v1_0.x * v2_0.y) - (v1_0.y * v2_0.x));
+
+	// Distance from vertex to line:
+	float d0 = a0 / length(v1_0 - v2_0);
+	dist = vec3(d0, 0.0, 0.0);
+	dist *= pos0.w;
+
+	gl_Position = pos0;
 
 	EmitVertex();
+
+
+	// Calculations for position 1:
+	//	Vectors:
+	vec2 v0_1 = vScale * (pos0_2d - pos1_2d);
+	vec2 v2_1 = vScale * (pos2_2d - pos1_2d);
+
+	// Area:
+	float a1 = abs((v0_1.x * v2_1.y) - (v0_1.y * v2_1.x));
+
+	// Distance from vertex to line:
+	float d1 = a1 / length(v0_1 - v2_1);
+	dist = vec3(0.0, d1, 0.0);
+	dist *= pos1.w;
+
+	gl_Position = pos1;
+
+	EmitVertex();
+
+
+	// Calculations for position 2:
+	//	Vectors:
+	vec2 v0_2 = vScale * (pos0_2d - pos2_2d);
+	vec2 v1_2 = vScale * (pos1_2d - pos2_2d);
+
+	// Area:
+	float a2 = abs((v0_2.x * v1_2.y) - (v0_2.y * v1_2.x));
+
+	// Distance from vertex to line:
+	float d2 = a2 / length(v1_2 - v1_2);
+	dist = vec3(0.0, 0.0, d2);
+	dist *= pos2.w;
+
+	gl_Position = pos2;
+
+	EmitVertex();
+
 	EndPrimitive();
 }
