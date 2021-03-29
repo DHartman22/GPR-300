@@ -41,13 +41,22 @@
 // (2 verts/axis * 3 axes/basis * (3 vertex bases + 1 face basis) + 4 to 8 wireframe verts = 28 to 32 verts)
 #define MAX_VERTICES 32
 
+//credit for this file: https://www.geeks3d.com/hacklab/20180514/demo-wireframe-shader-opengl-3-2-and-opengl-es-3-1/
+
 layout (triangles) in;
 
 layout (line_strip, max_vertices = MAX_VERTICES) out;
 
 out vec4 vColor;
+flat out int vVertexData[];
 
 void main()
 {
-	
+	//gets the position of each corner of a triangle
+	vec4 position0 = gl_in[0].gl_Position;
+	vec4 position1 = gl_in[1].gl_Position;
+	vec4 position2 = gl_in[2].gl_Position;
+
+	EmitVertex();
+	EndPrimitive();
 }

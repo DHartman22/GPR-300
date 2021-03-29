@@ -112,9 +112,9 @@ void main()
 	//		an efficient way of representing the required matrix operation)
 	// tangent-space view vector
 	vec3 viewVec_tan = vec3(
-		0.0,
-		0.0,
-		0.0
+		tan_view.x,
+		tan_view.y,
+		tan_view.z
 	);
 
 	//mat3 tbn = {vTangentBasis_view[0].xyz, vTangentBasis_view[1].xyz, vTangentBasis_view[2].xyz};
