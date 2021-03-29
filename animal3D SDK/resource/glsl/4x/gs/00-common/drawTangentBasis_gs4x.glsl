@@ -47,8 +47,36 @@ layout (triangles) in;
 
 layout (line_strip, max_vertices = MAX_VERTICES) out;
 
+in vbVertexData {
+	mat4 vTangentBasis_view;
+	vec4 vTexcoord_atlas;
+} vVertexData[];
+
 out vec4 vColor;
-flat out int vVertexData[];
+
+void drawWireFrame()
+{
+	vColor = vec4(1.0, 0.0, 0.0, 1.0);
+	gl_Position = gl_in[0].gl_Position;
+	EmitVertex();
+	gl_Position = gl_in[1].gl_Position;
+	EmitVertex();
+	EndPrimitive();
+
+	vColor = vec4(0.0, 1.0, 0.0, 1.0);
+	gl_Position = gl_in[1].gl_Position;
+	EmitVertex();
+	gl_Position = gl_in[2].gl_Position;
+	EmitVertex();
+	EndPrimitive();
+
+	vColor = vec4(0.0, 0.0, 1.0, 1.0);
+	gl_Position = gl_in[2].gl_Position;
+	EmitVertex();
+	gl_Position = gl_in[0].gl_Position;
+	EmitVertex();
+	EndPrimitive();
+}
 
 uniform mat4 uMVP;
 uniform vec2 vScale;
@@ -56,6 +84,8 @@ out vec3 dist;
 
 void main()
 {
+	drawWireFrame();
+	
 	//gets the position of each corner of a triangle
 	vec4 pos0 = gl_in[0].gl_Position;
 	vec4 pos1 = gl_in[1].gl_Position;
