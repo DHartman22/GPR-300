@@ -84,8 +84,10 @@ out vec3 dist;
 
 void main()
 {
-	drawWireFrame();
+	//drawWireFrame();
 	
+	vColor = vec4(1.0, 0.0, 0.0, 1.0);
+
 	//gets the position of each corner of a triangle
 	vec4 pos0 = gl_in[0].gl_Position;
 	vec4 pos1 = gl_in[1].gl_Position;

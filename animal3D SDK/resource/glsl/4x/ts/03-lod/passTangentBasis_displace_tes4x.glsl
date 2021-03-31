@@ -49,4 +49,11 @@ void main()
 {
 	// gl_TessCoord -> barycentric (3 elements)
 	//gl_position = ???
+
+	gl_TessCoord[0];
+	gl_TessCoord[1];
+	gl_TessCoord[2];
+
+	//gl_Position = vTexcoord_atlas;
+
 }
