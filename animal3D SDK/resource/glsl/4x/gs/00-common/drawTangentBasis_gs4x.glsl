@@ -83,29 +83,60 @@ void drawVertexTangents()
 	vec4 bitangent = vVertexData[0].vTangentBasis_view[1];
 	vec4 normal = tangent * bitangent;
 
+	mat4 TBN = mat4(
+		tangent.x, bitangent.x, normal.x, 0.0,
+		tangent.y, bitangent.y, normal.y, 0.0,
+		tangent.z, bitangent.z, normal.z, 0.0,
+		      0.0,         0.0,      0.0, 1.0
+	);
+
 	vColor = vec4(1.0, 0.0, 0.0, 1.0);
-	gl_Position = gl_in[0].gl_Position + tangent;
+	gl_Position = gl_in[0].gl_Position + TBN[0];
 	EmitVertex();
 	
 	vColor = vec4(0.0, 1.0, 0.0, 1.0);
-	gl_Position = gl_in[1].gl_Position + bitangent;
+	gl_Position = gl_in[1].gl_Position + TBN[1];
 	EmitVertex();
 	
 	vColor = vec4(0.0, 0.0, 1.0, 1.0);
-	gl_Position = gl_in[2].gl_Position + normal;
+	gl_Position = gl_in[2].gl_Position + TBN[2];
 	EmitVertex();
-
+	
 	EndPrimitive();
 }
 
 void drawFaceTangents()
 {
+	// Calculating tangent, normal, and bitangent
+	vec4 tangent = vVertexData[1].vTangentBasis_view[0];
+	vec4 bitangent = vVertexData[1].vTangentBasis_view[1];
+	vec4 normal = tangent * bitangent;
 
+	mat4 TBN = mat4(
+		tangent.x, bitangent.x, normal.x, 0.0,
+		tangent.y, bitangent.y, normal.y, 0.0,
+		tangent.z, bitangent.z, normal.z, 0.0,
+		      0.0,         0.0,      0.0, 1.0
+	);
+
+	vColor = vec4(1.0, 0.0, 0.0, 1.0);
+	gl_Position = gl_in[0].gl_Position + TBN[0];
+	EmitVertex();
+	
+	vColor = vec4(0.0, 1.0, 0.0, 1.0);
+	gl_Position = gl_in[1].gl_Position + TBN[1];
+	EmitVertex();
+	
+	vColor = vec4(0.0, 0.0, 1.0, 1.0);
+	gl_Position = gl_in[2].gl_Position + TBN[2];
+	EmitVertex();
+	
+	EndPrimitive();
 }
 
 void main()
 {
 	drawWireFrame();
 	drawVertexTangents();
-	
+	//drawFaceTangents();
 }
