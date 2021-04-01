@@ -33,12 +33,22 @@
 //	-> perform morph target interpolation using correct attributes
 //		(hint: results can be stored in local variables named after the 
 //		complete tangent basis attributes provided before any changes)
-
+/*
 layout (location = 0) in vec4 aPosition;
 layout (location = 2) in vec3 aNormal;
 layout (location = 8) in vec4 aTexcoord;
 layout (location = 10) in vec3 aTangent;
 layout (location = 11) in vec3 aBitangent;
+*/
+
+// single morph target: position, normal, tangent
+//		We can have 5 targets: 16 attributes / 3 per target
+//		Leftover attribute: texcoord
+
+// not morph target: texcoord, bitangent
+//		texcoord is common attribute
+//		bitengent is normal x tangent
+
 
 struct sModelMatrixStack
 {
@@ -70,6 +80,11 @@ void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	//gl_Position = aPosition;
+
+	vec4 aPosition;
+	vec3 aTangent, aBitangent, aNormal;
+
+	// testing: copy first morph target
 	
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
 	
