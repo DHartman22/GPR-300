@@ -21,6 +21,7 @@
 	drawPhongPOM_fs4x.glsl
 	Output Phong shading with parallax occlusion mapping (POM).
 */
+//Edited by Nick Preis and Daniel Hartman
 
 #version 450
 
@@ -68,26 +69,26 @@ vec3 calcParallaxCoord(in vec3 coord, in vec3 viewVec, const int steps)
 
 	//using learnopengl as a reference https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
 
+	
 	float stepLength = 1.0 / steps;
 	float currentStepValue = 0.0;
-	float depthValue = texture(uTex_dm, coord.xy).r;
+	float depthValue = texture(uTex_hm, coord.xy).r;
 
-	vec3 texCoord = coord;
 	vec3 P = viewVec * depthScale;
 	vec3 deltaTexCoord = P / steps;
-	while (currentStepValue < depthValue)
+
+	vec3 originalCoord = coord; //save original for interp
+
+	for(currentStepValue = 0.0; currentStepValue < depthValue; currentStepValue += stepLength)
 	{
-		texCoord += deltaTexCoord;
-		depthValue = texture(uTex_dm, texCoord.xy).r;
+		coord += deltaTexCoord; //take a step
+		depthValue = texture(uTex_hm, coord.xy).r; //sample the height map to check if we've reached the parallax coord yet
+	} 
 
-		currentStepValue += stepLength;
 
-	}
-
-	vec2 prevCoords = texCoord.xy - deltaTexCoord.xy;
-
+	vec3 final = mix(originalCoord, coord, 0.5);
 	// done
-	return texCoord;
+	return final;
 }
 
 void main()
@@ -117,11 +118,9 @@ void main()
 		tan_view.z
 	);
 
-	//mat3 tbn = {vTangentBasis_view[0].xyz, vTangentBasis_view[1].xyz, vTangentBasis_view[2].xyz};
-	mat3 tbn = {tan_view.xyz, bit_view.xyz, nrm_view.xyz};
+	mat3 tbn = {tan_view.xyz, bit_view.xyz, nrm_view.xyz}; //create matrix manually so I can inverse it
 
-
-	viewVec_tan = inverse(tbn) * viewVec.xyz;
+	viewVec_tan = inverse(tbn) * viewVec.xyz; //view -> tangent
 	// parallax occlusion mapping
 	vec3 texcoord = vec3(vTexcoord_atlas.xy, uSize);
 	texcoord = calcParallaxCoord(texcoord, viewVec_tan, 256);

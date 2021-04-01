@@ -67,7 +67,7 @@ void a3curves_update_animation(a3_DemoState* demoState, a3_DemoMode3_Curves* dem
 		{
 			// without this check, when curveSegmentIndex = 3 the destination becomes the origin of the scene 
 			// since that space in the array hasn't been overwritten
-			if (demoMode->curveSegmentIndex + 1 != demoMode->curveWaypointCount) 
+			if (demoMode->curveSegmentIndex < demoMode->curveWaypointCount - 1)
 			{
 				a3real4HermiteTangent(sceneObjectData->position.v,
 					demoMode->curveWaypoint[demoMode->curveSegmentIndex].v,
@@ -90,7 +90,7 @@ void a3curves_update_animation(a3_DemoState* demoState, a3_DemoMode3_Curves* dem
 		else
 		{
 			// see previous comment
-			if (demoMode->curveSegmentIndex + 1 != demoMode->curveWaypointCount)
+			if (demoMode->curveSegmentIndex < demoMode->curveWaypointCount-1)
 			{
 				demoMode->curveSegmentIndex++;
 			}
