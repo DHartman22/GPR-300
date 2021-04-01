@@ -22,9 +22,10 @@
 	Pass color, outputting result of interpolation.
 */
 
+//Edited by Dan Hartman and Nick Preis
 #version 450
 
-// ****DONE (supposedly): 
+// ****DONE: 
 //	-> declare uniform block for spline waypoint and handle data
 //	-> implement spline interpolation algorithm based on scene object's path
 //	-> interpolate along curve using correct inputs and project result
@@ -63,5 +64,5 @@ void main()
 	);
 	gl_Position = uP * p;
 
-	vColor = vec4(0.5, 0.0, 1.0, 1.0);
+	vColor = vec4(0.5, u, 1.0, 1.0);
 }

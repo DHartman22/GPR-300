@@ -52,7 +52,7 @@ uniform sampler2D uTex_dm, uTex_sm, uTex_nm, uTex_hm;
 
 const vec4 kEyePos = vec4(0.0, 0.0, 0.0, 1.0);
 
-const float depthScale = 0.1f;
+const float depthScale = 0.02f;
 
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtFragNormal;
@@ -63,30 +63,39 @@ void calcPhongPoint(out vec4 diffuseColor, out vec4 specularColor, in vec4 eyeVe
 	
 vec3 calcParallaxCoord(in vec3 coord, in vec3 viewVec, const int steps)
 {
-	// ****TO-DO:
+	// ****DONE:
 	//	-> step along view vector until intersecting height map
 	//	-> determine precise intersection point, return resulting coordinate
 
 	//using learnopengl as a reference https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
+	//as well as the lecture 10 slides
 
 	
 	float stepLength = 1.0 / steps;
-	float currentStepValue = 0.0;
-	float depthValue = texture(uTex_hm, coord.xy).r;
+	float currentStepValue = 0.0; 
+	float depthValue = texture(uTex_hm, coord.xy).r; 
 
 	vec3 P = viewVec * depthScale;
 	vec3 deltaTexCoord = P / steps;
 
 	vec3 originalCoord = coord; //save original for interp
 
-	for(currentStepValue = 0.0; currentStepValue < depthValue; currentStepValue += stepLength)
+	while(currentStepValue <= depthValue) // <= just in case it miraculously lands on the perfect spot
 	{
 		coord += deltaTexCoord; //take a step
 		depthValue = texture(uTex_hm, coord.xy).r; //sample the height map to check if we've reached the parallax coord yet
+		currentStepValue += stepLength;
 	} 
 
+	vec3 previousStepCoord = coord - deltaTexCoord;
+	float previousStepCoordDepth = texture(uTex_hm, previousStepCoord.xy).r - depthValue + stepLength;
 
-	vec3 final = mix(originalCoord, coord, 0.5);
+	float deltaH = previousStepCoord.y - coord.y;
+	float deltaB = previousStepCoordDepth - depthValue;
+
+	float x = (previousStepCoord.y - previousStepCoordDepth) / (deltaB - deltaH);
+
+	vec3 final = mix(previousStepCoord, coord, x); //find x in y = mx + b
 	// done
 	return final;
 }

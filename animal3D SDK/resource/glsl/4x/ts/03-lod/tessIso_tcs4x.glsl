@@ -21,6 +21,7 @@
 	tessIso_tcs4x.glsl
 	Basic tessellation control for isolines.
 */
+//Edited by Dan Hartman and Nick Preis
 
 #version 450
 

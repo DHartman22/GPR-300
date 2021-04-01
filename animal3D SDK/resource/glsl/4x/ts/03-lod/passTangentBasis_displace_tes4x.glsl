@@ -76,30 +76,7 @@ void main()
 	vTangentBasis_view[2] += (texture(uTex_hm, tc2.xy).r * displacementDepth);
 	p2.y += texture(uTex_hm, tc2.xy).r * displacementDepth;
 
-	//tbn mat experiment
-
-	vec4 tan_view = normalize(vTangentBasis_view[0]);
-	vec4 bit_view = normalize(vTangentBasis_view[1]);
-	vec4 nrm_view = normalize(vTangentBasis_view[2]);
-	vec4 pos_view = vTangentBasis_view[3];
-	
-	// view-space view vector
-	//vec4 viewVec = normalize(kEyePos - pos_view);
-	
-	// ****TO-DO:
-	//	-> convert view vector into tangent space
-	//		(hint: the above TBN bases convert tangent to view, figure out 
-	//		an efficient way of representing the required matrix operation)
-	// tangent-space view vector
-	vec3 viewVec_tan = vec3(
-		tan_view.x,
-		tan_view.y,
-		tan_view.z
-	);
-
-	mat4 tbn = {tan_view, bit_view, nrm_view, pos_view}; //create matrix manually so I can inverse it
-
-	gl_Position = uP * vTangentBasis_view * (p0); // what do I do here?
+	gl_Position = uP * (p0); // what do I do here?
 
 
 }
