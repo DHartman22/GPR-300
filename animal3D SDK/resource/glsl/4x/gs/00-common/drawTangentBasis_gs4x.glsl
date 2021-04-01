@@ -79,6 +79,8 @@ void drawWireFrame()
 
 void drawVertexTangents()
 {
+	//Got some inspiration from here: https://io7m.github.io/r2/documentation/p2s23.xhtml
+
 	// Calculating tangent, normal, and bitangent
 	vec4 tangent = vVertexData[0].vTangentBasis_view[0];
 	vec4 bitangent = vVertexData[0].vTangentBasis_view[1];
@@ -108,6 +110,8 @@ void drawVertexTangents()
 
 void drawFaceTangents()
 {
+	//Got some inspiration from here: https://io7m.github.io/r2/documentation/p2s23.xhtml
+
 	// Calculating tangent, normal, and bitangent
 	vec4 tangent = vec4(vVertexData[0].vTexcoord_atlas[0]);
 	vec4 bitangent = vec4(vVertexData[0].vTexcoord_atlas[1]);
