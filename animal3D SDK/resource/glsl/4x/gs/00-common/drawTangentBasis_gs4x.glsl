@@ -109,8 +109,8 @@ void drawVertexTangents()
 void drawFaceTangents()
 {
 	// Calculating tangent, normal, and bitangent
-	vec4 tangent = vVertexData[1].vTangentBasis_view[0];
-	vec4 bitangent = vVertexData[1].vTangentBasis_view[1];
+	vec4 tangent = vec4(vVertexData[0].vTexcoord_atlas[0]);
+	vec4 bitangent = vec4(vVertexData[0].vTexcoord_atlas[1]);
 	vec4 normal = tangent * bitangent;
 
 	mat4 TBN = mat4(
@@ -139,5 +139,5 @@ void main()
 {
 	drawWireFrame();
 	drawVertexTangents();
-	//drawFaceTangents();
+	drawFaceTangents();
 }
