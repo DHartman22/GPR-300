@@ -50,6 +50,16 @@ layout (location = 11) in vec3 aBitangent;
 //		bitengent is normal x tangent
 
 
+struct sMorphTarget
+{
+	vec4 position;
+	vec3 normal;	float nPad;
+	vec3 tangent;	float tPad;
+};
+
+layout (location = 0) in sMorphTarget aMorphTarget[5];
+//need texcoord
+
 struct sModelMatrixStack
 {
 	mat4 modelMat;						// model matrix (object -> world)
@@ -86,6 +96,7 @@ void main()
 
 	// testing: copy first morph target
 	
+
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
 	
 	vTangentBasis_view = t.modelViewMatInverseTranspose * mat4(aTangent, 0.0, aBitangent, 0.0, aNormal, 0.0, vec4(0.0));
