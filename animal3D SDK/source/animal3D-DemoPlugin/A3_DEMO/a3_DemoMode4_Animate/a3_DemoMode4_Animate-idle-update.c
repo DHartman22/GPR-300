@@ -84,7 +84,7 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			// ****TO-DO:
 			// concatenate base pose
 
-			// ****TO-DO:
+			// ****TO-DO: second
 			// convert to matrix
 
 		}
@@ -100,10 +100,10 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 {
 	if (hierarchy && objectSpaceArray && localSpaceArray)
 	{
-		// ****TO-DO: 
+		// ****TO-DO: first
 		// forward kinematics
-		//a3ui32 j;
-		//a3i32 jp;
+		a3ui32 j;
+		a3i32 jp;
 
 		// done
 		return 1;
