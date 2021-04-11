@@ -105,6 +105,11 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 		a3ui32 j;
 		a3i32 jp;
 
+		for (j = 0; j < hierarchy->numNodes; j++)
+		{
+
+		}
+
 		// done
 		return 1;
 	}
