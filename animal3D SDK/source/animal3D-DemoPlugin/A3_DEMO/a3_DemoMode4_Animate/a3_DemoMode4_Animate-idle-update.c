@@ -73,7 +73,7 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 		
 		for (j = 0;
 			j < hierarchy->numNodes;
-			++j, ++p0, ++p1, ++pBase, ++localSpaceArray)
+			++j, ++p0, ++p1, ++pBase)
 		{
 			// testing: copy base pose
 			tmpPose = *pBase;
@@ -87,29 +87,47 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			// ****TO-DO: second
 			// convert to matrix
 			//localSpaceArray[j] = a3mat4_identity;
-			hierarchy->nodes[j].index;
-			//a3mat4 temp = {
-			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.x,
-			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.y,
-			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.z,
-			//	0.0f, 0.0f, 0.0f, 1.0f
-			//};
 
-			a3vec3 xVector = { 1.0f, 1.0f, 1.0f };
 
 			a3mat4 temp = {
-				tmpPose.euler.x, 0.0f, 0.0f, tmpPose.position.x,
-				0.0f, 0.0f, 0.0f, tmpPose.position.y,
-				0.0f, 0.0f, 0.0f, tmpPose.position.z,
-				1.0f, tmpPose.euler.y, tmpPose.euler.z, tmpPose.scale.x
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				tmpPose.position.x, tmpPose.position.y, tmpPose.position.z, 1.0f
 			};
 
-			//a3mat4 temp = {
-			//	1.0f, 0.0f, 0.0f, tmpPose.position.x,
-			//	0.0f, 1.0f, 0.0f, tmpPose.position.y,
-			//	0.0f, 0.0f, 1.0f, tmpPose.position.z,
-			//	1.0f, 1.0f, 1.0f, 1.0f
-			//};
+			a3mat4 tempRotationX = {
+				1.0f, 0.0f, 0.0f, 0.0f,
+				0.0f, a3cosd(tmpPose.euler.x), a3sind(tmpPose.euler.x), 0.0f,
+				0.0f, -a3sind(tmpPose.euler.x), a3cosd(tmpPose.euler.x), 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};
+
+			a3mat4 tempRotationY = {
+				a3cosd(tmpPose.euler.y), 0.0f, -a3sind(tmpPose.euler.y), 0.0f,
+				0.0f, 1.0f, 0.0f, 0.0f,
+				a3sind(tmpPose.euler.y), 0.0f, a3cosd(tmpPose.euler.y), 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};
+
+			a3mat4 tempRotationZ = {
+				a3cosd(tmpPose.euler.z), -a3sind(tmpPose.euler.z), 0.0f, 0.0f,
+				a3sind(tmpPose.euler.z), a3cosd(tmpPose.euler.z), 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};
+
+			a3mat4 tempScale = {
+				tmpPose.scale.x, 0.0f, 0.0f, 0.0f,
+				0.0f, tmpPose.scale.y, 0.0f, 0.0f,
+				0.0f, 0.0f, tmpPose.scale.z, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};
+
+			a3real4x4Concat(tempRotationX.m, temp.m);
+			a3real4x4Concat(tempRotationY.m, temp.m);
+			a3real4x4Concat(tempRotationZ.m, temp.m);
+			a3real4x4Concat(tempScale.m, temp.m);
 
 			localSpaceArray[j] = temp;
 
@@ -132,40 +150,41 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 		a3i32 jp = 0;
 		for (j = 0; j < hierarchy->numNodes; j++)
 		{
-			if (hierarchy->nodes[j].name == "skel:root")
+			if (j == 0)
 			{
-				//do nothing
+				//same value
+				objectSpaceArray[j] = localSpaceArray[j];
 			}
 			else
 			{
-				while (a3hierarchyIsParentNode(hierarchy, jp, j))
-				{
-					//a3mat4 temp = a3mat4_identity;
-					objectSpaceArray[j] = localSpaceArray[jp];
-					jp++;
-				}
+				// SolveOrderedFK
+				a3mat4 temp = a3mat4_identity;
+				temp = localSpaceArray[j];
+				a3real4x4Concat(objectSpaceArray[hierarchy->nodes[j].parentIndex].m, temp.m);
+				objectSpaceArray[j] = temp;
+				//jp++;
+
+				// SolveRecursiveFK
+				//while (a3hierarchyIsChildNode(hierarchy, jp, j))
+				//{
+				//	//a3mat4 temp = a3mat4_identity;
+				//	a3mat4 temp = localSpaceArray[j];
+				//	a3real4x4Concat(objectSpaceArray[jp].m, temp.m);
+				//	objectSpaceArray[j] = temp;
+				//	jp++;
+				//}
 			}
 
-<<<<<<< HEAD
 		}
 
+		//for (j = 0;
+		//	j < hierarchy->numNodes;
+		//	++j)
+		//{
 
-
-		for (j = 0;
-			j < hierarchy->numNodes;
-			++j)
-		{
-
-			objectSpaceArray[j] = localSpaceArray[j];
-		}
+		//	objectSpaceArray[j] = localSpaceArray[j];
+		//}
 		//hierarchy-
-=======
-		for (j = 0; j < hierarchy->numNodes; j++)
-		{
-			jp = hierarchy->nodes[j].parentIndex;
-		}
-
->>>>>>> 4d8117fc1122d894d633f37c474b556d5197a307
 		// done
 		return 1;
 	}
