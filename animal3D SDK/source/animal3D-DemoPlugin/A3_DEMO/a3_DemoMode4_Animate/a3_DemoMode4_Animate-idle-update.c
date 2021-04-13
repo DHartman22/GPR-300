@@ -77,15 +77,41 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 		{
 			// testing: copy base pose
 			tmpPose = *pBase;
-
+			
 			// ****TO-DO:
 			// interpolate channels
 
 			// ****TO-DO:
 			// concatenate base pose
-
+			
 			// ****TO-DO: second
 			// convert to matrix
+			//localSpaceArray[j] = a3mat4_identity;
+			hierarchy->nodes[j].index;
+			//a3mat4 temp = {
+			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.x,
+			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.y,
+			//	0.0f, 0.0f, 0.0f, keyPoseArray[j]->position.z,
+			//	0.0f, 0.0f, 0.0f, 1.0f
+			//};
+
+			a3vec3 xVector = { 1.0f, 1.0f, 1.0f };
+
+			a3mat4 temp = {
+				tmpPose.euler.x, 0.0f, 0.0f, tmpPose.position.x,
+				0.0f, 0.0f, 0.0f, tmpPose.position.y,
+				0.0f, 0.0f, 0.0f, tmpPose.position.z,
+				1.0f, tmpPose.euler.y, tmpPose.euler.z, tmpPose.scale.x
+			};
+
+			//a3mat4 temp = {
+			//	1.0f, 0.0f, 0.0f, tmpPose.position.x,
+			//	0.0f, 1.0f, 0.0f, tmpPose.position.y,
+			//	0.0f, 0.0f, 1.0f, tmpPose.position.z,
+			//	1.0f, 1.0f, 1.0f, 1.0f
+			//};
+
+			localSpaceArray[j] = temp;
 
 		}
 
@@ -102,9 +128,36 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 	{
 		// ****TO-DO: first
 		// forward kinematics
-		a3ui32 j;
-		a3i32 jp;
+		a3ui32 j = 0;
+		a3i32 jp = 0;
+		for (j = 0; j < hierarchy->numNodes; j++)
+		{
+			if (hierarchy->nodes[j].name == "skel:root")
+			{
+				//do nothing
+			}
+			else
+			{
+				while (a3hierarchyIsParentNode(hierarchy, jp, j))
+				{
+					//a3mat4 temp = a3mat4_identity;
+					objectSpaceArray[j] = localSpaceArray[jp];
+					jp++;
+				}
+			}
 
+		}
+
+
+
+		for (j = 0;
+			j < hierarchy->numNodes;
+			++j)
+		{
+
+			objectSpaceArray[j] = localSpaceArray[j];
+		}
+		//hierarchy-
 		// done
 		return 1;
 	}
