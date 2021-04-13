@@ -146,6 +146,7 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 				}
 			}
 
+<<<<<<< HEAD
 		}
 
 
@@ -158,6 +159,13 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 			objectSpaceArray[j] = localSpaceArray[j];
 		}
 		//hierarchy-
+=======
+		for (j = 0; j < hierarchy->numNodes; j++)
+		{
+			jp = hierarchy->nodes[j].parentIndex;
+		}
+
+>>>>>>> 4d8117fc1122d894d633f37c474b556d5197a307
 		// done
 		return 1;
 	}
