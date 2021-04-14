@@ -103,7 +103,11 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			a3real offsetRotationZ = a3lerpFunc(p0->euler.z, p1->euler.z, u);
 
 			a3vec3 offsetScale = a3vec3_zero;
-			offsetScale.v1 = a3lerpFunc(p0->scale.v1, p1->scale.v1, u);
+			a3real scale = a3lerpFunc(p0->scale.v1, p1->scale.v1, u);
+
+			offsetScale.x = a3lerpFunc(p0->scale.x, p1->scale.x, u);
+			offsetScale.y = a3lerpFunc(p0->scale.y, p1->scale.y, u);
+			offsetScale.z = a3lerpFunc(p0->scale.z, p1->scale.z, u);
 
 			a3mat4 temp = {
 				1.0f, 0.0f, 0.0f, 0.0f,
@@ -134,11 +138,18 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			};
 
 			a3mat4 tempScale = {
-				tmpPose.scale.x + offsetScale.x, 0.0f, 0.0f, 0.0f,
-				0.0f, tmpPose.scale.y + offsetScale.y, 0.0f, 0.0f,
-				0.0f, 0.0f, tmpPose.scale.z + offsetScale.z, 0.0f,
+				offsetScale.x, 0.0f, 0.0f, 0.0f,
+				0.0f, offsetScale.y, 0.0f, 0.0f,
+				0.0f, 0.0f, offsetScale.z, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
+
+			/*a3mat4 tempScale = {
+				1.1f, 0.0f, 0.0f, 0.0f,
+				0.0f, 1.1f, 0.0f, 0.0f,
+				0.0f, 0.0f, 1.1f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};*/
 
 			a3real4x4Concat(tempRotationX.m, temp.m);
 			a3real4x4Concat(tempRotationY.m, temp.m);
