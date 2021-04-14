@@ -69,7 +69,9 @@ vec3 calcParallaxCoord(in vec3 coord, in vec3 viewVec, const int steps)
 
 	//using learnopengl as a reference https://learnopengl.com/Advanced-Lighting/Parallax-Mapping
 	//as well as the lecture 10 slides
-
+	//update 4-14-21: upon reexamining this code, it borrowed a bit too much from learnopengl, so its
+	// not entirely accurate to say I used it simply as a reference, so I only claim full ownership over 
+	// the code from line 95 downwards
 	
 	float stepLength = 1.0 / steps;
 	float currentStepValue = 0.0; 
