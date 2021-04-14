@@ -77,10 +77,10 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 		{
 			// testing: copy base pose
 			tmpPose = *pBase;
-			
 			// ****TO-DO:
 			// interpolate channels
-
+			//tmpPose.position.x += p0->position.x;
+			
 			// ****TO-DO:
 			// concatenate base pose
 			
@@ -88,39 +88,55 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			// convert to matrix
 			//localSpaceArray[j] = a3mat4_identity;
 
+			//a3mat4 temp = {
+			//	1.0f, 0.0f, 0.0f, keyPoseArray[j]->position.x,
+			//	0.0f, 1.0f, 0.0f, keyPoseArray[j]->position.y,
+			//	0.0f, 0.0f, 1.0f, keyPoseArray[j]->position.z,
+			//	0.0f, 0.0f, 0.0f, 1.0f
+			//};
+
+			a3vec4 offsetTranslation = a3vec4_zero;
+			offsetTranslation.v1 = a3lerpFunc(p0->position.v1, p1->position.v1, u);
+
+			a3real offsetRotationX = a3lerpFunc(p0->euler.x, p1->euler.x, u);
+			a3real offsetRotationY = a3lerpFunc(p0->euler.y, p1->euler.y, u);
+			a3real offsetRotationZ = a3lerpFunc(p0->euler.z, p1->euler.z, u);
+
+			a3vec3 offsetScale = a3vec3_zero;
+			offsetScale.v1 = a3lerpFunc(p0->scale.v1, p1->scale.v1, u);
 
 			a3mat4 temp = {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
-				tmpPose.position.x, tmpPose.position.y, tmpPose.position.z, 1.0f
+				tmpPose.position.x + offsetTranslation.x, tmpPose.position.y + offsetTranslation.y, tmpPose.position.z + offsetTranslation.z, 1.0f
 			};
 
 			a3mat4 tempRotationX = {
 				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, a3cosd(tmpPose.euler.x), a3sind(tmpPose.euler.x), 0.0f,
-				0.0f, -a3sind(tmpPose.euler.x), a3cosd(tmpPose.euler.x), 0.0f,
+				0.0f, a3cosd(tmpPose.euler.x + offsetRotationX), a3sind(tmpPose.euler.x + offsetRotationX), 0.0f,
+				0.0f, -a3sind(tmpPose.euler.x + offsetRotationX), a3cosd(tmpPose.euler.x + offsetRotationX), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
 			a3mat4 tempRotationY = {
-				a3cosd(tmpPose.euler.y), 0.0f, -a3sind(tmpPose.euler.y), 0.0f,
+				a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f, -a3sind(tmpPose.euler.y + offsetRotationY), 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
-				a3sind(tmpPose.euler.y), 0.0f, a3cosd(tmpPose.euler.y), 0.0f,
+				a3sind(tmpPose.euler.y + offsetRotationY), 0.0f, a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
 			a3mat4 tempRotationZ = {
-				a3cosd(tmpPose.euler.z), -a3sind(tmpPose.euler.z), 0.0f, 0.0f,
-				a3sind(tmpPose.euler.z), a3cosd(tmpPose.euler.z), 0.0f, 0.0f,
+				a3cosd(tmpPose.euler.z + offsetRotationZ), -a3sind(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
+				a3sind(tmpPose.euler.z + offsetRotationZ), a3cosd(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
 			a3mat4 tempScale = {
-				tmpPose.scale.x, 0.0f, 0.0f, 0.0f,
-				0.0f, tmpPose.scale.y, 0.0f, 0.0f,
-				0.0f, 0.0f, tmpPose.scale.z, 0.0f,
+				tmpPose.scale.x + offsetScale.x, 0.0f, 0.0f, 0.0f,
+				0.0f, tmpPose.scale.y + offsetScale.y, 0.0f, 0.0f,
+				0.0f, 0.0f, tmpPose.scale.z + offsetScale.z, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
@@ -130,7 +146,6 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			a3real4x4Concat(tempScale.m, temp.m);
 
 			localSpaceArray[j] = temp;
-
 		}
 
 		// done
