@@ -77,24 +77,12 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 		{
 			// testing: copy base pose
 			tmpPose = *pBase;
-			// ****TO-DO:
+
+
+
+			//offset the base pose's local position and rotation so it can interpolate through the target points while retaining the base pose
+			// ****DONE:
 			// interpolate channels
-			//tmpPose.position.x += p0->position.x;
-			
-			// ****TO-DO:
-			// concatenate base pose
-			
-			// ****TO-DO: second
-			// convert to matrix
-			//localSpaceArray[j] = a3mat4_identity;
-
-			//a3mat4 temp = {
-			//	1.0f, 0.0f, 0.0f, keyPoseArray[j]->position.x,
-			//	0.0f, 1.0f, 0.0f, keyPoseArray[j]->position.y,
-			//	0.0f, 0.0f, 1.0f, keyPoseArray[j]->position.z,
-			//	0.0f, 0.0f, 0.0f, 1.0f
-			//};
-
 			a3vec4 offsetTranslation = a3vec4_zero;
 			offsetTranslation.v1 = a3lerpFunc(p0->position.v1, p1->position.v1, u);
 
@@ -102,61 +90,63 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			a3real offsetRotationY = a3lerpFunc(p0->euler.y, p1->euler.y, u);
 			a3real offsetRotationZ = a3lerpFunc(p0->euler.z, p1->euler.z, u);
 
-			a3vec3 offsetScale = a3vec3_zero;
+			a3vec3 lerpScale = a3vec3_zero;
 			a3real scale = a3lerpFunc(p0->scale.v1, p1->scale.v1, u);
 
-			offsetScale.x = a3lerpFunc(p0->scale.x, p1->scale.x, u);
-			offsetScale.y = a3lerpFunc(p0->scale.y, p1->scale.y, u);
-			offsetScale.z = a3lerpFunc(p0->scale.z, p1->scale.z, u);
+			//nodes are not individually scaled, so offsetting the scale is unnecessary
+			lerpScale.x = a3lerpFunc(p0->scale.x, p1->scale.x, u);
+			lerpScale.y = a3lerpFunc(p0->scale.y, p1->scale.y, u);
+			lerpScale.z = a3lerpFunc(p0->scale.z, p1->scale.z, u);
 
-			a3mat4 temp = {
+			// ****DONE:
+			// concatenate base pose
+			
+			// ****DONE: 
+			// convert to matrix
+
+			//tmpPose = skeleton pose
+			a3mat4 translationMat = {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				tmpPose.position.x + offsetTranslation.x, tmpPose.position.y + offsetTranslation.y, tmpPose.position.z + offsetTranslation.z, 1.0f
 			};
 
-			a3mat4 tempRotationX = {
+			a3mat4 xRotationMat = {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, a3cosd(tmpPose.euler.x + offsetRotationX), a3sind(tmpPose.euler.x + offsetRotationX), 0.0f,
 				0.0f, -a3sind(tmpPose.euler.x + offsetRotationX), a3cosd(tmpPose.euler.x + offsetRotationX), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
-			a3mat4 tempRotationY = {
+			a3mat4 yRotationMat = {
 				a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f, -a3sind(tmpPose.euler.y + offsetRotationY), 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				a3sind(tmpPose.euler.y + offsetRotationY), 0.0f, a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
-			a3mat4 tempRotationZ = {
+			a3mat4 zRotationMat = {
 				a3cosd(tmpPose.euler.z + offsetRotationZ), -a3sind(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
 				a3sind(tmpPose.euler.z + offsetRotationZ), a3cosd(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
-			a3mat4 tempScale = {
-				offsetScale.x, 0.0f, 0.0f, 0.0f,
-				0.0f, offsetScale.y, 0.0f, 0.0f,
-				0.0f, 0.0f, offsetScale.z, 0.0f,
+			a3mat4 scaleMat = {
+				lerpScale.x, 0.0f, 0.0f, 0.0f,
+				0.0f, lerpScale.y, 0.0f, 0.0f,
+				0.0f, 0.0f, lerpScale.z, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
-			/*a3mat4 tempScale = {
-				1.1f, 0.0f, 0.0f, 0.0f,
-				0.0f, 1.1f, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.1f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
-			};*/
+			//concatenate rotation and scale onto translation mat
+			a3real4x4Concat(xRotationMat.m, translationMat.m);
+			a3real4x4Concat(yRotationMat.m, translationMat.m);
+			a3real4x4Concat(zRotationMat.m, translationMat.m);
+			a3real4x4Concat(scaleMat.m, translationMat.m);
 
-			a3real4x4Concat(tempRotationX.m, temp.m);
-			a3real4x4Concat(tempRotationY.m, temp.m);
-			a3real4x4Concat(tempRotationZ.m, temp.m);
-			a3real4x4Concat(tempScale.m, temp.m);
-
-			localSpaceArray[j] = temp;
+			localSpaceArray[j] = translationMat;
 		}
 
 		// done
@@ -170,7 +160,7 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 {
 	if (hierarchy && objectSpaceArray && localSpaceArray)
 	{
-		// ****TO-DO: first
+		// ****DONE: 
 		// forward kinematics
 		a3ui32 j = 0;
 		a3i32 jp = 0;
@@ -178,40 +168,18 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 		{
 			if (j == 0)
 			{
-				//same value
+				//same value, root local space IS root world space
 				objectSpaceArray[j] = localSpaceArray[j];
 			}
 			else
 			{
-				// SolveOrderedFK
+				// SolveOrderedFK solution from slides
 				a3mat4 temp = a3mat4_identity;
 				temp = localSpaceArray[j];
 				a3real4x4Concat(objectSpaceArray[hierarchy->nodes[j].parentIndex].m, temp.m);
 				objectSpaceArray[j] = temp;
-				//jp++;
-
-				// SolveRecursiveFK
-				//while (a3hierarchyIsChildNode(hierarchy, jp, j))
-				//{
-				//	//a3mat4 temp = a3mat4_identity;
-				//	a3mat4 temp = localSpaceArray[j];
-				//	a3real4x4Concat(objectSpaceArray[jp].m, temp.m);
-				//	objectSpaceArray[j] = temp;
-				//	jp++;
-				//}
 			}
-
 		}
-
-		//for (j = 0;
-		//	j < hierarchy->numNodes;
-		//	++j)
-		//{
-
-		//	objectSpaceArray[j] = localSpaceArray[j];
-		//}
-		//hierarchy-
-		// done
 		return 1;
 	}
 	return -1;
