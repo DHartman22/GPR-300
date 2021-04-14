@@ -40,7 +40,7 @@ uniform ubTransformMVP {
 
 uniform ubHeirarchyDepth
 {
-	vec4 uDepth[MAX_COLORS];
+	int uDepth[MAX_COLORS];
 };
 
 uniform vec4 uColor0[MAX_COLORS];
@@ -56,8 +56,8 @@ void main()
 //	gl_Position = aPosition;
 	gl_Position = uMVP[gl_InstanceID] * aPosition;
 	
-	//vColor = uColor0[gl_InstanceID];
-	vColor = uDepth[gl_InstanceID];
+	vColor = uColor0[uDepth[gl_InstanceID]];
+	//vColor = uDepth[gl_InstanceID];
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
