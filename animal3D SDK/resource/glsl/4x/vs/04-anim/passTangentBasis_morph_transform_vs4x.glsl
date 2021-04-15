@@ -53,8 +53,8 @@
 struct sMorphTarget
 {
 	vec4 position;
-	vec3 normal;	float nPad;
-	vec3 tangent;	float tPad;
+	vec4 normal;	float nPad;
+	vec4 tangent;	float tPad;
 };
 
 layout (location = 0) in sMorphTarget aMorphTarget[5];
@@ -79,6 +79,7 @@ uniform ubTransformStack
 	sModelMatrixStack uModelMatrixStack[MAX_OBJECTS];
 };
 uniform int uIndex;
+uniform float uTime;
 
 out vbVertexData {
 	mat4 vTangentBasis_view;
@@ -88,17 +89,42 @@ out vbVertexData {
 flat out int vVertexID;
 flat out int vInstanceID;
 
-float time;
+//For slerp: https://www.geeks3d.com/20140205/glsl-simple-morph-target-animation-opengl-glslhacker-demo/
+vec4 slerp(vec4 p0, vec4 p1, float t)
+{
+	float dotp = dot(normalize(p0), normalize(p1));
+	if ((dotp > 0.9999) || (dotp<-0.9999))
+	{
+		if (t<=0.5)
+		{
+			return p0;
+		}
+		return p1;
+	}
+	float theta = acos(dotp * 3.14159/180.0);
+	vec4 P = ((p0*sin((1-t)*theta) + p1*sin(t*theta)) / sin(theta));
+	P.w = 1;
+	return P;
+}
+
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	//gl_Position = aPosition;
 
-	vec4 aPosition;
-	vec3 aTangent, aBitangent, aNormal;
+	//Morph position of teapot based on time
+	int pos1 = int(uTime) % 5;
+	int pos2 = (pos1 + 1) % 5;
+	float param = uTime - float(pos1);
 
-	// testing: copy first morph target
+	//Calculating tangent and normal slerp, then getting the cross product
+	//Learned about cross product here: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/cross.xhtml
+	vec3 aTangent = slerp(aMorphTarget[pos1].tangent, aMorphTarget[2].tangent, param).xyz;
+	vec3 aNormal = slerp(aMorphTarget[pos1].normal, aMorphTarget[2].normal, param).xyz;
+	vec3 aBitangent = cross(aTangent, aNormal);
+
+	vec4 aPosition;
 	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
@@ -106,6 +132,7 @@ void main()
 	vTangentBasis_view = t.modelViewMatInverseTranspose * mat4(aTangent, 0.0, aBitangent, 0.0, aNormal, 0.0, vec4(0.0));
 	vTangentBasis_view[3] = t.modelViewMat * aPosition;
 	gl_Position = t.modelViewProjectionMat * aPosition;
+	
 	
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 
