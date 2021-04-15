@@ -88,6 +88,8 @@ out vbVertexData {
 flat out int vVertexID;
 flat out int vInstanceID;
 
+float time;
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
