@@ -53,8 +53,8 @@
 struct sMorphTarget
 {
 	vec4 position;
-	vec4 normal;	float nPad;
-	vec4 tangent;	float tPad;
+	vec4 normal;
+	vec4 tangent;
 };
 
 layout (location = 0) in sMorphTarget aMorphTarget[5];
@@ -120,11 +120,11 @@ void main()
 
 	//Calculating tangent and normal slerp, then getting the cross product
 	//Learned about cross product here: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/cross.xhtml
-	vec3 aTangent = slerp(aMorphTarget[pos1].tangent, aMorphTarget[2].tangent, param).xyz;
-	vec3 aNormal = slerp(aMorphTarget[pos1].normal, aMorphTarget[2].normal, param).xyz;
+	vec3 aTangent = slerp(aMorphTarget[pos1].tangent, aMorphTarget[pos2].tangent, param).xyz;
+	vec3 aNormal = slerp(aMorphTarget[pos1].normal, aMorphTarget[pos2].normal, param).xyz;
 	vec3 aBitangent = cross(aTangent, aNormal);
 
-	vec4 aPosition;
+	vec4 aPosition = slerp(aMorphTarget[pos1].position, aMorphTarget[pos2].position, param);
 	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
