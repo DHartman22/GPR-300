@@ -21,6 +21,7 @@
 	passColor_hierarchy_transform_instanced_vs4x.glsl
 	Transform position attribute for instance and pass hierarchical color.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 

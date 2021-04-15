@@ -21,6 +21,7 @@
 	passTangentBasis_morph_transform_vs4x.glsl
 	Calculate and pass morphed tangent basis.
 */
+//Edited by Daniel Hartman and Nick Preis
 
 #version 450
 

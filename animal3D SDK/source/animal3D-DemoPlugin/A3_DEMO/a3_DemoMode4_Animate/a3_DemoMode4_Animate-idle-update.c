@@ -26,6 +26,7 @@
 	********************************************
 */
 
+//Edited by Daniel Hartman and Nick Preis
 //-----------------------------------------------------------------------------
 
 #include "../a3_DemoMode4_Animate.h"
@@ -78,22 +79,27 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 			// testing: copy base pose
 			tmpPose = *pBase;
 
-
-
 			//offset the base pose's local position and rotation so it can interpolate through the target points while retaining the base pose
 			// ****DONE:
 			// interpolate channels
-			a3vec4 offsetTranslation = a3vec4_zero;
-			offsetTranslation.v1 = a3lerpFunc(p0->position.v1, p1->position.v1, u);
 
-			a3real offsetRotationX = a3lerpFunc(p0->euler.x, p1->euler.x, u);
-			a3real offsetRotationY = a3lerpFunc(p0->euler.y, p1->euler.y, u);
-			a3real offsetRotationZ = a3lerpFunc(p0->euler.z, p1->euler.z, u);
+			//helpful resource that I used to remember the templates for each matrix
+			//https://www.brainvoyager.com/bv/doc/UsersGuide/CoordsAndTransforms/SpatialTransformationMatrices.html
 
-			a3vec3 lerpScale = a3vec3_zero;
-			a3real scale = a3lerpFunc(p0->scale.v1, p1->scale.v1, u);
+			a3vec3 offsetTranslation;
 
-			//nodes are not individually scaled, so offsetting the scale is unnecessary
+			offsetTranslation.x = a3lerpFunc(p0->position.x, p1->position.x, u);
+			offsetTranslation.y = a3lerpFunc(p0->position.y, p1->position.y, u);
+			offsetTranslation.z = a3lerpFunc(p0->position.z, p1->position.z, u);
+
+			a3vec3 offsetRotation;
+
+			offsetRotation.x = a3lerpFunc(p0->euler.x, p1->euler.x, u);
+			offsetRotation.y = a3lerpFunc(p0->euler.y, p1->euler.y, u);
+			offsetRotation.z = a3lerpFunc(p0->euler.z, p1->euler.z, u);
+
+			a3vec3 lerpScale;
+
 			lerpScale.x = a3lerpFunc(p0->scale.x, p1->scale.x, u);
 			lerpScale.y = a3lerpFunc(p0->scale.y, p1->scale.y, u);
 			lerpScale.z = a3lerpFunc(p0->scale.z, p1->scale.z, u);
@@ -114,25 +120,26 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 
 			a3mat4 xRotationMat = {
 				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, a3cosd(tmpPose.euler.x + offsetRotationX), a3sind(tmpPose.euler.x + offsetRotationX), 0.0f,
-				0.0f, -a3sind(tmpPose.euler.x + offsetRotationX), a3cosd(tmpPose.euler.x + offsetRotationX), 0.0f,
+				0.0f, a3cosd(tmpPose.euler.x + offsetRotation.x), a3sind(tmpPose.euler.x + offsetRotation.x), 0.0f,
+				0.0f, -a3sind(tmpPose.euler.x + offsetRotation.x), a3cosd(tmpPose.euler.x + offsetRotation.x), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
 			a3mat4 yRotationMat = {
-				a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f, -a3sind(tmpPose.euler.y + offsetRotationY), 0.0f,
+				a3cosd(tmpPose.euler.y + offsetRotation.y), 0.0f, -a3sind(tmpPose.euler.y + offsetRotation.y), 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
-				a3sind(tmpPose.euler.y + offsetRotationY), 0.0f, a3cosd(tmpPose.euler.y + offsetRotationY), 0.0f,
+				a3sind(tmpPose.euler.y + offsetRotation.y), 0.0f, a3cosd(tmpPose.euler.y + offsetRotation.y), 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
 			a3mat4 zRotationMat = {
-				a3cosd(tmpPose.euler.z + offsetRotationZ), -a3sind(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
-				a3sind(tmpPose.euler.z + offsetRotationZ), a3cosd(tmpPose.euler.z + offsetRotationZ), 0.0f, 0.0f,
+				a3cosd(tmpPose.euler.z + offsetRotation.z), -a3sind(tmpPose.euler.z + offsetRotation.z), 0.0f, 0.0f,
+				a3sind(tmpPose.euler.z + offsetRotation.z), a3cosd(tmpPose.euler.z + offsetRotation.z), 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
+			//nodes are not individually scaled (all set to 1), so offsetting the scale is unnecessary
 			a3mat4 scaleMat = {
 				lerpScale.x, 0.0f, 0.0f, 0.0f,
 				0.0f, lerpScale.y, 0.0f, 0.0f,
@@ -140,13 +147,15 @@ inline int a3animate_updateSkeletonLocalSpace(a3_Hierarchy const* hierarchy,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
 
-			//concatenate rotation and scale onto translation mat
-			a3real4x4Concat(xRotationMat.m, translationMat.m);
-			a3real4x4Concat(yRotationMat.m, translationMat.m);
-			a3real4x4Concat(zRotationMat.m, translationMat.m);
-			a3real4x4Concat(scaleMat.m, translationMat.m);
+			a3mat4 finalMat = translationMat; //start with the translation matrix
 
-			localSpaceArray[j] = translationMat;
+			//concatenate rotation and scale onto final mat
+			a3real4x4Concat(xRotationMat.m, finalMat.m);
+			a3real4x4Concat(yRotationMat.m, finalMat.m);
+			a3real4x4Concat(zRotationMat.m, finalMat.m);
+			a3real4x4Concat(scaleMat.m, finalMat.m);
+
+			localSpaceArray[j] = finalMat;
 		}
 
 		// done
@@ -163,19 +172,19 @@ inline int a3animate_updateSkeletonObjectSpace(a3_Hierarchy const* hierarchy,
 		// ****DONE: 
 		// forward kinematics
 		a3ui32 j = 0;
-		a3i32 jp = 0;
 		for (j = 0; j < hierarchy->numNodes; j++)
 		{
 			if (j == 0)
 			{
+				// used SolveOrderedFK pseudocode from slides for solution
 				//same value, root local space IS root world space
 				objectSpaceArray[j] = localSpaceArray[j];
 			}
 			else
 			{
-				// SolveOrderedFK solution from slides
-				a3mat4 temp = a3mat4_identity;
-				temp = localSpaceArray[j];
+				// needed to use temp to apply concated value to objectSpaceArray 
+				a3mat4 temp = localSpaceArray[j];
+				//child world transform = parent world transform * child local transform
 				a3real4x4Concat(objectSpaceArray[hierarchy->nodes[j].parentIndex].m, temp.m);
 				objectSpaceArray[j] = temp;
 			}
