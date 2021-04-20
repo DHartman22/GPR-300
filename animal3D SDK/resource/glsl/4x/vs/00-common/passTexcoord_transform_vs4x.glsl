@@ -25,14 +25,21 @@
 #version 450
 
 layout (location = 0) in vec4 aPosition;
+layout (location = 15) in vec4 aTexcoord;
 
 flat out int vVertexID;
 flat out int vInstanceID;
+
+uniform mat4 uV;
+
+out vec4 vTexcoord;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	gl_Position = aPosition;
+
+	vTexcoord = aTexcoord;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

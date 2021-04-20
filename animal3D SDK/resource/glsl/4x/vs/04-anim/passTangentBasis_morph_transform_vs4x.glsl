@@ -126,6 +126,7 @@ void main()
 	vec3 aBitangent = cross(aTangent, aNormal);
 
 	vec4 aPosition = slerp(aMorphTarget[pos1].position, aMorphTarget[pos2].position, param);
+	aPosition = aMorphTarget[0].position;
 	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
@@ -133,7 +134,7 @@ void main()
 	vTangentBasis_view = t.modelViewMatInverseTranspose * mat4(aTangent, 0.0, aBitangent, 0.0, aNormal, 0.0, vec4(0.0));
 	vTangentBasis_view[3] = t.modelViewMat * aPosition;
 	gl_Position = t.modelViewProjectionMat * aPosition;
-	
+	//gl_Position = modelViewProjectionMat * aPosition;
 	
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 

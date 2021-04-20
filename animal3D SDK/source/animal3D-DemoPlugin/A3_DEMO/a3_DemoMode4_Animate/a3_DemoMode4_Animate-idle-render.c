@@ -205,8 +205,8 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 	const a3_DemoStateShaderProgram* renderProgram[animate_renderMode_max][animateMaxCount_sceneObject] = {
 		{
 			0, 0, 0, 0, 0,
-			demoState->prog_drawPhongPOM_morph,
-			demoState->prog_drawPhongPOM,
+			demoState->prog_drawScreenSpaceReflections,
+			demoState->prog_drawScreenSpaceReflections,
 		},
 	};
 	// overlay shader programs
@@ -298,6 +298,9 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		a3textureActivate(textureSet[j][1], a3tex_unit01);
 		a3textureActivate(textureSet[j][2], a3tex_unit02);
 		a3textureActivate(textureSet[j][3], a3tex_unit03);
+		a3ui32* temp = 0;
+		a3cubemapActivate(demoState->tex_skybox_water, a3tex_unit04, demoState->tex_skybox_water->handle->handle);
+		
 		a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uSize, 1, htScale + j);
 
 		// draw

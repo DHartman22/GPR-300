@@ -23,17 +23,37 @@
 */
 
 #version 450
+#define MAX_OBJECTS 128
 
 layout (location = 0) in vec4 aPosition;
 
+struct sModelMatrixStack
+{
+	mat4 modelMat;						// model matrix (object -> world)
+	mat4 modelMatInverse;				// model inverse matrix (world -> object)
+	mat4 modelMatInverseTranspose;		// model inverse-transpose matrix (object -> world skewed)
+	mat4 modelViewMat;					// model-view matrix (object -> viewer)
+	mat4 modelViewMatInverse;			// model-view inverse matrix (viewer -> object)
+	mat4 modelViewMatInverseTranspose;	// model-view inverse transpose matrix (object -> viewer skewed)
+	mat4 modelViewProjectionMat;		// model-view-projection matrix (object -> clip)
+	mat4 atlasMat;						// atlas matrix (texture -> cell)
+};
+
+uniform ubTransformStack
+{
+	sModelMatrixStack uModelMatrixStack[MAX_OBJECTS];
+};
+uniform int uIndex;
+
+uniform mat4 uMVP;
 flat out int vVertexID;
 flat out int vInstanceID;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
+	//gl_Position = aPosition * uModelMatrixStack[uIndex].modelViewProjectionMat * 2;
 
-	vVertexID = gl_VertexID;
+	vVertexID = gl_VertexID;a
 	vInstanceID = gl_InstanceID;
 }

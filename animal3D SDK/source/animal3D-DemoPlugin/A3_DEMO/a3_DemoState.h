@@ -102,7 +102,7 @@ enum a3_DemoState_ObjectMaxCount
 	demoStateMaxCount_vertexArray = 4,
 	demoStateMaxCount_drawable = 16,
 
-	demoStateMaxCount_shaderProgram = 32,
+	demoStateMaxCount_shaderProgram = 33,
 	demoStateMaxCount_uniformBuffer = 8,
 
 	demoStateMaxCount_texture = 32,
@@ -305,6 +305,9 @@ struct a3_DemoState
 				prog_drawTangentBasisPOM_morph[1],			// draw tangent basis and wireframe for morphing POM objects
 				prog_drawPhongPOM_morph[1],					// draw Phong for morphing POM objects
 				prog_drawColorHierarchy_instanced[1];		// draw color based on hierarchical index
+			a3_DemoStateShaderProgram
+				prog_drawScreenSpaceReflections[1],
+				prog_drawAntiAliasing[1];
 		};
 	};
 

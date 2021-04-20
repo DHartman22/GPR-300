@@ -547,6 +547,10 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 03-lod
 			a3_DemoStateShader
 				drawPhongPOM_fs[1];
+
+			// 05-final
+			a3_DemoStateShader
+				drawReflection_fs[1];
 		};
 	} shaderList = {
 		{
@@ -617,6 +621,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },
 			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/e/drawPhongPOM_fs4x.glsl",
 																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },
+
+			{ { { 0 },	"shdr-fs:draw-reflection",			a3shader_fragment,	2,{ A3_DEMO_FS"05-final/drawReflection_fs4x.glsl",
+																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } },
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
@@ -828,6 +835,14 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-hcol-inst");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passColor_hierarchy_transform_instanced_vs->shader);
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
+
+	// 05-final programs:
+	// Screen space reflections
+	currentDemoProg = demoState->prog_drawScreenSpaceReflections;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-reflect");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_morph_transform_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawReflection_fs->shader);
+
 
 
 	// activate a primitive for validation

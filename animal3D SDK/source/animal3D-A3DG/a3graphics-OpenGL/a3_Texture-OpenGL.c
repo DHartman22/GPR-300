@@ -327,6 +327,32 @@ a3ret a3textureActivate(const a3_Texture *texture, const a3_TextureUnit unit)
 	return 0;
 }
 
+a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit, const void *data)
+{
+	// switch unit
+	glActiveTexture(GL_TEXTURE0 + unit);
+	GLuint tex = texture->handle->handle;
+	
+	// if valid texture, activate
+	if (texture && texture->handle->handle)
+	{
+			glGenTextures(1, &tex);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+			glTexStorage2D(GL_TEXTURE_CUBE_MAP, texture->channels, texture->internalFormat, texture->width, texture->height);
+		for (int i = 0; i < 6; i++)
+		{
+			glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, texture->width, texture->height,
+				GL_RGB, texture->internalType, &data + i * texture->bytes);
+			
+		}
+		return 1;
+	}
+
+	// deactivate
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	return 0;
+}
+
 a3ret a3textureDeactivate(const a3_TextureUnit unit)
 {
 	glActiveTexture(GL_TEXTURE0 + unit);
@@ -364,6 +390,7 @@ a3ret a3textureChangeRepeatMode(const a3_TextureRepeatOption repeatOptionHoriz, 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, optionV);
 	return 1;
 }
+
 
 
 //-----------------------------------------------------------------------------

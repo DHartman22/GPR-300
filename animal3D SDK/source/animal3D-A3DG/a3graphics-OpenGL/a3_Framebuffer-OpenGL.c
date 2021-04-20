@@ -215,6 +215,7 @@ a3ret a3framebufferBindColorTexture(const a3_Framebuffer *framebuffer, const a3_
 	{
 		glActiveTexture(GL_TEXTURE0 + unit);
 		glBindTexture(GL_TEXTURE_2D, framebuffer->colorTextureHandle[colorTarget]);
+		
 		return 1;
 	}
 	return -1;
@@ -232,6 +233,21 @@ a3ret a3framebufferBindDepthTexture(const a3_Framebuffer *framebuffer, const a3_
 	return -1;
 }
 
+
+//new!
+
+a3ret a3bindCubeMap(const a3_Framebuffer *framebuffer, const a3_TextureUnit unit, const a3ui32 colorTarget)
+{
+	// validate
+	if (framebuffer && framebuffer->handle->handle && colorTarget < framebuffer->color)
+	{
+		glActiveTexture(GL_TEXTURE0 + unit);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, framebuffer->colorTextureHandle[colorTarget]);
+
+		return 1;
+	}
+	return -1;
+}
 
 //-----------------------------------------------------------------------------
 // framebuffer double-buffer
