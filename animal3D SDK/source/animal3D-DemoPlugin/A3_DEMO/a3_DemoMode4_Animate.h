@@ -105,7 +105,7 @@ enum a3_DemoMode4_Animate_ObjectMaxCount
 	animateMaxCount_projector = 1,	// how many of the above behave as projectors
 	animateMaxCount_pointLight = 1,	// how many of the above behave as lights
 
-	animateMaxCount_skeletonPose = 4,
+	animateMaxCount_skeletonPose = 5,
 	animateMaxCount_skeletonJoint = 128,
 };
 

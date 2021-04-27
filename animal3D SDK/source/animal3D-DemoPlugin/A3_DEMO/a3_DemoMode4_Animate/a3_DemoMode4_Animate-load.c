@@ -559,17 +559,34 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		p = 1;
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetRotation(spatialPose, +45.0f, +60.0f, +90.0f);	// rotate whole figure about all axes
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);	
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 
 		p = 2;
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetScale(spatialPose, 2.0f, 2.0f, 2.0f);	// uniformly scale whole figure up to 200%
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 
 		p = 3;
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetTranslation(spatialPose, +3.0f, +4.0f, +5.0f);	// shift whole figure by some vector
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+
+		p = 4;
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 	}
 
 
