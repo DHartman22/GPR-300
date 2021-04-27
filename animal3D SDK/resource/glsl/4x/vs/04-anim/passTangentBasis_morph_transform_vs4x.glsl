@@ -51,14 +51,10 @@
 //		bitengent is normal x tangent
 
 
-struct sMorphTarget
-{
-	vec4 position;
-	vec4 normal;
-	vec4 tangent;
-};
 
-layout (location = 0) in sMorphTarget aMorphTarget[5];
+
+layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec3 aNormal; //will this work?
 
 layout (location = 15) in vec4 aTexcoord; //see demostate-load.c line 334 for proof its 15
 //need texcoord
@@ -90,23 +86,12 @@ out vbVertexData {
 flat out int vVertexID;
 flat out int vInstanceID;
 
-//For slerp: https://www.geeks3d.com/20140205/glsl-simple-morph-target-animation-opengl-glslhacker-demo/
-vec4 slerp(vec4 p0, vec4 p1, float t)
-{
-	float dotp = dot(normalize(p0), normalize(p1));
-	if ((dotp > 0.9999) || (dotp<-0.9999))
-	{
-		if (t<=0.5)
-		{
-			return p0;
-		}
-		return p1;
-	}
-	float theta = acos(dotp * 3.14159/180.0);
-	vec4 P = ((p0*sin((1-t)*theta) + p1*sin(t*theta)) / sin(theta));
-	P.w = 1;
-	return P;
-}
+uniform mat4 uMV;
+uniform mat4 uP;
+
+out vec4 vTexcoord;
+out vec3 vNormal;
+out vec3 vView;
 
 
 void main()
@@ -121,22 +106,26 @@ void main()
 
 	//Calculating tangent and normal slerp, then getting the cross product
 	//Learned about cross product here: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/cross.xhtml
-	vec3 aTangent = slerp(aMorphTarget[pos1].tangent, aMorphTarget[pos2].tangent, param).xyz;
-	vec3 aNormal = slerp(aMorphTarget[pos1].normal, aMorphTarget[pos2].normal, param).xyz;
-	vec3 aBitangent = cross(aTangent, aNormal);
 
-	vec4 aPosition = slerp(aMorphTarget[pos1].position, aMorphTarget[pos2].position, param);
-	aPosition = aMorphTarget[0].position;
+
+	//vec4 aPosition = slerp(aMorphTarget[pos1].position, aMorphTarget[pos2].position, param);
 	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
 	
-	vTangentBasis_view = t.modelViewMatInverseTranspose * mat4(aTangent, 0.0, aBitangent, 0.0, aNormal, 0.0, vec4(0.0));
-	vTangentBasis_view[3] = t.modelViewMat * aPosition;
-	gl_Position = t.modelViewProjectionMat * aPosition;
+
 	//gl_Position = modelViewProjectionMat * aPosition;
-	
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
+	
+	vTexcoord = aTexcoord;
+	vNormal = mat3(t.modelViewMat) * aNormal;
+	vec4 testPos = t.modelViewMat * aPosition;
+	vView = testPos.xyz;
+	vVertexID = gl_VertexID;
+	vInstanceID = gl_InstanceID;
+	gl_Position = testPos * uP;
+
+	gl_Position = t.modelViewProjectionMat * aPosition;
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

@@ -321,26 +321,26 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 
 	// morph targets setup
 	//	- add required data from each model to new data descriptor
-	{
-		a3_VertexAttributeDescriptor* morphAttribPtr;
-		a3_VertexAttributeName attribName;
-		a3ui32 morphModelIndex = 0;
+	//{
+	//	a3_VertexAttributeDescriptor* morphAttribPtr;
+	//	a3_VertexAttributeName attribName;
+	//	a3ui32 morphModelIndex = 0;
 
-		for (i = 0, morphAttribPtr = morphAttrib, attribName = a3attrib_user00; i < morphingModelsMaxTargets; ++i)
-			for (j = 0; j < 3; ++j, ++morphAttribPtr, ++attribName)
-				// create descriptors for position, normal and tangent
-				a3vertexAttribCreateDescriptor(morphAttribPtr, (a3_VertexAttributeName)attribName, a3attrib_vec3);
-		// the final attribute will be for texture coordinates
-		a3vertexAttribCreateDescriptor(morphAttribPtr, a3attrib_user15, a3attrib_vec2);
+	//	for (i = 0, morphAttribPtr = morphAttrib, attribName = a3attrib_user00; i < morphingModelsMaxTargets; ++i)
+	//		for (j = 0; j < 3; ++j, ++morphAttribPtr, ++attribName)
+	//			// create descriptors for position, normal and tangent
+	//			a3vertexAttribCreateDescriptor(morphAttribPtr, (a3_VertexAttributeName)attribName, a3attrib_vec3);
+	//	// the final attribute will be for texture coordinates
+	//	a3vertexAttribCreateDescriptor(morphAttribPtr, a3attrib_user15, a3attrib_vec2);
 
-		// make format
-		a3vertexFormatCreateDescriptor(morphFormat, morphAttrib, morphAttribCount);
-		for (i = 0; i < morphingModelsCount; ++i)
-		{
-			sharedVertexStorage += a3vertexFormatGetStorageSpaceRequired(morphFormat, morphingModelsData[i]->numVertices);
-			numVerts += morphingModelsData[i]->numVertices;
-		}
-	}
+	//	// make format
+	//	a3vertexFormatCreateDescriptor(morphFormat, morphAttrib, morphAttribCount);
+	//	for (i = 0; i < morphingModelsCount; ++i)
+	//	{
+	//		sharedVertexStorage += a3vertexFormatGetStorageSpaceRequired(morphFormat, morphingModelsData[i]->numVertices);
+	//		numVerts += morphingModelsData[i]->numVertices;
+	//	}
+	//}
 
 
 	// common index format required for shapes that share vertex formats
@@ -400,35 +400,35 @@ void a3demo_loadGeometry(a3_DemoState *demoState)
 	sharedVertexStorage += a3geometryGenerateDrawable(currentDrawable, proceduralShapesData + 6, vao, vbo_ibo, sceneCommonIndexFormat, 0, 0);
 
 	// morphing models
-	vao = demoState->vao_tangentbasis_texcoord_morph;
-	a3vertexArrayCreateDescriptor(vao, "vao:tb+tc+morph", vbo_ibo, morphFormat, sharedVertexStorage);
-	{
-		a3_VertexAttributeDataDescriptor morphAttribData[16] = { 0 }, * morphAttribDataPtr;
-		a3_VertexAttributeName attribName;
-		a3ui32 morphModelIndex = 0;
+	//vao = demoState->vao_tangentbasis_texcoord_morph;
+	//a3vertexArrayCreateDescriptor(vao, "vao:tb+tc+morph", vbo_ibo, morphFormat, sharedVertexStorage);
+	//{
+	//	a3_VertexAttributeDataDescriptor morphAttribData[16] = { 0 }, * morphAttribDataPtr;
+	//	a3_VertexAttributeName attribName;
+	//	a3ui32 morphModelIndex = 0;
 
-		for (i = 0, morphAttribDataPtr = morphAttribData, attribName = a3attrib_user00; i < morphingModelsMaxTargets; ++i)
-			for (j = 0; j < 3; ++j, ++morphAttribDataPtr, ++attribName)
-				a3vertexAttribDataCreateDescriptor(morphAttribDataPtr, (a3_VertexAttributeName)attribName, morphingModelsData[morphModelIndex][i].attribData[j * j]);
-		a3vertexAttribDataCreateDescriptor(morphAttribDataPtr, a3attrib_user15, morphingModelsData[morphModelIndex]->attribData[a3attrib_geomTexcoord]);
+	//	for (i = 0, morphAttribDataPtr = morphAttribData, attribName = a3attrib_user00; i < morphingModelsMaxTargets; ++i)
+	//		for (j = 0; j < 3; ++j, ++morphAttribDataPtr, ++attribName)
+	//			a3vertexAttribDataCreateDescriptor(morphAttribDataPtr, (a3_VertexAttributeName)attribName, morphingModelsData[morphModelIndex][i].attribData[j * j]);
+	//	a3vertexAttribDataCreateDescriptor(morphAttribDataPtr, a3attrib_user15, morphingModelsData[morphModelIndex]->attribData[a3attrib_geomTexcoord]);
 
-		a3vertexArrayStore(vao, morphAttribData, morphingModelsData[morphModelIndex]->numVertices, 0, 0);
-		a3indexBufferStore(vbo_ibo, sceneCommonIndexFormat, morphingModelsData[morphModelIndex]->indexData, morphingModelsData[morphModelIndex]->numIndices, 0, &i, 0);
+	//	a3vertexArrayStore(vao, morphAttribData, morphingModelsData[morphModelIndex]->numVertices, 0, 0);
+	//	a3indexBufferStore(vbo_ibo, sceneCommonIndexFormat, morphingModelsData[morphModelIndex]->indexData, morphingModelsData[morphModelIndex]->numIndices, 0, &i, 0);
 
-		currentDrawable = demoState->draw_teapot_morph;
-		a3vertexDrawableCreateIndexed(currentDrawable, vao, vbo_ibo, sceneCommonIndexFormat, morphingModelsData[morphModelIndex]->primType, i, morphingModelsData[morphModelIndex]->numIndices);
-	}
+	//	currentDrawable = demoState->draw_teapot_morph;
+	//	a3vertexDrawableCreateIndexed(currentDrawable, vao, vbo_ibo, sceneCommonIndexFormat, morphingModelsData[morphModelIndex]->primType, i, morphingModelsData[morphModelIndex]->numIndices);
+	//}
 
-	// release data when done
-	for (i = 0; i < displayShapesCount; ++i)
-		a3geometryReleaseData(displayShapesData + i);
-	for (i = 0; i < proceduralShapesCount; ++i)
-		a3geometryReleaseData(proceduralShapesData + i);
-	for (i = 0; i < loadedModelsCount; ++i)
-		a3geometryReleaseData(loadedModelsData + i);
-	for (i = 0; i < morphingModelsCount; ++i)
-		for (j = 0; j < morphingModelsMaxTargets; ++j)
-			a3geometryReleaseData(morphingModelsData[i] + j);
+	//// release data when done
+	//for (i = 0; i < displayShapesCount; ++i)
+	//	a3geometryReleaseData(displayShapesData + i);
+	//for (i = 0; i < proceduralShapesCount; ++i)
+	//	a3geometryReleaseData(proceduralShapesData + i);
+	//for (i = 0; i < loadedModelsCount; ++i)
+	//	a3geometryReleaseData(loadedModelsData + i);
+	//for (i = 0; i < morphingModelsCount; ++i)
+	//	for (j = 0; j < morphingModelsMaxTargets; ++j)
+	//		a3geometryReleaseData(morphingModelsData[i] + j);
 }
 
 
@@ -1015,6 +1015,7 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 			a3_DemoStateTexture
 				texSkyClouds[1],
 				texSkyWater[1],
+				texCubemap[1],
 				texRampDM[1],
 				texRampSM[1],
 				texTestSprite[1],
@@ -1042,16 +1043,34 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 
 			{ demoState->tex_skybox_clouds,	"tex:sky-clouds",	A3_DEMO_TEX"bg/sky_clouds.png" },
 			{ demoState->tex_skybox_water,	"tex:sky-water",	A3_DEMO_TEX"bg/sky_water.png" },
+
+
+
 			{ demoState->tex_ramp_dm,		"tex:ramp-dm",		A3_DEMO_TEX"sprite/celRamp_dm.png" },
 			{ demoState->tex_ramp_sm,		"tex:ramp-sm",		A3_DEMO_TEX"sprite/celRamp_sm.png" },
 			{ demoState->tex_testsprite,	"tex:testsprite",	A3_DEMO_TEX"sprite/spriteTest8x8.png" },
 			{ demoState->tex_checker,		"tex:checker",		A3_DEMO_TEX"sprite/checker.png" },
+			{ demoState->tex_cubemap,	"tex:cubemap",	A3_DEMO_TEX"bg/top.jpg" },
 		}
+
+		// texture objects
+
 	};
 	const a3ui32 numTextures = sizeof(textureList) / sizeof(a3_DemoStateTexture);
 	a3_DemoStateTexture* const textureListPtr = (a3_DemoStateTexture*)(&textureList), * texturePtr;
 
 	// load all textures
+	for (i = 0; i < numTextures - 1; ++i)
+	{
+		texturePtr = textureListPtr + i;
+		a3textureCreateFromFile(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
+		a3textureActivate(texturePtr->texture, a3tex_unit00);
+		a3textureDefaultSettings();
+	}
+	texturePtr = textureListPtr + i;
+	a3cubemapLoad(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
+	a3cubemapActivate(texturePtr->texture, a3tex_unit00);
+	// load all cubemaps
 	for (i = 0; i < numTextures; ++i)
 	{
 		texturePtr = textureListPtr + i;

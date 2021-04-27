@@ -218,11 +218,23 @@ extern "C"
 	//	param texture: pointer to initialized texture; pass null or 
 	//		uninitialized texture to deactivate
 	//	param unit: texture unit or "slot" to bind texture to
+	//	return: 1 if activated
+	//	return: 0 if deactivated
+	a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit);
+
+	// A3: Use a texture for rendering.
+	//	param texture: pointer to initialized texture; pass null or 
+	//		uninitialized texture to deactivate
+	//	param unit: texture unit or "slot" to bind texture to
 		//	param data_opt: optional pointer to replacement data; pass null to 
 	//		erase current data in that part of the image ??
 	//	return: 1 if activated
 	//	return: 0 if deactivated
-	a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit, const void* data);
+	a3ret a3cubemapLoadBeta(const a3_Texture* textureRight, const a3_Texture* textureLeft, const a3_Texture* textureTop,
+		const a3_Texture* textureBottom, const a3_Texture* textureFront, const a3_Texture* textureBack,
+		const a3_TextureUnit unit, const void* data);
+
+	a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePath);
 
 	// A3: Deactivate texture on specified slot.
 	//	param unit: texture unit to unbind texture from

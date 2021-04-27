@@ -1,7 +1,9 @@
 #version 450
 
 layout (location = 0) out vec4 rtFragColor;
-layout (binding = 4) uniform sampler2D cubeMapTex;
+layout (binding = 4) uniform samplerCube cubeMapTex;
+layout (binding = 2) uniform sampler2D testSample;
+
 uniform samplerCube cubeMap;
 
 in vbVertexData {
@@ -9,9 +11,16 @@ in vbVertexData {
 	vec4 vTexcoord_atlas;
 } vVertexData;
 
+in vec4 vTexcoord;
+in vec3 vNormal;
+in vec3 vView;
+
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
-	rtFragColor = texture(cubeMapTex, vec2(0.0, 0.0));
+	vec3 ref = reflect(vView, normalize(vNormal));
+	rtFragColor = texture(cubeMapTex, ref * -1f);
+	
+	rtFragColor.a = 1.0f;
 	
 }

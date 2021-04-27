@@ -40,6 +40,7 @@
 #ifdef _WIN32
 #include <gl/glew.h>
 #include <Windows.h>
+#include <string.h>
 #include <GL/GL.h>
 #else	// !_WIN32
 #include <OpenGL/gl3.h>
@@ -171,7 +172,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		0,								// camera
 		demoState->draw_unit_box,		// skybox
 		0,
-		demoState->draw_teapot_morph,
+		demoState->draw_teapot,
 		demoState->draw_unit_plane_z,
 	};
 
@@ -181,6 +182,28 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		demoState->texSet_stone,	// teapot
 		demoState->texSet_stone,	// ground
 	};
+
+	const a3_Texture* cubemapSet[6] = {
+		demoState->tex_cubemap_right,
+		demoState->tex_cubemap_left,
+		demoState->tex_cubemap_top,
+		demoState->tex_cubemap_bottom,
+		demoState->tex_cubemap_back,	
+		demoState->tex_cubemap_front,
+	};
+
+	const char* pathArray[6] = {
+		"yes",
+		"yes",
+		"yes",
+		"yes",
+		"yes",
+		"yes",
+
+	};
+
+	
+
 
 	// height map scale
 	const a3f32 htScale[animateMaxCount_sceneObject] = {
@@ -206,14 +229,14 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		{
 			0, 0, 0, 0, 0,
 			demoState->prog_drawScreenSpaceReflections,
-			demoState->prog_drawScreenSpaceReflections,
+			demoState->prog_drawPhongPOM_morph,
 		},
 	};
 	// overlay shader programs
 	const a3_DemoStateShaderProgram* overlayProgram[animate_renderMode_max][animateMaxCount_sceneObject] = {
 		{
 			0, 0, 0, 0, 0,
-			demoState->prog_drawTangentBasisPOM_morph,
+			demoState->prog_drawTangentBasisPOM,
 			demoState->prog_drawTangentBasisPOM,
 		},
 	};
@@ -299,13 +322,22 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		a3textureActivate(textureSet[j][2], a3tex_unit02);
 		a3textureActivate(textureSet[j][3], a3tex_unit03);
 		a3ui32* temp = 0;
-		a3cubemapActivate(demoState->tex_skybox_water, a3tex_unit04, demoState->tex_skybox_water->handle->handle);
+		//void* offset = offset;
+		//unsigned int intTest = a3cubemapActivate(cubemapSet[0], cubemapSet[1], cubemapSet[2], cubemapSet[3], cubemapSet[4], cubemapSet[5], a3tex_unit04, demoState->tex_skybox_water->handle);
+		a3cubemapActivate(demoState->tex_cubemap, a3tex_unit04);
 		
+
+		//a3textureActivate(demoState->tex_cubemap_front, a3tex_unit04);
+
 		a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uSize, 1, htScale + j);
 
 		// draw
 		a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uIndex, 1, &j);
 		a3vertexDrawableActivateAndRender(drawable[j]);
+
+		//uMV
+		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, currentSceneObject->modelMatrixStackPtr->modelViewMat.mm);
+
 	}
 
 	// stop using stencil
@@ -407,6 +439,8 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 
 		// done
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, fsq.mm);
+		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uP, 1, projectionMat.mm);
+
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uAtlas, 1, a3mat4_identity.mm);
 		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, a3vec4_one.v);
 		a3vertexDrawableRenderActive();
@@ -479,6 +513,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		a3shaderProgramActivate(currentDemoProgram->program);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMVP, 1, fsq.mm);
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uAtlas, 1, a3mat4_identity.mm);
+		
 		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uColor, 1, a3vec4_one.v);
 		a3framebufferBindColorTexture(currentWriteFBO, a3tex_unit00, 0);
 		a3vertexDrawableRenderActive();

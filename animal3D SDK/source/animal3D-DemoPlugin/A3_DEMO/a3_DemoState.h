@@ -347,6 +347,17 @@ struct a3_DemoState
 				tex_atlas_hm[1],
 				tex_skybox_clouds[1],
 				tex_skybox_water[1],
+
+				//cubemap individual faces
+				tex_cubemap_front[1],
+				tex_cubemap_back[1],
+				tex_cubemap_bottom[1],
+				tex_cubemap_left[1],
+				tex_cubemap_right[1],
+				tex_cubemap_top[1],
+
+				tex_cubemap[1],
+
 				tex_ramp_dm[1],
 				tex_ramp_sm[1],
 				tex_testsprite[1],

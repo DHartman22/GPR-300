@@ -25,22 +25,28 @@
 #version 450
 
 layout (location = 0) in vec4 aPosition;
+layout (location = 2) in vec3 aNormal;
 layout (location = 15) in vec4 aTexcoord;
 
 flat out int vVertexID;
 flat out int vInstanceID;
 
-uniform mat4 uV;
+uniform mat4 uMV;
+uniform mat4 uP;
 
 out vec4 vTexcoord;
+out vec3 vNormal;
+out vec3 vView;
 
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
-	gl_Position = aPosition;
 
 	vTexcoord = aTexcoord;
-
+	vNormal = mat3(uMV) * aNormal;
+	vec4 testPos = uMV * aPosition;
+	vView = testPos.xyz;
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
+	gl_Position = testPos * uP;
 }

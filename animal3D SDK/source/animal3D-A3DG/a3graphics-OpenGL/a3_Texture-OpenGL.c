@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 #ifdef UNICODE
 #define A3_UNICODE_UNDEF
 #undef UNICODE
@@ -327,30 +328,188 @@ a3ret a3textureActivate(const a3_Texture *texture, const a3_TextureUnit unit)
 	return 0;
 }
 
-a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit, const void *data)
+a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit)
 {
 	// switch unit
 	glActiveTexture(GL_TEXTURE0 + unit);
-	GLuint tex = texture->handle->handle;
-	
+
 	// if valid texture, activate
 	if (texture && texture->handle->handle)
 	{
-			glGenTextures(1, &tex);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
-			glTexStorage2D(GL_TEXTURE_CUBE_MAP, texture->channels, texture->internalFormat, texture->width, texture->height);
-		for (int i = 0; i < 6; i++)
-		{
-			glTexSubImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, 0, 0, texture->width, texture->height,
-				GL_RGB, texture->internalType, &data + i * texture->bytes);
-			
-		}
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture->handle->handle);
 		return 1;
 	}
 
 	// deactivate
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	return 0;
+}
+
+a3ret a3cubemapLoadBeta(const a3_Texture* textureRight, const a3_Texture* textureLeft, const a3_Texture* textureTop,
+	const a3_Texture* textureBottom, const a3_Texture* textureFront, const a3_Texture* textureBack, 
+	const a3_TextureUnit unit, const void *data)
+{
+	// switch unit
+	glActiveTexture(GL_TEXTURE0 + unit);
+	unsigned int tex;
+	
+	const a3_Texture* cubemapSet[6] = {
+		textureRight,
+		textureLeft,
+		textureTop,
+		textureBottom,
+		textureBack,
+		textureFront,
+	};
+	const char* filenames[6] = {
+		"../../../../resource/tex/bg/right.jpg",
+		"../../../../resource/tex/bg/left.jpg",
+		"../../../../resource/tex/bg/bottom.jpg",
+		"../../../../resource/tex/bg/top.jpg",
+		"../../../../resource/tex/bg/back.jpg",
+		"../../../../resource/tex/bg/front.jpg",
+
+	};
+	int width, height, channels, bytes;
+	// if valid texture, activate
+	if (textureRight && textureRight->handle->handle)
+	{
+			glGenTextures(1, &tex);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+			a3ui32 ILhandle = 0;
+			//glTexStorage2D(GL_TEXTURE_CUBE_MAP, cubemapSet[0]->channels, cubemapSet[0]->internalFormat, cubemapSet[0]->width, cubemapSet[0]->height);
+		for (int i = 0; i < 6; i++)
+		{
+			ILhandle = ilGenImage();
+			ilBindImage(ILhandle);
+			ilLoadImage(filenames[i]);
+				width = ilGetInteger(IL_IMAGE_WIDTH);
+				height = ilGetInteger(IL_IMAGE_HEIGHT);
+				channels = ilGetInteger(IL_IMAGE_CHANNELS);
+				bytes = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL) / channels;
+
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, cubemapSet[i]->internalFormat, width, height, 0, GL_RGB,
+				cubemapSet[i]->internalType, ilGetData());
+			
+			ilDeleteImage(ILhandle);
+		}
+		//this is literally copy pasted, just for testing
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		//glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
+
+		return tex;
+	}
+
+
+	// deactivate
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	return 0;
+}
+
+a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePath)
+{
+	const char* filenames[6] = {
+		"../../../../resource/tex/bg/right.jpg",
+		"../../../../resource/tex/bg/left.jpg",
+		"../../../../resource/tex/bg/bottom.jpg",
+		"../../../../resource/tex/bg/top.jpg",
+		"../../../../resource/tex/bg/front.jpg",
+		"../../../../resource/tex/bg/back.jpg",
+
+	};
+
+	a3_Texture ret = { 0 };
+	if (texture_out)
+	{
+		if (!texture_out->handle->handle)
+		{
+			// multi-platform-friendly way of doing this: 
+			//	no platform-specific calls
+			// start by initializing image library in case it hasn't been
+			a3i32 result = a3textureInitializeImageLibrary();
+			a3i32 convertFormat, convertType, textureFormat, textureFormatInternal;
+			a3ui32 glHandle = 0;
+			a3ui32 ilHandle = 0;
+			a3ui32 width, height, channels, bytes;
+
+			// generate IL handle
+			ilHandle = ilGenImage();
+			if (ilHandle)
+			{
+				ilBindImage(ilHandle);
+				result = ilLoadImage(filenames[0]);
+				if (result)
+				{
+					result = 0;
+					width = ilGetInteger(IL_IMAGE_WIDTH);
+					height = ilGetInteger(IL_IMAGE_HEIGHT);
+					channels = ilGetInteger(IL_IMAGE_CHANNELS);
+					bytes = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL) / channels;
+
+					if (width && height && channels && bytes)
+					{
+						// determine format: want all images to be one of 4 types: 
+						//	rgb8, rgb16, rgba8 or rgba16
+						channels = channels >= 3 ? channels <= 4 ? channels : 4 : 3;
+						bytes = bytes >= 1 ? bytes <= 2 ? bytes : 2 : 1;
+
+						// select descriptors and convert image
+						if (channels == 3)
+							textureFormat = bytes == 1 ? GL_RGB8 : GL_RGB16;
+						else
+							textureFormat = bytes == 1 ? GL_RGBA8 : GL_RGBA16;
+						convertFormat = textureFormatInternal = channels == 3 ? IL_RGB : IL_RGBA;
+						convertType = bytes == 1 ? IL_UNSIGNED_BYTE : IL_UNSIGNED_SHORT;
+						ilConvertImage(convertFormat, convertType);
+
+						// create GL texture with default settings
+						glGenTextures(1, &glHandle);
+						if (glHandle)
+						{
+							glBindTexture(GL_TEXTURE_CUBE_MAP, glHandle);
+							for (int i = 0; i < 6; i++) 
+							{
+								ilLoadImage(filenames[i]);
+								glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, textureFormat, width, height, 0, textureFormatInternal, convertType, ilGetData());
+							}
+							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+							//a3textureDefaultSettings();
+							//glBindTexture(GL_TEXTURE_2D, 0);
+
+							// configure the output
+							a3handleCreateHandle(ret.handle, a3textureInternalHandleReleaseFunc, name_opt, glHandle, 1);
+							ret.width = width;
+							ret.height = height;
+							ret.channels = channels;
+							ret.bytes = bytes;
+							ret.internalFormat = textureFormatInternal;
+							ret.internalType = convertType;
+
+							// done
+							*texture_out = ret;
+							a3textureReference(texture_out);
+							result = 1;
+						}
+					}
+				}
+
+				// delete IL image
+				ilDeleteImage(ilHandle);
+			}
+
+			// done
+			return result;
+		}
+	}
+	return -1;
 }
 
 a3ret a3textureDeactivate(const a3_TextureUnit unit)
