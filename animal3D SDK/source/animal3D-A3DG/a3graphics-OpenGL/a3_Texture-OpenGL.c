@@ -474,6 +474,7 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 							{
 								ilLoadImage(filenames[i]);
 								ILfloat a = 90.0f;
+								//iluRotate(a);
 								//iluMirror();
 								//iluRotate(a);
 								

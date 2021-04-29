@@ -20,10 +20,11 @@ void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
 	vec3 finalView = normalize(vView - uCameraPos.xyz);
+	//finalView *= vec3(1.0, 0.0, 0.0);
 	vec3 ref = reflect(finalView, normalize(vNormal));
 	//vec3 ref = reflect(normalize(vNormal), finalView);
 
-	rtFragColor = texture(cubeMapTex, ref );
+	rtFragColor = texture(cubeMapTex, ref);
 	
 	rtFragColor.a = 1.0f;
 	
