@@ -118,8 +118,8 @@ void main()
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 	
 	vTexcoord = aTexcoord;
-	vNormal = mat3(t.modelViewMat) * aNormal;
-	vec4 testPos = t.modelViewMat * aPosition;
+	vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
+	vec4 testPos = t.modelMat * aPosition;
 	vView = testPos.xyz;
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

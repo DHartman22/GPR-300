@@ -465,7 +465,6 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 						convertFormat = textureFormatInternal = channels == 3 ? IL_RGB : IL_RGBA;
 						convertType = bytes == 1 ? IL_UNSIGNED_BYTE : IL_UNSIGNED_SHORT;
 						ilConvertImage(convertFormat, convertType);
-
 						// create GL texture with default settings
 						glGenTextures(1, &glHandle);
 						if (glHandle)
@@ -474,7 +473,12 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 							for (int i = 0; i < 6; i++) 
 							{
 								ilLoadImage(filenames[i]);
+								ILfloat a = 90.0f;
+								//iluMirror();
+								//iluRotate(a);
+								
 								glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, textureFormat, width, height, 0, textureFormatInternal, convertType, ilGetData());
+								//iluRotate(a * -1.0f);
 							}
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -482,6 +486,7 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 							//a3textureDefaultSettings();
+							
 							//glBindTexture(GL_TEXTURE_2D, 0);
 
 							// configure the output

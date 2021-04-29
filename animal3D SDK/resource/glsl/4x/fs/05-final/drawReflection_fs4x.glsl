@@ -5,6 +5,7 @@ layout (binding = 4) uniform samplerCube cubeMapTex;
 layout (binding = 2) uniform sampler2D testSample;
 
 uniform samplerCube cubeMap;
+uniform vec4 uCameraPos;
 
 in vbVertexData {
 	mat4 vTangentBasis_view;
@@ -18,8 +19,11 @@ in vec3 vView;
 void main()
 {
 	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
-	vec3 ref = reflect(vView, normalize(vNormal));
-	rtFragColor = texture(cubeMapTex, ref * -1f);
+	vec3 finalView = normalize(vView - uCameraPos.xyz);
+	vec3 ref = reflect(finalView, normalize(vNormal));
+	//vec3 ref = reflect(normalize(vNormal), finalView);
+
+	rtFragColor = texture(cubeMapTex, ref );
 	
 	rtFragColor.a = 1.0f;
 	

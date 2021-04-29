@@ -223,7 +223,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 	}, tessLevelCurve[1][2] = {
 		{ 1.0f, 32.0f }
 	};
-
+	
 	// forward pipeline shader programs
 	const a3_DemoStateShaderProgram* renderProgram[animate_renderMode_max][animateMaxCount_sceneObject] = {
 		{
@@ -262,7 +262,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 	a3mat4 projectionMat = activeCamera->projectorMatrixStackPtr->projectionMat;
 	a3mat4 viewProjectionMat = activeCamera->projectorMatrixStackPtr->viewProjectionMat;
 	a3mat4 modelMat, modelViewProjectionMat;
-
+	
 	// FSQ matrix
 	const a3mat4 fsq = {
 		2.0f, 0.0f, 0.0f, 0.0f,
@@ -315,6 +315,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 
 		// animation
 		a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uTime, 1, &keyframeTime);
+		
 
 		// textures
 		a3textureActivate(textureSet[j][0], a3tex_unit00);
@@ -337,7 +338,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 
 		//uMV
 		a3shaderUniformSendFloatMat(a3unif_mat4, 0, currentDemoProgram->uMV, 1, currentSceneObject->modelMatrixStackPtr->modelViewMat.mm);
-
+		a3shaderUniformSendFloat(a3unif_vec4, currentDemoProgram->uCameraPos, 1, activeCamera->sceneObjectPtr->dataPtr->position.v);
 	}
 
 	// stop using stencil
@@ -498,6 +499,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 
 				// animation
 				a3shaderUniformSendFloat(a3unif_single, currentDemoProgram->uTime, 1, &keyframeTime);
+
 
 				// draw
 				a3shaderUniformSendInt(a3unif_single, currentDemoProgram->uIndex, 1, &j);

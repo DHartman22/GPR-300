@@ -925,6 +925,7 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 		a3demo_setUniformDefaultDouble(currentDemoProg, uTime, defaultDouble);
 		a3demo_setUniformDefaultVec4(currentDemoProg, uColor0, a3vec4_one.v);
 		a3demo_setUniformDefaultVec4(currentDemoProg, uColor, a3vec4_one.v);
+		a3demo_setUniformDefaultVec4(currentDemoProg, uCameraPos, a3vec4_one.v);
 
 		// transformation uniform blocks
 		a3demo_setUniformDefaultBlock(currentDemoProg, ubTransformStack, demoProg_blockTransformStack);

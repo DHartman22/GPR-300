@@ -118,6 +118,9 @@
     <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\04-anim">
       <UniqueIdentifier>{18252e52-3ee4-474d-aad9-aea70fdbf3de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\04-anim\NewFilter1">
+      <UniqueIdentifier>{f08320bc-38bb-4974-9a8d-fd65973f6764}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_src_win\main_dll.c">

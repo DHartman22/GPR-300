@@ -56,6 +56,7 @@
     <ClInclude Include="..\..\..\include\animal3D-A3DG\a3graphics\a3_VertexDescriptors.h" />
     <ClInclude Include="..\..\..\include\animal3D-A3DG\a3graphics\a3_VertexDrawable.h" />
     <ClInclude Include="..\..\..\include\animal3D-A3DG\animal3D-A3DG.h" />
+    <ClInclude Include="..\..\..\include\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\animal3D-A3DG\a3graphics\_inl\a3_BufferObject.inl" />
@@ -166,6 +167,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <Lib>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

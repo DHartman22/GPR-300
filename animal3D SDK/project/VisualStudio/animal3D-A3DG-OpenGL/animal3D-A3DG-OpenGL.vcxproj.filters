@@ -152,6 +152,9 @@
     <ClInclude Include="..\..\..\include\animal3D-A3DG\a3graphics\a3_VertexDrawable.h">
       <Filter>Header Files\animal3D-A3DG\a3graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\stb_image.h">
+      <Filter>Header Files\animal3D-A3DG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\animal3D-A3DG\a3graphics\_inl\a3_Framebuffer.inl">

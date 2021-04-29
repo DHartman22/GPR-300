@@ -91,7 +91,8 @@ struct a3_DemoStateShaderProgram
 			uFlag,						// generic flag
 			uTime,						// time
 			uColor0,					// color (used in whatever context is needed)
-			uColor;						// color (used in whatever context is needed)
+			uColor,						// color (used in whatever context is needed)
+			uCameraPos;
 
 		a3i32
 			// common texture handles
