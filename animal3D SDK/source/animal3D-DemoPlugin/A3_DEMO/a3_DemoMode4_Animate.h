@@ -107,6 +107,8 @@ enum a3_DemoMode4_Animate_ObjectMaxCount
 
 	animateMaxCount_skeletonPose = 5,
 	animateMaxCount_skeletonJoint = 128,
+
+	curvesFinalMaxCount_waypoint = 32,
 };
 
 
@@ -168,6 +170,13 @@ struct a3_DemoMode4_Animate
 
 	// scene hierarchy and data
 	a3_Hierarchy hierarchy_scene[1];
+
+	a3vec4 curveFinalWaypoint[curvesFinalMaxCount_waypoint], curveFinalTangent[curvesFinalMaxCount_waypoint];
+	a3ui32 curveFinalWaypointCount;
+
+	// animation data for teapot
+	a3f32 curveFinalSegmentDuration, curveFinalSegmentDurationInv, curveFinalSegmentTime, curveFinalSegmentParam;
+	a3ui32 curveFinalSegmentIndex;
 
 	// animation data
 	a3_KeyframeController animMorphTeapot[1], animPoseSkel[1];

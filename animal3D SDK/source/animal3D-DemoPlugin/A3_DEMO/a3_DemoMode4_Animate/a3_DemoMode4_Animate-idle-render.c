@@ -229,7 +229,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		{
 			0, 0, 0, 0, 0,
 			demoState->prog_drawScreenSpaceReflections,
-			demoState->prog_drawPhongPOM_morph,
+			demoState->prog_drawPhongPOM,
 		},
 	};
 	// overlay shader programs

@@ -58,6 +58,9 @@ out vbVertexData {
 flat out int vVertexID;
 flat out int vInstanceID;
 
+out vec3 vNormal;
+out vec3 vView;
+
 void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
@@ -70,6 +73,11 @@ void main()
 	gl_Position = t.modelViewProjectionMat * aPosition;
 	
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
+
+		vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
+	vec4 testPos = t.modelMat * aPosition;
+	vView = testPos.xyz;
+
 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;

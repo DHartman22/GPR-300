@@ -301,6 +301,30 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 	a3animate_initKeyframeController(demoMode->animMorphTeapot, 5, 0, 2.0f);
 	a3animate_initKeyframeController(demoMode->animPoseSkel, 4, 0, 3.0f);	// 3 poses animating + base
 
+	// set up waypoints
+	demoMode->curveFinalWaypointCount = 4;
+	for (i = 0; i < curvesFinalMaxCount_waypoint; ++i)
+	{
+		demoMode->curveFinalWaypoint[i] = a3vec4_w;
+		demoMode->curveFinalTangent[i] = a3vec4_zero;
+	}
+	demoMode->curveFinalWaypoint[0].x = +24.0f;
+	demoMode->curveFinalWaypoint[0].z = 2.0f;
+	demoMode->curveFinalWaypoint[1].y = +24.0f;
+	demoMode->curveFinalWaypoint[1].z = 12.0f;
+	demoMode->curveFinalWaypoint[2].x = -24.0f;
+	demoMode->curveFinalWaypoint[2].z = 2.0f;
+	demoMode->curveFinalWaypoint[3].y = -24.0f;
+	demoMode->curveFinalWaypoint[3].z = 12.0f;
+	demoMode->curveFinalTangent[0].y = +8.0f;
+	demoMode->curveFinalTangent[1].x = -8.0f;
+	demoMode->curveFinalTangent[2].y = -8.0f;
+	demoMode->curveFinalTangent[3].x = +8.0f;
+
+	// animation
+	demoMode->curveFinalSegmentDuration = 2.0f;
+	demoMode->curveFinalSegmentDurationInv = a3recip(demoMode->curveFinalSegmentDuration);
+
 	{
 		// manually set up a skeleton
 		// first is the hierarchy: the general non-spatial relationship between bones

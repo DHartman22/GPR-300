@@ -240,7 +240,7 @@ void a3curves_load(a3_DemoState const* demoState, a3_DemoMode3_Curves* demoMode)
 
 	// set up waypoints
 	demoMode->curveWaypointCount = 4;
-	for (i = 0; i < curvesMaxCount_waypoint; ++i)
+	for (i = 0; i < curvesFinalMaxCount_waypoint; ++i)
 	{
 		demoMode->curveWaypoint[i] = a3vec4_w;
 		demoMode->curveTangent[i] = a3vec4_zero;
