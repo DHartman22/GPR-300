@@ -557,6 +557,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		// initialize the changes where applicable
 		// (note: the channels describe which pose components can change)
 		p = 1;
+		//Moving the right arm
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +60.0f, +20.0f);
@@ -567,7 +568,19 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +90.0f);
 
+		//Moving the left arm
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, -60.0f, -20.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:elbow_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:forearm_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -90.0f);
 
+
+		//Moving the right leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -22.5f);
@@ -575,6 +588,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 
+		//Moving the left leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +22.5f);
@@ -583,6 +597,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 
 		p = 2;
+		//Moving the right arm
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +60.0f, +20.0f);
@@ -593,7 +608,19 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +90.0f);
 
+		//Moving the left arm
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, -60.0f, -20.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:elbow_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -45.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:forearm_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -90.0f);
 
+
+		//Moving the right leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
@@ -601,6 +628,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +20.0f);
 
+		//Moving the left leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +45.0f);
@@ -609,6 +637,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +45.0f);
 
 		p = 3;
+		//Moving the right arm
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +60.0f, +20.0f);
@@ -619,7 +648,19 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +90.0f);
 
+		//Moving the left arm
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, -60.0f, -20.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:elbow_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:forearm_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -90.0f);
 
+
+		//Moving the right leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -22.5f);
@@ -627,6 +668,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 
+		//Moving the left leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +22.5f);
@@ -635,6 +677,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, 0.0f);
 
 		p = 4;
+		//Moving the right arm
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +60.0f, +20.0f);
@@ -645,15 +688,30 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +90.0f);
 
+		//Moving the left arm
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:shoulder_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, -60.0f, -20.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:elbow_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +45.0f);
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:forearm_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -90.0f);
+
+
+		//Moving the right leg
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -45.0f);
-		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
-		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:knee_r");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -45.0f);
+
+		//Moving the left leg
+		j = a3hierarchyGetNodeIndex(hierarchy, "skel:hip_l");
+		spatialPose = demoMode->skeletonPose[p] + j;
+		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, +0.0f);
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:knee_l");
 		spatialPose = demoMode->skeletonPose[p] + j;
 		a3spatialPoseSetRotation(spatialPose, +0.0f, +0.0f, -20.0f);
