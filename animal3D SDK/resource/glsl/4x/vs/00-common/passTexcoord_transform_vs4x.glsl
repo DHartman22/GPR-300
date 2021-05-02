@@ -33,6 +33,7 @@ flat out int vInstanceID;
 
 uniform mat4 uMV;
 uniform mat4 uP;
+uniform mat4 uMVP;
 
 out vec4 vTexcoord;
 out vec3 vNormal;
@@ -48,5 +49,6 @@ void main()
 	vView = testPos.xyz;
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
-	gl_Position = testPos * uP;
+
+	gl_Position = uMVP * aPosition;
 }

@@ -121,6 +121,12 @@
     <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\04-anim\NewFilter1">
       <UniqueIdentifier>{f08320bc-38bb-4974-9a8d-fd65973f6764}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\fs\05-final">
+      <UniqueIdentifier>{51c1b3d1-4920-4021-97d7-c25747bfab61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\A3_DEMO\glsl\4x\vs\05-final">
+      <UniqueIdentifier>{b284176d-672c-4464-b339-857c7c28548e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="_src_win\main_dll.c">
@@ -390,6 +396,15 @@
     </None>
     <None Include="..\..\..\resource\glsl\4x\vs\04-anim\passColor_hierarchy_transform_instanced_vs4x.glsl">
       <Filter>Resource Files\A3_DEMO\glsl\4x\vs\04-anim</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\05-final\drawReflection_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\05-final</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\fs\05-final\drawSkybox_fs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\fs\05-final</Filter>
+    </None>
+    <None Include="..\..\..\resource\glsl\4x\vs\05-final\passTexcoord_skybox_vs4x.glsl">
+      <Filter>Resource Files\A3_DEMO\glsl\4x\vs\05-final</Filter>
     </None>
   </ItemGroup>
 </Project>

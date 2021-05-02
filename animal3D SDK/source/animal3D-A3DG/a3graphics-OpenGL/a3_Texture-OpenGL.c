@@ -473,9 +473,8 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 							for (int i = 0; i < 6; i++) 
 							{
 								ilLoadImage(filenames[i]);
-								ILfloat a = 90.0f;
+								//ILfloat a = 180.0f;
 								//iluRotate(a);
-								//iluMirror();
 								//iluRotate(a);
 								
 								glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, textureFormat, width, height, 0, textureFormatInternal, convertType, ilGetData());

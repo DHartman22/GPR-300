@@ -54,12 +54,13 @@ uniform sampler2D uTex_dm, uTex_sm, uTex_nm, uTex_hm;
 const vec4 kEyePos = vec4(0.0, 0.0, 0.0, 1.0);
 
 const float depthScale = 0.02f;
+const float reflectionPower = 0.5f;
 
 layout (location = 0) out vec4 rtFragColor;
 layout (location = 1) out vec4 rtFragNormal;
 
-out vec3 vNormal;
-out vec3 vView;
+in vec3 vNormal;
+in vec3 vView;
 
 void calcPhongPoint(out vec4 diffuseColor, out vec4 specularColor, in vec4 eyeVec,
 	in vec4 fragPos, in vec4 fragNrm, in vec4 fragColor,
@@ -157,15 +158,27 @@ void main()
 
 	vec4 sample_dm = texture(uTex_dm, texcoord.xy);
 	vec4 sample_sm = texture(uTex_sm, texcoord.xy);
-	vec3 finalView = normalize(vView - uCameraPos.xyz);
-	vec4 sample_reflect = texture(cubeMapTex, reflect(finalView, texcoord));
+	vec3 finalView = normalize(vView.xyz - uCameraPos.xyz);
 
-	rtFragColor = sample_dm * diffuseColor + sample_sm * specularColor + sample_reflect;
+		vec3 ref = reflect(finalView, normalize(vNormal));
+	//This is kinda scuffed
+	vec3 ref2 = ref;
+	ref.z = ref.y;
+	ref.y = ref2.z;
+
+		mat3 rot = mat3(-1.0, 0, 0,
+					0, 1.0, 0,
+					0, 0, -1.0);
+
+	vec4 sample_reflect = texture(cubeMapTex, ref * -1 * rot);
+
+	rtFragColor = sample_dm * diffuseColor + sample_sm * specularColor + sample_reflect * reflectionPower;
+	//rtFragColor = sample_reflect;
 	rtFragColor.a = sample_dm.a;
 	
 	// MRT
 	rtFragNormal = vec4(nrm_view.xyz * 0.5 + 0.5, 1.0);
 	
 	// DEBUGGING
-	//rtFragColor.rgb = texcoord;
+	//rtFragColor.rgb = vNormal;
 }

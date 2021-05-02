@@ -146,7 +146,7 @@ extern inline void a3demo_drawModelTexturedColored_invertModel(a3real4x4p modelV
 	a3shaderProgramActivate(program->program);
 	a3shaderUniformSendFloatMat(a3unif_mat4, 0, program->uAtlas, 1, *atlasMat);
 	a3shaderUniformSendFloat(a3unif_vec4, program->uColor, 1, color);
-	a3textureActivate(texture, a3tex_unit00);
+	a3cubemapActivate(texture, a3tex_unit00);
 
 	// draw inverted
 	glCullFace(GL_FRONT);

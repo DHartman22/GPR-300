@@ -74,9 +74,8 @@ void main()
 	
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 
-		vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
-	vec4 testPos = t.modelMat * aPosition;
-	vView = testPos.xyz;
+	vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
+	vView = (t.modelMat * aPosition).xyz;
 
 
 	vVertexID = gl_VertexID;

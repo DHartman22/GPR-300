@@ -18,13 +18,19 @@ in vec3 vView;
 
 void main()
 {
-	// DUMMY OUTPUT: all fragments are OPAQUE MAGENTA
 	vec3 finalView = normalize(vView - uCameraPos.xyz);
-	//finalView *= vec3(1.0, 0.0, 0.0);
-	vec3 ref = reflect(finalView, normalize(vNormal));
-	//vec3 ref = reflect(normalize(vNormal), finalView);
 
-	rtFragColor = texture(cubeMapTex, ref);
+	vec3 ref = reflect(finalView, normalize(vNormal));
+	//Not the cleanest method, but it works
+	vec3 ref2 = ref;
+	ref.z = ref.y;
+	ref.y = ref2.z;
+	mat3 rot = mat3(-1.0, 0, 0,
+					0, 1.0, 0,
+					0, 0, -1.0);
+	
+	rtFragColor = texture(cubeMapTex, ref * -1 * rot);
+	//Z is up in animal3d 
 	
 	rtFragColor.a = 1.0f;
 	

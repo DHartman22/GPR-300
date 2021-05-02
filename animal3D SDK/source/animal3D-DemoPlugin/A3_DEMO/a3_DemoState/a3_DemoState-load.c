@@ -506,7 +506,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			a3_DemoStateShader
 				passColor_hierarchy_transform_instanced_vs[1],
 				passTangentBasis_morph_transform_vs[1];
-
+			// 05-final
+			a3_DemoStateShader
+				passTexcoord_skybox_vs[1];
 			// tessellation shaders
 			// 03-lod
 			a3_DemoStateShader
@@ -547,10 +549,11 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			// 03-lod
 			a3_DemoStateShader
 				drawPhongPOM_fs[1];
-
+			
 			// 05-final
 			a3_DemoStateShader
-				drawReflection_fs[1];
+				drawCubemapReflection_fs[1],
+				drawSkybox_fs[1];	
 		};
 	} shaderList = {
 		{
@@ -581,6 +584,9 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-vs:pass-hcol-trans-inst",		a3shader_vertex  ,	1,{ A3_DEMO_VS"04-anim/passColor_hierarchy_transform_instanced_vs4x.glsl" } } }, // ****DECODE
 			{ { { 0 },	"shdr-vs:pass-tb-morph-trans",		a3shader_vertex  ,	2,{ A3_DEMO_VS"04-anim/passTangentBasis_morph_transform_vs4x.glsl", // ****DECODE
 																					A3_DEMO_VS"00-common/utilCommon_vs4x.glsl",} } }, // ****DECODE
+			// 05-final
+
+			{ { { 0 },	"shdr-vs:pass-tex-skybox",			a3shader_vertex  ,	1,{ A3_DEMO_VS"05-final/passTexcoord_skybox_vs4x.glsl" } } },
 
 			// ts
 			// 03-lod
@@ -620,10 +626,12 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 			{ { { 0 },	"shdr-fs:draw-Phong-nm",			a3shader_fragment,	2,{ A3_DEMO_FS"02-pipeline-deferred/e/drawPhongNM_fs4x.glsl",
 																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },
 			{ { { 0 },	"shdr-fs:draw-Phong-pom",			a3shader_fragment,	2,{ A3_DEMO_FS"03-lod/drawPhongPOM_fs4x.glsl",
-																					A3_DEMO_FS"00-common/e/utilCommon_fs4x.glsl",} } },
+																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } },
 
 			{ { { 0 },	"shdr-fs:draw-reflection",			a3shader_fragment,	2,{ A3_DEMO_FS"05-final/drawReflection_fs4x.glsl",
 																					A3_DEMO_FS"00-common/utilCommon_fs4x.glsl",} } },
+			{ { { 0 },	"shdr-fs:draw-skybox",			a3shader_fragment,	1,{ A3_DEMO_FS"05-final/drawSkybox_fs4x.glsl" } } },
+
 		}
 	};
 	a3_DemoStateShader *const shaderListPtr = (a3_DemoStateShader *)(&shaderList), *shaderPtr;
@@ -837,11 +845,19 @@ void a3demo_loadShaders(a3_DemoState *demoState)
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawColorAttrib_fs->shader);
 
 	// 05-final programs:
-	// Screen space reflections
-	currentDemoProg = demoState->prog_drawScreenSpaceReflections;
-	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-reflect");
+	//reflections
+	currentDemoProg = demoState->prog_drawCubemapReflections;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-reflection");
 	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTangentBasis_morph_transform_vs->shader);
-	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawReflection_fs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawCubemapReflection_fs->shader);
+	//Skybox
+	currentDemoProg = demoState->prog_drawSkybox;
+	a3shaderProgramCreate(currentDemoProg->program, "prog:draw-skybox");
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.passTexcoord_skybox_vs->shader);
+	a3shaderProgramAttachShader(currentDemoProg->program, shaderList.drawSkybox_fs->shader);
+
+
+
 
 
 

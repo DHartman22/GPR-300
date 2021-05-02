@@ -228,7 +228,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 	const a3_DemoStateShaderProgram* renderProgram[animate_renderMode_max][animateMaxCount_sceneObject] = {
 		{
 			0, 0, 0, 0, 0,
-			demoState->prog_drawScreenSpaceReflections,
+			demoState->prog_drawCubemapReflections,
 			demoState->prog_drawPhongPOM,
 		},
 	};
@@ -360,7 +360,7 @@ void a3animate_render(a3_DemoState const* demoState, a3_DemoMode4_Animate const*
 		modelMat = demoMode->obj_skybox->modelMatrixStackPtr->modelMat;
 		a3demo_drawModelTexturedColored_invertModel(
 			modelViewProjectionMat.m, viewProjectionMat.m, modelMat.m, a3mat4_identity.m,
-			demoState->prog_drawTexture, demoState->draw_unit_box, demoState->tex_skybox_clouds, a3vec4_one.v);
+			demoState->prog_drawSkybox, demoState->draw_unit_box, demoState->tex_cubemap, a3vec4_one.v);
 	}
 	else
 	{

@@ -88,6 +88,7 @@ flat out int vInstanceID;
 
 uniform mat4 uMV;
 uniform mat4 uP;
+uniform mat4 uMVP;
 
 out vec4 vTexcoord;
 out vec3 vNormal;
@@ -98,32 +99,17 @@ void main()
 {
 	// DUMMY OUTPUT: directly assign input position to output position
 	//gl_Position = aPosition;
-
-	//Morph position of teapot based on time
-	int pos1 = int(uTime) % 5;
-	int pos2 = (pos1 + 1) % 5;
-	float param = uTime - float(pos1);
-
-	//Calculating tangent and normal slerp, then getting the cross product
-	//Learned about cross product here: https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/cross.xhtml
-
-
-	//vec4 aPosition = slerp(aMorphTarget[pos1].position, aMorphTarget[pos2].position, param);
 	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
-	
 
-	//gl_Position = modelViewProjectionMat * aPosition;
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 	
-	vTexcoord = aTexcoord;
+	vTexcoord = aPosition;
 	vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
-	vec4 testPos = t.modelMat * aPosition;
-	vView = testPos.xyz;
+	vView = (t.modelMat * aPosition).xyz;
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
-	gl_Position = testPos * uP;
 
 	gl_Position = t.modelViewProjectionMat * aPosition;
 
