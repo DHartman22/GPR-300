@@ -265,7 +265,7 @@ void a3animate_update_animation(a3_DemoState* demoState, a3_DemoMode4_Animate* d
 			demoMode->skeletonPose_local, demoMode->skeletonPose, demoMode->animPoseSkel);
 		a3animate_updateSkeletonObjectSpace(demoMode->hierarchy_skel,
 			demoMode->skeletonPose_object, demoMode->skeletonPose_local);
-
+		
 		//a3real2CatmullRom()
 		
 		// this is basically copied over directly from demomode 3 curve idle update

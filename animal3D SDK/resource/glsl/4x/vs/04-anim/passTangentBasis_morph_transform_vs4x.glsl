@@ -96,18 +96,16 @@ out vec3 vView;
 
 
 void main()
-{
-	// DUMMY OUTPUT: directly assign input position to output position
-	//gl_Position = aPosition;
-	
+{	
 
 	sModelMatrixStack t = uModelMatrixStack[uIndex];
 
 	vTexcoord_atlas = t.atlasMat * aTexcoord;
 	
 	vTexcoord = aPosition;
+	//vView and vNormal are both important for reflection
 	vNormal = mat3(transpose(inverse(t.modelMat))) * aNormal;
-	vView = (t.modelMat * aPosition).xyz;
+	vView = (t.modelMat * aPosition).xyz; 
 	vVertexID = gl_VertexID;
 	vInstanceID = gl_InstanceID;
 

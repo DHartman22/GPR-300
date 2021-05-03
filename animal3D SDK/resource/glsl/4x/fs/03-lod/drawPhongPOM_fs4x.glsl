@@ -160,8 +160,9 @@ void main()
 	vec4 sample_sm = texture(uTex_sm, texcoord.xy);
 	vec3 finalView = normalize(vView.xyz - uCameraPos.xyz);
 
+	//Uses normal of plane rather than 
 		vec3 ref = reflect(finalView, normalize(vNormal));
-	//This is kinda scuffed
+	//Use same ray rotation method from reflection shader
 	vec3 ref2 = ref;
 	ref.z = ref.y;
 	ref.y = ref2.z;
@@ -172,8 +173,7 @@ void main()
 
 	vec4 sample_reflect = texture(cubeMapTex, ref * -1 * rot);
 
-	rtFragColor = sample_dm * diffuseColor + sample_sm * specularColor + sample_reflect * reflectionPower;
-	//rtFragColor = sample_reflect;
+	rtFragColor = sample_dm * diffuseColor + sample_sm * specularColor + sample_reflect * reflectionPower; //weight variable to ensure the reflection doesn't overpower everything
 	rtFragColor.a = sample_dm.a;
 	
 	// MRT

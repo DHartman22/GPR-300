@@ -16,7 +16,7 @@ void main()
 
 mat3 rot = mat3(1.0, 0, 0,
 		0, -1, 0,
-		0, 0, -1.0);
+		0, 0, -1.0); //Used to prevent skybox from being upside down
 	rtFragColor = texture(cubeMapTex, vTexcoord.xyz * rot); 
 	//Z is up in animal3d, so flip it
 	

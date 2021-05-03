@@ -214,27 +214,24 @@ extern "C"
 	//	return: 0 if deactivated
 	a3ret a3textureActivate(const a3_Texture *texture, const a3_TextureUnit unit);
 
-	// A3: Use a texture for rendering.
+	// A3: Use a cubemap for rendering.
 	//	param texture: pointer to initialized texture; pass null or 
 	//		uninitialized texture to deactivate
-	//	param unit: texture unit or "slot" to bind texture to
+	//	param unit: texture unit or "slot" to bind cubemap to
 	//	return: 1 if activated
 	//	return: 0 if deactivated
 	a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit);
 
-	// A3: Use a texture for rendering.
-	//	param texture: pointer to initialized texture; pass null or 
-	//		uninitialized texture to deactivate
-	//	param unit: texture unit or "slot" to bind texture to
-		//	param data_opt: optional pointer to replacement data; pass null to 
-	//		erase current data in that part of the image ??
-	//	return: 1 if activated
-	//	return: 0 if deactivated
-	a3ret a3cubemapLoadBeta(const a3_Texture* textureRight, const a3_Texture* textureLeft, const a3_Texture* textureTop,
-		const a3_Texture* textureBottom, const a3_Texture* textureFront, const a3_Texture* textureBack,
-		const a3_TextureUnit unit, const void* data);
-
-	a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePath);
+	// A3: Load texture from image file.
+	//	param texture_out: non-null pointer to uninitialized texture
+	//	param name_opt: optional cstring for short name/description; max 31 
+	//		chars + null terminator; pass null for default name
+	//	param filePath: non-null, valid cstring of file path to load form
+	//	filepaths for all indiv. faces of the cubemap
+	//	return: 1 if successful load
+	//	return: 0 if load failed
+	//	return: -1 if invalid params or already initialized
+	a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePathRight, const a3byte* filePathLeft, const a3byte* filePathBottom, const a3byte* filePathTop, const a3byte* filePathFront, const a3byte* filePathBack);
 
 	// A3: Deactivate texture on specified slot.
 	//	param unit: texture unit to unbind texture from

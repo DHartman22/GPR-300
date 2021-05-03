@@ -328,6 +328,7 @@ a3ret a3textureActivate(const a3_Texture *texture, const a3_TextureUnit unit)
 	return 0;
 }
 
+//Same as a3TextureActivate with GL_TEXTURE_2D swapped for GL_TEXTURE_CUBE_MAP
 a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit)
 {
 	// switch unit
@@ -345,81 +346,17 @@ a3ret a3cubemapActivate(const a3_Texture* texture, const a3_TextureUnit unit)
 	return 0;
 }
 
-a3ret a3cubemapLoadBeta(const a3_Texture* textureRight, const a3_Texture* textureLeft, const a3_Texture* textureTop,
-	const a3_Texture* textureBottom, const a3_Texture* textureFront, const a3_Texture* textureBack, 
-	const a3_TextureUnit unit, const void *data)
+//Most code copied from a3textureCreateFromFile but modified to work with cubemaps
+a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePathRight, const a3byte* filePathLeft, const a3byte* filePathBottom, const a3byte* filePathTop, const a3byte* filePathFront, const a3byte* filePathBack)
 {
-	// switch unit
-	glActiveTexture(GL_TEXTURE0 + unit);
-	unsigned int tex;
-	
-	const a3_Texture* cubemapSet[6] = {
-		textureRight,
-		textureLeft,
-		textureTop,
-		textureBottom,
-		textureBack,
-		textureFront,
-	};
-	const char* filenames[6] = {
-		"../../../../resource/tex/bg/right.jpg",
-		"../../../../resource/tex/bg/left.jpg",
-		"../../../../resource/tex/bg/bottom.jpg",
-		"../../../../resource/tex/bg/top.jpg",
-		"../../../../resource/tex/bg/back.jpg",
-		"../../../../resource/tex/bg/front.jpg",
-
-	};
-	int width, height, channels, bytes;
-	// if valid texture, activate
-	if (textureRight && textureRight->handle->handle)
-	{
-			glGenTextures(1, &tex);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
-			a3ui32 ILhandle = 0;
-			//glTexStorage2D(GL_TEXTURE_CUBE_MAP, cubemapSet[0]->channels, cubemapSet[0]->internalFormat, cubemapSet[0]->width, cubemapSet[0]->height);
-		for (int i = 0; i < 6; i++)
-		{
-			ILhandle = ilGenImage();
-			ilBindImage(ILhandle);
-			ilLoadImage(filenames[i]);
-				width = ilGetInteger(IL_IMAGE_WIDTH);
-				height = ilGetInteger(IL_IMAGE_HEIGHT);
-				channels = ilGetInteger(IL_IMAGE_CHANNELS);
-				bytes = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL) / channels;
-
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, cubemapSet[i]->internalFormat, width, height, 0, GL_RGB,
-				cubemapSet[i]->internalType, ilGetData());
-			
-			ilDeleteImage(ILhandle);
-		}
-		//this is literally copy pasted, just for testing
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		//glBindTexture(GL_TEXTURE_CUBE_MAP, tex);
-
-		return tex;
-	}
-
-
-	// deactivate
-	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-	return 0;
-}
-
-a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3byte* filePath)
-{
-	const char* filenames[6] = {
-		"../../../../resource/tex/bg/right.jpg",
-		"../../../../resource/tex/bg/left.jpg",
-		"../../../../resource/tex/bg/bottom.jpg",
-		"../../../../resource/tex/bg/top.jpg",
-		"../../../../resource/tex/bg/front.jpg",
-		"../../../../resource/tex/bg/back.jpg",
-
+	// learnOpenGL helped a lot here https://learnopengl.com/Advanced-OpenGL/Cubemaps
+	const a3byte* filenames[6] = {
+		filePathRight,
+		filePathLeft,
+		filePathBottom,
+		filePathTop,
+		filePathFront,
+		filePathBack,
 	};
 
 	a3_Texture ret = { 0 };
@@ -472,23 +409,19 @@ a3ret a3cubemapLoad(a3_Texture* texture_out, const a3byte name_opt[32], const a3
 							glBindTexture(GL_TEXTURE_CUBE_MAP, glHandle);
 							for (int i = 0; i < 6; i++) 
 							{
-								ilLoadImage(filenames[i]);
-								//ILfloat a = 180.0f;
-								//iluRotate(a);
-								//iluRotate(a);
+								ilLoadImage(filenames[i]); //load the next image of the cubemap
 								
 								glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, textureFormat, width, height, 0, textureFormatInternal, convertType, ilGetData());
-								//iluRotate(a * -1.0f);
 							}
+							
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+							
+							//Important for setting the 3d texcoord for sampling
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 							glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-							//a3textureDefaultSettings();
 							
-							//glBindTexture(GL_TEXTURE_2D, 0);
-
 							// configure the output
 							a3handleCreateHandle(ret.handle, a3textureInternalHandleReleaseFunc, name_opt, glHandle, 1);
 							ret.width = width;

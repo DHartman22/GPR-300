@@ -1084,17 +1084,31 @@ void a3demo_loadTextures(a3_DemoState* demoState)
 		a3textureActivate(texturePtr->texture, a3tex_unit00);
 		a3textureDefaultSettings();
 	}
+	const a3byte* filenames[6] = {
+		"../../../../resource/tex/bg/right.jpg",
+		"../../../../resource/tex/bg/left.jpg",
+		"../../../../resource/tex/bg/bottom.jpg",
+		"../../../../resource/tex/bg/top.jpg",
+		"../../../../resource/tex/bg/front.jpg",
+		"../../../../resource/tex/bg/back.jpg",
+
+	};
+
+	// load singular cubemap
 	texturePtr = textureListPtr + i;
-	a3cubemapLoad(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
+	a3cubemapLoad(texturePtr->texture, texturePtr->textureName, 
+		filenames[0], filenames[1], filenames[2],
+		filenames[3], filenames[4], filenames[5]);
 	a3cubemapActivate(texturePtr->texture, a3tex_unit00);
-	// load all cubemaps
-	for (i = 0; i < numTextures; ++i)
-	{
-		texturePtr = textureListPtr + i;
-		a3textureCreateFromFile(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
-		a3textureActivate(texturePtr->texture, a3tex_unit00);
-		a3textureDefaultSettings();
-	}
+
+
+	//for (i = 0; i < numTextures; ++i)
+	//{
+	//	texturePtr = textureListPtr + i;
+	//	a3textureCreateFromFile(texturePtr->texture, texturePtr->textureName, texturePtr->filePath);
+	//	a3textureActivate(texturePtr->texture, a3tex_unit00);
+	//	a3textureDefaultSettings();
+	//}
 
 	// change settings on a per-texture or per-type basis
 	// materials
