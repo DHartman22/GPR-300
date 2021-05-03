@@ -29,6 +29,7 @@
 //-----------------------------------------------------------------------------
 
 #include "../a3_DemoMode4_Animate.h"
+#include "../a3_DemoMode3_Curves.h"
 
 //typedef struct a3_DemoState a3_DemoState;
 #include "../a3_DemoState.h"
@@ -623,7 +624,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		//Moving root
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetTranslation(spatialPose, -10.0f, +0.0f, +15.0f);
+		a3spatialPoseSetTranslation(spatialPose, demoMode->curveFinalWaypoint->x = -10.0f, demoMode->curveFinalWaypoint->y = 0.0f, demoMode->curveFinalTangent->z = +15.0f);
 
 		p = 2;
 		//Moving the right arm
@@ -668,7 +669,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		//Moving root
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetTranslation(spatialPose, +10.0f, -15.0f, +0.0f);
+		a3spatialPoseSetTranslation(spatialPose, demoMode->curveFinalWaypoint->x = +10.0f, demoMode->curveFinalWaypoint->y = -15.0f, demoMode->curveFinalTangent->z = +0.0f);
 
 		p = 3;
 		//Moving the right arm
@@ -713,7 +714,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		//Moving root
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetTranslation(spatialPose, -10.0f, -30.0f, +15.0f);
+		a3spatialPoseSetTranslation(spatialPose, demoMode->curveFinalWaypoint->x = -10.0f, demoMode->curveFinalWaypoint->y = -30.0f, demoMode->curveFinalTangent->z = +15.0f);
 
 		p = 4;
 		//Moving the right arm
@@ -758,7 +759,7 @@ void a3animate_load(a3_DemoState const* demoState, a3_DemoMode4_Animate* demoMod
 		//Moving root
 		j = a3hierarchyGetNodeIndex(hierarchy, "skel:root");
 		spatialPose = demoMode->skeletonPose[p] + j;
-		a3spatialPoseSetTranslation(spatialPose, -30.0f, -15.0f, +0.0f);
+		a3spatialPoseSetTranslation(spatialPose, demoMode->curveFinalWaypoint->x = -30.0f, demoMode->curveFinalWaypoint->y = -15.0f, demoMode->curveFinalTangent->z = +0.0f);
 	}
 
 
