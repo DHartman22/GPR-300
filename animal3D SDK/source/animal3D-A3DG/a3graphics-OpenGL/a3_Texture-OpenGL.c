@@ -24,6 +24,8 @@
 	**DO NOT MODIFY THIS FILE**
 */
 
+//Edited by Nick Preis and Daniel Hartman
+
 #include "animal3D-A3DG/a3graphics/a3_Texture.h"
 
 #include "GL/glew.h"

@@ -21,6 +21,7 @@
 	a3_DemoRenderUtils.c
 	Drawing utilities implementations.
 */
+//Edited by Nick Preis and Daniel Hartman
 
 #include "../a3_DemoRenderUtils.h"
 

@@ -23,6 +23,7 @@
 
 	**DO NOT MODIFY THIS FILE**
 */
+//Edited by Nick Preis and Daniel Hartman
 
 #ifndef __ANIMAL3D_TEXTURE_H
 #define __ANIMAL3D_TEXTURE_H

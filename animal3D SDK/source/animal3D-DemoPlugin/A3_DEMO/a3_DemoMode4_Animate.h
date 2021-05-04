@@ -25,6 +25,7 @@
 	*** THIS IS ONE DEMO MODE'S HEADER FILE  ***
 	********************************************
 */
+//Edited by Nick Preis and Daniel Hartman
 
 #ifndef __ANIMAL3D_DEMOMODE4_ANIMATE_H
 #define __ANIMAL3D_DEMOMODE4_ANIMATE_H

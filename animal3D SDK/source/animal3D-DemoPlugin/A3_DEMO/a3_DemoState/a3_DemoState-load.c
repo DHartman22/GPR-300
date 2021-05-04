@@ -30,6 +30,7 @@
 
 #include "../_a3_demo_utilities/a3_DemoMacros.h"
 
+//Edited by Nick Preis and Daniel Hartman
 
 //-----------------------------------------------------------------------------
 

@@ -34,6 +34,7 @@
 //typedef struct a3_DemoState a3_DemoState;
 #include "../a3_DemoState.h"
 
+//Edited by Nick Preis and Daniel Hartman
 
 //-----------------------------------------------------------------------------
 

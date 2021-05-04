@@ -265,44 +265,6 @@ void a3animate_update_animation(a3_DemoState* demoState, a3_DemoMode4_Animate* d
 			demoMode->skeletonPose_local, demoMode->skeletonPose, demoMode->animPoseSkel);
 		a3animate_updateSkeletonObjectSpace(demoMode->hierarchy_skel,
 			demoMode->skeletonPose_object, demoMode->skeletonPose_local);
-		
-		//a3real2CatmullRom()
-		
-		// this is basically copied over directly from demomode 3 curve idle update
-
-		//a3_SceneObjectData* sceneObjectData = demoMode->obj_camera_main->dataPtr;
-		//
-		//// teapot follows curved path
-		//a3ui32 const i0 = demoMode->curveFinalSegmentIndex,
-		//	i1 = (i0 + 1) % demoMode->curveFinalWaypointCount,
-		//	iN = (i1 + 1) % demoMode->curveFinalWaypointCount,
-		//	iP = (i0 + demoMode->curveFinalWaypointCount - 1) % demoMode->curveFinalWaypointCount;
-		//
-		////a3real3Lerp(sceneObjectData->position.v,
-		////	demoMode->curveWaypoint[i0].v,
-		////	demoMode->curveWaypoint[i1].v,
-		////	demoMode->curveSegmentParam);
-		//a3real3CatmullRom(sceneObjectData->position.v,
-		//	demoMode->curveFinalWaypoint[iP].v,
-		//	demoMode->curveFinalWaypoint[i0].v,
-		//	demoMode->curveFinalWaypoint[i1].v,
-		//	demoMode->curveFinalWaypoint[iN].v,
-		//	demoMode->curveFinalSegmentParam);
-		////a3real3HermiteTangent(sceneObjectData->position.v,
-		////	demoMode->curveWaypoint[i0].v,
-		////	demoMode->curveTangent[i0].v,
-		////	demoMode->curveWaypoint[i1].v,
-		////	demoMode->curveTangent[i1].v,
-		////	demoMode->curveSegmentParam);
-
-		//// update timer
-		//demoMode->curveFinalSegmentTime += (a3f32)dt;
-		//if (demoMode->curveFinalSegmentTime >= demoMode->curveFinalSegmentDuration)
-		//{
-		//	demoMode->curveFinalSegmentTime -= demoMode->curveFinalSegmentDuration;
-		//	demoMode->curveFinalSegmentIndex = (demoMode->curveFinalSegmentIndex + 1) % demoMode->curveFinalWaypointCount;
-		//}
-		//demoMode->curveFinalSegmentParam = demoMode->curveFinalSegmentTime * demoMode->curveFinalSegmentDurationInv;
 
 	}
 

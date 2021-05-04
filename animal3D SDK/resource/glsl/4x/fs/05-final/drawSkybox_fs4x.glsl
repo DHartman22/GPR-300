@@ -1,4 +1,5 @@
 #version 450
+//Daniel Hartman
 
 layout (location = 0) out vec4 rtFragColor;
 layout (binding = 4) uniform samplerCube cubeMapTex;
